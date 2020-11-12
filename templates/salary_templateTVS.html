@@ -1,0 +1,13 @@
+<!-- Edit this file to change the layout of each record in the table view -->
+<!-- To disable clicking of a field, remove the  and  formatters around it-->
+
+<!-- If you wish to hide the table view header that contains the column titles, -->
+<!-- add the following to the salary_init() hook (in hooks/salary.php file) -->
+<!--     $options->ShowTableHeader = 0;     -->
+
+		<td id="salary-contacto-<%%VALUE(id)%%>" class="salary-contacto"><%%VALUE(contacto)%%></td>
+		<td id="salary-monto-<%%VALUE(id)%%>" class="salary-monto"><%%VALUE(monto)%%></td>
+		<td id="salary-mes-<%%VALUE(id)%%>" class="salary-mes"><%%VALUE(mes)%%></td>
+		<td id="salary-nombre-<%%VALUE(id)%%>" class="salary-nombre"><%%VALUE(nombre)%%></td>
+		<td id="salary-rango-<%%VALUE(id)%%>" class="salary-rango"><%%VALUE(rango)%%></td>
+		<td id="salary-date-<%%VALUE(id)%%>" class="salary-date"><%%VALUE(date)%%></td>

@@ -1,0 +1,67 @@
+<!-- Edit this file to change the layout of the detail view print preview page -->
+
+
+<div class="panel-heading"><h3 class="panel-title">
+	<strong><%%DETAIL_VIEW_TITLE%%></strong>
+	<div class="hidden-print pull-right">
+		<div class="btn-group">
+			<button type="button" id="print" onclick="window.print();" title="<%%TRANSLATION(Print)%%>" class="btn btn-primary"><i class="glyphicon glyphicon-print"></i> <%%TRANSLATION(Print)%%></button>
+			<button type="submit" id="back" title="<%%TRANSLATION(Cancel Printing)%%>" class="btn btn-default"><i class="glyphicon glyphicon-remove-circle"></i> <%%TRANSLATION(Cancel Printing)%%></button>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</h3></div>
+
+<div class="panel-body">
+	<fieldset class="form-horizontal">
+		<!-- Field: ID -->
+		<div class="form-group salary-id" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">ID</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><%%VALUE(id)%%></div>
+			</div>
+		</div>
+		<!-- Field: Contacto -->
+		<div class="form-group salary-contacto" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">Contacto</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><span id="contacto<%%RND1%%>"><%%COMBOTEXT(contacto)%%></span></div>
+			</div>
+		</div>
+		<!-- Field: Monto -->
+		<div class="form-group salary-monto" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">Monto</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><%%VALUE(monto)%%></div>
+			</div>
+		</div>
+		<!-- Field: Mes -->
+		<div class="form-group salary-mes" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">Mes</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><%%VALUE(mes)%%></div>
+			</div>
+		</div>
+		<!-- Field: Nombre -->
+		<div class="form-group salary-nombre" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">Nombre</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><span id="nombre<%%RND1%%>"></span></div>
+			</div>
+		</div>
+		<!-- Field: Rango -->
+		<div class="form-group salary-rango" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">Rango</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><span id="rango<%%RND1%%>"></span></div>
+			</div>
+		</div>
+		<!-- Field: Proxima fecha de pago -->
+		<div class="form-group salary-date" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">Proxima fecha de pago</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><span id="date<%%RND1%%>"></span></div>
+			</div>
+		</div>
+	</fieldset>
+</div>
