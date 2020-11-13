@@ -51,7 +51,6 @@ $f = new Request('f');
                                 images = [];
                         });
                         this.on("error", function(file, response) {
-                                debugger;
                                 if ($j.type(response) === "string") {
                                         response = "Error: " + response; //dropzone sends it's own error messages in string
                                 } else {

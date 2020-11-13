@@ -19,10 +19,10 @@ class MultipleUpload
 		$this->extensions_audio = '|wav|mp3';
 		$this->type = 'img';
 
-		$this->original = '/upload';
-		$this->thumbs = '/th';
-		$this->loRes = '/LO';
-		$this->folder = '';
+		$this->original = '';
+		// $this->thumbs = '';
+		// $this->loRes = '';
+		// $this->folder = '';
 		$this->minImageSize = 1200;
 
 
@@ -108,6 +108,9 @@ class MultipleUpload
 			$aproveUpload = true;
 		}
 
+			$folder_base = $base_dir . $this->folder;
+			$original = $folder_base . $this->original;
+
 		try {
 
 			//if file exceeded the filesize, no file will be sent
@@ -159,8 +162,13 @@ class MultipleUpload
 			if (!preg_match('/^[A-Za-z0-9-_]/', $_FILES['uploadedFile']['name'])) {
 				throw new RuntimeException('File was not uploaded. The file can only contain "A-Z", "a-z", "0-9", "_" and "-".');
 			}
-			
-			
+
+			// check folder if exist and create
+			if (!is_dir($original)) {
+				if(!mkdir($original, 0777, true)) {
+					throw new RuntimeException('File was not uploaded. The folder can\'t create, check permissions. ');
+				}
+			}
 			
 		} catch (RuntimeException $e) {
 			$a = dirname(__FILE__);
@@ -171,16 +179,8 @@ class MultipleUpload
 			));
 		}
 
-
 			//check existing projects' names 
-
-			$folder_base = $base_dir . $this->folder;
-			$original = $folder_base . $this->original;
-
-			
-
 			$currentFiles = scandir($original);
-
 			natsort($currentFiles);
 			$currentFiles = array_reverse($currentFiles);
 
@@ -222,7 +222,7 @@ class MultipleUpload
 				if ($this->type === 'img' || strtolower($ext) === 'pdf' || $this->type === 'mov') {
 					//add thumbsnail
 					include '_resampledIMG.php';
-					$exit = make_thumb($renameFlag ? $newName : $file['basename'], $filename, $ext, $this, $ret);
+					$exit = make_thumb($renameFlag ? $newName : $file['basename'], $filename, $ext, $this);
 					//agregar a la tabla de files
 				}
 				//file uploaded successfully	

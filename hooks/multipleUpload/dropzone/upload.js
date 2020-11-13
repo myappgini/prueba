@@ -181,10 +181,9 @@ function getDefualtImage(j) {
     return ret;
 }
 
-async function loadImages(t, indice) {
-    var b = 'full';
+async function loadImages(title, indice) {
     var j = await getUploadedFile(indice);
-    data = { cmd: b, tn: thisTable(), json: j, title: t }
+    data = { cmd: "full", tn: thisTable(), json: j, title: title }
     $j('#imagesThumbs').load('hooks/multipleUpload/previewImages.php', data, function() {
         if (!is_add_new()) {
             showSlides(getDefualtImage(j));

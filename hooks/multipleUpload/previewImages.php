@@ -2,19 +2,7 @@
 // 
 // Author: Alejandro Landini
 // previewImages.php 7/4/18
-// toDo: 
-// revision:   
-//             * 18/7/18 add 4 thumbs for a video 
-//             * 9/7/18 modify show mov code
-//             * 7/5/18 implement dragable UI
-//             * -add library to header.php before bootstrap.js
-//             * -add library css to heder-extras.php
-//             * -update open gallery
-//
-
-// if(!function_exists('makeSafe')){
-// include("../lib.php");
-// } 
+// update 10/9/20
 
 $cmd        = isset($_POST['cmd'])    ? $_POST['cmd']    : '';
 $source     = isset($_POST['source']) ? $_POST['source'] : '';
@@ -37,7 +25,7 @@ if ($cmd !== '') {
     $html = '<div class="mySliders mt-2 pb-1 mb-1">';
     $html2 = '';
     $index = 1;
-    $base_dir = realpath("{$currDir}/..");
+    $base_dir = realpath("{$currDir}/../..");
     $modif = time();
     if ($json !== []) {
         switch ($cmd) {
@@ -50,28 +38,28 @@ if ($cmd !== '') {
                 $a = [];
                 foreach ($json['images'] as $image => $a) {
                     $fo = $a['folder_base'];
-                    if (!empty($fo)) {
-                        $folderO = substr($fo, 1) . "/upload/"; //original
-                        $folderT = substr($fo, 1) . "/th/"; //thumbs$folderT = substr ($fo,1)."/th/"; //thumbs
-                        $folderL = substr($fo, 1) . "/LO/"; //loRes
-                    } else {
-                        $folderO = $folder; //original
-                        $folderT = $folder; //thumbs
-                        $folderL = $folder; //loRes
-                    }
+                    // if (!empty($fo)) {
+                    //     $folderO = substr($fo, 1) . "/upload/"; //original
+                    //     // $folderT = substr($fo, 1) . "/th/"; //thumbs$folderT = substr ($fo,1)."/th/"; //thumbs
+                    //     // $folderL = substr($fo, 1) . "/LO/"; //loRes
+                    // } else {
+                    //     $folderO = $folder; //original
+                    //     // $folderT = $folder; //thumbs
+                    //     // $folderL = $folder; //loRes
+                    // }
                     $ext = strtolower($a['extension']);
-                    $url = $folderO . $a['fileName'];
+                    $url = $fo . $a['fileName'];
                     if ($a['hd_image'] === 'true') {
-                        $url = $folderL . $a['name'] . '_LO.jpg';
+                        $url = $fo . $a['name'] . '_LO.jpg';
                     }
-                    $url_th = $folderT . "{$a['name']}_th.jpg";
+                    $url_th = $fo . "{$a['name']}_th.jpg";
                     $source = $base_dir . '/' . $url_th;
                     if (file_exists($source)) {
                         $modif = filemtime($source);
                     }
 
                     $href = '<a class="example-image-link" href="' . $url . '" data-lightbox="set-' . $indice . '" data-title="' . $title . '">';
-                    $thumbs = '<img class="img-slide elevation-2" src="' . $url_th . '?m=' . $modif . '" alt="' . $a['fileName'].'"/>';
+                    $thumbs = '<img class="img-slide elevation-2" src="' . $url_th . '?m=' . $modif . '" alt="' . $a['fileName'] . '"/>';
 
                     if ($ext === 'pdf') {
                         $href = "<a onclick=\"showPdf('" . $url . "' , '" .  $title . "' , '" . $index . "' , '" . $indice . "')\">";
@@ -150,7 +138,7 @@ if ($cmd !== '') {
                 }
 
                 $form =  '<ul id = "sortable-images" class="list-unstyled">' . $form . '</ul>' . myscripts($indice);
-                $form = modal($form,$indice);
+                $form = modal($form, $indice);
                 echo $form;
                 return;
             case 'buttons':
@@ -172,7 +160,7 @@ if ($cmd !== '') {
                 return;
             case 'get_json':
                 if (!function_exists('sqlValue')) {
-                    include($currDir."/../../lib.php");
+                    include($currDir . "/../../lib.php");
                 }
                 $tn = $_REQUEST['tn'];
                 $fn = $_REQUEST['fn'];
@@ -184,7 +172,7 @@ if ($cmd !== '') {
                 break;
             case 'put_json':
                 if (!function_exists('sqlValue')) {
-                    include($currDir."/../../lib.php");
+                    include($currDir . "/../../lib.php");
                 }
                 $tn = $_REQUEST['tn'];
                 $set = $_REQUEST['set'];
@@ -193,8 +181,7 @@ if ($cmd !== '') {
                 $rslt = put_json($tn, $set, $where);
                 header('Content-Type: application/json; charset=utf-8');
                 echo json_encode($rslt);
-            break;
-
+                break;
         }
 
         return;
@@ -273,15 +260,13 @@ function imageForm($a, $folder, $index, $json, $mi, $tableName, $indice)
                 <div class="card-tools">
                     <button class="move-element btn btn-default btn-xs"><i class="glyphicon glyphicon-move"></i></button>
                     <button id="remove-<?php echo $index; ?>" class="remove btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</button>
-                    <button id="makeDe-<?php echo $index; ?>" 
-                        <?php if ($a['defaultImage'] === 'true') { ?> 
-                            class="makeDe btn btn-success btn-xs">
-                            <i class="glyphicon glyphicon-check">
+                    <button id="makeDe-<?php echo $index; ?>" <?php if ($a['defaultImage'] === 'true') { ?> class="makeDe btn btn-success btn-xs">
+                        <i class="glyphicon glyphicon-check">
                         <?php } else { ?>
                             class="makeDe btn btn-default btn-xs">
                             <i class="glyphicon glyphicon-unchecked">
                             <?php } ?>
-                        </i> Setting Image
+                            </i> Setting Image
                     </button>
                     <?php
                     //boton download
@@ -749,9 +734,8 @@ function makeSafe_preview($string, $is_gpc = true)
     return ($escaped ? $string : $string);
 }
 
-function modal($form,$id)
+function modal($form, $id)
 {
-
     ob_start();
 ?>
     <div class="modal fade show" id="images-modal" aria-modal="true">
