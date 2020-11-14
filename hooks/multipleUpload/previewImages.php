@@ -4,6 +4,13 @@
 // previewImages.php 7/4/18
 // update 10/9/20
 
+# If not using composer, you can still load it manually.
+require 'handlebars-php/src/Handlebars/Autoloader.php';
+Handlebars\Autoloader::register();
+
+use Handlebars\Handlebars;
+use Handlebars\Loader\FilesystemLoader;
+
 $boostrap = "ver3";
 
 
@@ -758,6 +765,12 @@ function modal($form, $id)
     return $html;
 }
 
+/*
+* * get_json function
+    $tn = table name
+    $fn = field name
+    $where
+*/
 function get_json($tn, $fn, $where)
 {
     $sql = "SELECT {$fn} FROM `{$tn}` WHERE 1=1 AND {$where}";

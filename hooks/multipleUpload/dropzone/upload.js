@@ -18,7 +18,12 @@ function add_to_list(id, tableName) {
         method: "POST",
         dataType: "text",
         url: 'hooks/savedList.php',
-        data: { id: id, cmd: 'addToList', tableName: tableName, image: image },
+        data: {
+            id: id,
+            cmd: 'addToList',
+            tableName: tableName,
+            image: image
+        },
         success: function(response) {
             if (response !== '1') {
                 deleteItem(id, tableName);
@@ -33,7 +38,11 @@ function deleteItem(id, tableName) {
             method: "POST",
             dataType: "text",
             url: 'hooks/savedList.php',
-            data: { cmd: 'deleteItem', id: id, tableName: tableName }
+            data: {
+                cmd: 'deleteItem',
+                id: id,
+                tableName: tableName
+            }
         })
         .done(function(msg) {});
 }
@@ -43,7 +52,10 @@ function recountsItems(tableName) {
         method: "POST",
         dataType: "text",
         url: 'hooks/savedList.php',
-        data: { id: '1', cmd: 'recountItems' },
+        data: {
+            id: '1',
+            cmd: 'recountItems'
+        },
         success: function(response) {
             //                    alert('saved items: '+ response);
             $j('.itemSalvos').text(response);
@@ -68,7 +80,11 @@ function checkIsSaved(id, tableName) {
             method: "POST",
             dataType: "text",
             url: 'hooks/savedList.php',
-            data: { cmd: 'isSelected', id: id, tableName: tableName }
+            data: {
+                cmd: 'isSelected',
+                id: id,
+                tableName: tableName
+            }
         })
         .done(function(msg) {
             //cambiar el estado del selected...<span class="glyphicon glyphicon-record"></span
@@ -106,7 +122,7 @@ function checkIsSaved(id, tableName) {
 ///Tumbs functions
 ///////////////////////////
 
-async function showTumbs(fn = "") {
+async function showTumbs(fn = "uploads") {
     var $obj = $j('.' + thisTable() + '-image');
     $obj.each(function(index) {
         var $this = $j(this);
@@ -114,14 +130,21 @@ async function showTumbs(fn = "") {
 
         $j.ajax({
             type: "POST",
-            url: "hooks/multipleUpload/previewImages.php",
-            data: { cmd: 'get_json', tn: thisTable(), fn: 'uploads', where: 'id=' + x, json: ["1"] },
+            url: "hooks/multipleUpload/functions-ajax.php",
+            data: {
+                cmd: 'get_json',
+                tn: thisTable(),
+                fn,
+                where: `"${key}"="${x}"`
+            },
             dataType: "json",
             success: function(a) {
                 var b = 'full';
                 var title = $j('#' + thisTable() + '-' + fn + '-' + x).text();
                 if (!isJson(a) || !a) {
-                    a = { images: [] };
+                    a = {
+                        images: []
+                    };
                     b = 'empty';
                 } else {
                     a = JSON.parse(a);
@@ -131,9 +154,19 @@ async function showTumbs(fn = "") {
                     dataType: 'html',
                     url: 'hooks/multipleUpload/previewImages.php',
                     cache: 'false',
-                    data: { json: a, cmd: b, indice: x, title: title, tableName: thisTable() },
+                    data: {
+                        json: a,
+                        cmd: b,
+                        indice: x,
+                        title: title,
+                        tableName: thisTable()
+                    },
                     success: function(response) {
-                        var imgTumb = $j('<div />', { id: 'imagesThumbs-' + x, class: 'thumbs', title: title });
+                        var imgTumb = $j('<div />', {
+                            id: 'imagesThumbs-' + x,
+                            class: 'thumbs',
+                            title: title
+                        });
                         imgTumb.html(response);
                         setTimeout(function() {
                             $this.append(imgTumb);
@@ -149,17 +182,20 @@ async function showTumbs(fn = "") {
     });
 }
 
-function get_uploades_json(data = {}) {
+function get_uploades_json(data = false) {
     const promise = new Promise(function(resolve, reject) {
         if (data) {
             $j.ajax({
                     type: "POST",
-                    url: "hooks/multipleUpload/previewImages.php",
+                    url: "hooks/multipleUpload/functions-ajax.php",
                     data: data,
                     dataType: "json"
                 })
                 .done(function(a) {
                     resolve(a);
+                })
+                .fail(function() {
+                    reject(new Error("error on get data from ajax "));
                 });
 
         }
@@ -169,6 +205,7 @@ function get_uploades_json(data = {}) {
     });
     return promise;
 }
+
 
 function getDefualtImage(j) {
     var ret = 1;
@@ -181,9 +218,27 @@ function getDefualtImage(j) {
     return ret;
 }
 
-async function loadImages(title, indice) {
-    var j = await getUploadedFile(indice);
-    data = { cmd: "full", tn: thisTable(), json: j, title: title }
+async function loadImages(settings) {
+
+    let def = {
+        title: "missing title",
+        id: false,
+        tn: false,
+        fn: 'uploads',
+        key: 'id',
+    }
+    def = $j.extend({}, def, settings);
+
+    var j = await getUploadedFile(def);
+
+    //aca iria un cambio luego cuando defina el proximo preview
+    data = {
+        cmd: "full",
+        tn: def.tn,
+        json: j,
+        title: def.title
+    }
+
     $j('#imagesThumbs').load('hooks/multipleUpload/previewImages.php', data, function() {
         if (!is_add_new()) {
             showSlides(getDefualtImage(j));
@@ -246,7 +301,14 @@ async function setPdfThumb(i, tv) {
             dataType: 'html',
             url: 'hooks/multipleUpload/_resampledIMG.php',
             cache: 'false',
-            data: { cmd: 'newPDF', $source: a.name, $fileName: a.fileName, $ext: a.extension, $folder: a.folder_base, $page: new_page },
+            data: {
+                cmd: 'newPDF',
+                $source: a.name,
+                $fileName: a.fileName,
+                $ext: a.extension,
+                $folder: a.folder_base,
+                $page: new_page
+            },
             success: function(response) {
                 //                       alert(response);
             }
@@ -255,13 +317,19 @@ async function setPdfThumb(i, tv) {
 }
 
 function showSlides(n, x) {
-    if (x === undefined || x === null) { x = ''; }
+    if (x === undefined || x === null) {
+        x = '';
+    }
     var slides = $j(".lbid-" + x);
     var dots = $j(".img-lite");
 
     if (slides.length === 0) return;
-    if (n > slides.length) { n = 1; }
-    if (n < 1) { n = slides.length; }
+    if (n > slides.length) {
+        n = 1;
+    }
+    if (n < 1) {
+        n = slides.length;
+    }
 
     slides.hide();
     dots.removeClass("active");
@@ -299,13 +367,30 @@ function showMov(file, n, t = 'video/mp4') {
     //    });
 }
 
-async function getUploadedFile(id) { //si viene un id es una fucnion de la TV
+/**
+ * Get upLoadedFile from ajax async function
+ * @param {string} id record selector id
+ * @param {string} tn table name to get record
+ * @param {string} fn filename to get data images, default uploads
+ * @param {string} key key for selector id to get record, default id
+ */
+async function getUploadedFile(settings) {
 
-    data = { cmd: 'get_json', tn: thisTable(), fn: 'uploads', where: 'id=' + id, json: ["1"] };
-    var a = await get_uploades_json(data);
+    let def = {
+        id: false,
+        tn: false,
+        fn: false,
+        key: false,
+        cmd: "get_json",
+        where: `\`${settings.key}\`="${settings.id}"`
+    }
+    def = $j.extend({}, def, settings);
+    var a = await get_uploades_json(def);
 
     if (!a || !isJson(a)) {
-        a = { images: [] };
+        a = {
+            images: []
+        };
     } else {
         a = JSON.parse(a);
     }
@@ -319,7 +404,13 @@ async function openOtherFiles(id) {
             method: "POST",
             dataType: "text",
             url: 'hooks/multipleUpload/previewImages.php',
-            data: { json: a, cmd: 'buttons', indice: id, largo: largo.length, tableName: AppGini.currentTableName }
+            data: {
+                json: a,
+                cmd: 'buttons',
+                indice: id,
+                largo: largo.length,
+                tableName: AppGini.currentTableName
+            }
         })
         .done(function(msg) {
             modal_window({
@@ -358,7 +449,14 @@ function updatefilter() {
             url: './ajax_combo.php',
             dataType: 'json',
             cache: true,
-            data: function(term, page) { return { s: term, p: page, t: AppGini.currentTableName, f: field }; },
+            data: function(term, page) {
+                return {
+                    s: term,
+                    p: page,
+                    t: AppGini.currentTableName,
+                    f: field
+                };
+            },
             results: function(resp, page) {
                 return resp;
             }
@@ -484,7 +582,13 @@ async function jsonImages(data) {
     $j.ajax({
         type: "POST",
         url: "hooks/multipleUpload/previewImages.php",
-        data: { cmd: 'put_json', tn: thisTable(), set: "uploads='" + a + "'", where: 'id=' + indice, json: ["1", "2"] },
+        data: {
+            cmd: 'put_json',
+            tn: thisTable(),
+            set: "uploads='" + a + "'",
+            where: 'id=' + indice,
+            json: ["1", "2"]
+        },
         dataType: "json",
         success: function(response) {
             //console.log(response);
@@ -507,7 +611,12 @@ async function openGalery(btn) {
             method: "POST",
             dataType: "text",
             url: 'hooks/multipleUpload/previewImages.php',
-            data: { json: a, cmd: 'form', tableName: thisTable(), indice: indice }
+            data: {
+                json: a,
+                cmd: 'form',
+                tableName: thisTable(),
+                indice: indice
+            }
         })
         .done(function(msg) {
             $j('body').append(msg);
@@ -525,7 +634,13 @@ function save_button(data, id) {
     $j.ajax({
         type: "POST",
         url: "hooks/multipleUpload/previewImages.php",
-        data: { cmd: 'put_json', tn: thisTable(), set: "uploads='" + jsn + "'", where: 'id=' + id, json: ["1", "2"] },
+        data: {
+            cmd: 'put_json',
+            tn: thisTable(),
+            set: "uploads='" + jsn + "'",
+            where: 'id=' + id,
+            json: ["1", "2"]
+        },
         dataType: "json",
         success: function(response) {
             console.log(response);
@@ -534,7 +649,9 @@ function save_button(data, id) {
 
     $j.ajax({
         url: 'hooks/deleteFile.php',
-        data: { 'file': del },
+        data: {
+            'file': del
+        },
         dataType: 'json',
         success: function(response) {
             if (response.status === true) {}
@@ -550,7 +667,9 @@ function openMailForm() {
             method: "POST",
             dataType: "HTML",
             url: 'hooks/mailForm.php',
-            data: { cmd: 'form' }
+            data: {
+                cmd: 'form'
+            }
         })
         .done(function(msg) {
             modal_window({
@@ -566,7 +685,9 @@ function openMailForm() {
                                 method: "POST",
                                 dataType: "text",
                                 url: 'hooks/sendMail.php',
-                                data: { mail: mail }
+                                data: {
+                                    mail: mail
+                                }
                             })
                             .done(function(ret) {
                                 if (ret === '1') {
@@ -590,7 +711,11 @@ function requestDownload(btn, indice) {
             method: "POST",
             dataType: "json",
             url: 'hooks/requestDownload_AJX.php',
-            data: { cmd: 'dr', id: indice, fileName: fn }
+            data: {
+                cmd: 'dr',
+                id: indice,
+                fileName: fn
+            }
         })
         .done(function(ret) {
             if (ret) {
@@ -613,7 +738,11 @@ function isArchived() {
                     dataType: 'json', //json,text,html
                     url: 'hooks/isArchived_AJX.php',
                     cache: 'false',
-                    data: { cmd: 'check', id: id, tn: AppGini.currentTableName + '-ARCHIVED' }
+                    data: {
+                        cmd: 'check',
+                        id: id,
+                        tn: AppGini.currentTableName + '-ARCHIVED'
+                    }
                 })
                 .done(function(msg) {
                     //function at response
@@ -632,7 +761,11 @@ function archiveItem(tableName, id) {
             dataType: 'json', //json,text,html
             url: 'hooks/isArchived_AJX.php',
             cache: 'false',
-            data: { cmd: 'archive', tn: tableName, id: id }
+            data: {
+                cmd: 'archive',
+                tn: tableName,
+                id: id
+            }
         })
         .done(function(msg) {
             //function at response
@@ -654,7 +787,11 @@ function trashForm() {
             dataType: 'html', //json,text,html
             url: 'hooks/isArchived_AJX.php',
             cache: 'false',
-            data: { cmd: 'trashForm', tn: 'tn', id: 'id' }
+            data: {
+                cmd: 'trashForm',
+                tn: 'tn',
+                id: 'id'
+            }
         })
         .done(function(msg) {
             //function at response
@@ -683,6 +820,28 @@ function myCancel(btn) {
         document.myform.reset();
     }
     return mysubmit;
+}
+
+//tn, table name
+//folder source, defualt "images"
+//fn field name, default "uploads"
+function active_upload_frame(settings) {
+
+    let def = {
+        tn: false,
+        fn: 'uploads',
+        folder: 'iamges',
+    }
+    def = $j.extend({}, def, settings);
+
+    if (def.tn) {
+        var $actionButtons = $j('#' + def.tn + '_dv_action_buttons');
+        $actionButtons.prepend(' <div id="imagesThumbs"></div>');
+        $actionButtons.append('<p></p><div id="uploadFrame" class="col-12"></div>');
+        $j('#uploadFrame').load('hooks/multipleUpload/multipleUpload.php', {
+            f: `${def.folder}`
+        });
+    }
 }
 
 function enableButtons() {
