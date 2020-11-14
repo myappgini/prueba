@@ -20,9 +20,6 @@ class MultipleUpload
 		$this->type = 'img';
 
 		$this->original = '';
-		// $this->thumbs = '';
-		// $this->loRes = '';
-		// $this->folder = '';
 		$this->minImageSize = 1200;
 
 
@@ -108,8 +105,8 @@ class MultipleUpload
 			$aproveUpload = true;
 		}
 
-			$folder_base = $base_dir . $this->folder;
-			$original = $folder_base . $this->original;
+			$folder_base = $base_dir ."/". $this->folder;
+			$original = $folder_base ."/". $this->original;
 
 		try {
 

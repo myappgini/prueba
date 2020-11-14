@@ -1,8 +1,8 @@
 $j(function() {
     if (!is_add_new()) {
-        active_upload_frame(thisTable(), );
-        let id = selected_id();
-        loadImages($j('#titulo').val(), `/images/${selected_id()}`)
+        let folder = `images/${thisTable()}/${ selected_id()}`
+        active_upload_frame(thisTable(), folder);
+        loadImages($j('#titulo').val(), selected_id())
     }
 
 });
@@ -16,7 +16,7 @@ function active_upload_frame(tn = false, folder = 'images', fn = 'uploads') {
         $actionButtons.prepend(' <div id="imagesThumbs"></div>');
         $actionButtons.append('<p></p><div id="uploadFrame" class="col-12"></div>');
         $j('#uploadFrame').load('hooks/multipleUpload/multipleUpload.php', {
-            f: `/${folder}`
+            f: `${folder}`
         });
     }
 }

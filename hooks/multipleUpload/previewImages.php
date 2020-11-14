@@ -4,6 +4,9 @@
 // previewImages.php 7/4/18
 // update 10/9/20
 
+$boostrap = "ver3";
+
+
 $cmd        = isset($_POST['cmd'])    ? $_POST['cmd']    : '';
 $source     = isset($_POST['source']) ? $_POST['source'] : '';
 $json       = isset($_POST['json'])   ? $_POST['json']   : [];
@@ -21,7 +24,6 @@ $tableName  = isset($_POST['tableName'])  ? $_POST['tableName']  : '';
 $currDir = dirname(__FILE__);
 
 if ($cmd !== '') {
-    $folder = 'hooks/projects/';
     $html = '<div class="mySliders mt-2 pb-1 mb-1">';
     $html2 = '';
     $index = 1;
@@ -38,22 +40,13 @@ if ($cmd !== '') {
                 $a = [];
                 foreach ($json['images'] as $image => $a) {
                     $fo = $a['folder_base'];
-                    // if (!empty($fo)) {
-                    //     $folderO = substr($fo, 1) . "/upload/"; //original
-                    //     // $folderT = substr($fo, 1) . "/th/"; //thumbs$folderT = substr ($fo,1)."/th/"; //thumbs
-                    //     // $folderL = substr($fo, 1) . "/LO/"; //loRes
-                    // } else {
-                    //     $folderO = $folder; //original
-                    //     // $folderT = $folder; //thumbs
-                    //     // $folderL = $folder; //loRes
-                    // }
                     $ext = strtolower($a['extension']);
-                    $url = $fo . $a['fileName'];
+                    $url = $fo ."/" . $a['fileName'];
                     if ($a['hd_image'] === 'true') {
                         $url = $fo . $a['name'] . '_LO.jpg';
                     }
-                    $url_th = $fo . "{$a['name']}_th.jpg";
-                    $source = $base_dir . '/' . $url_th;
+                    $url_th = $fo . "/{$a['name']}_th.jpg";
+                    $source = $base_dir . $url_th;
                     if (file_exists($source)) {
                         $modif = filemtime($source);
                     }
@@ -93,7 +86,8 @@ if ($cmd !== '') {
                             . $video . $audio
                             . '</div>';
                         //TODO: check if can disable thumbs if TV
-                        $html2 .= '<div class="col-4">'
+                        $class = $boostrap === "ver4" ? "col-4" : "col-xs-4";
+                        $html2 .= "<div class='{$class}'>"
                             . '<img class="img-lite" style="" src="' . $url_th . '?m=' . $modif . '" onclick="currentSlide(' . $index . ',' .  $indice . ')" alt="' . $a['name'] . '"/>'
                             . '</div>';
                         $index += 1;
@@ -106,7 +100,8 @@ if ($cmd !== '') {
                             . '</a>'
                             . $video . $audio
                             . '</div>';
-                        $html2 .= '<div class="col-4">'
+                        $class = $boostrap === "ver4" ? "col-4" : "col-xs-4";
+                        $html2 .= "<div class='{$class}'>"
                             . '<img class="img-lite" src="' . $url_th . '?m=' . $modif . '" onclick="currentSlide(' . $index . ',' .  $indice . ')" alt="' . $a['name'] . '"/>'
                             . '</div>';
                         $index += 1;
