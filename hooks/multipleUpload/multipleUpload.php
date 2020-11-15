@@ -1,8 +1,8 @@
 <?php
 $currDir = dirname(__FILE__);
 $base_dir = realpath("{$currDir}/../..");
-include($currDir.'/MultipleUpload.php');
 if (!isset($_REQUEST['folder'])) die("You can't call this file directly.");
+include($currDir . '/MultipleUpload.php');
 $ext = new MultipleUpload();
 if (!function_exists('makeSafe')) {
         include("$base_dir/lib.php");
@@ -22,10 +22,9 @@ $url = "hooks/multipleUpload/upload-ajax.php?f={$f}&tn={$tn}&fn={$fn}&id={$id}";
         </div>
 </div>
 <script>
-        var ext = "." + '<?php echo $ext->extensions_img . "|" . $ext->extensions_mov . "|" . $ext->extensions_docs . "|" . $upload->extensions_audio; 
+        var ext = "." + '<?php echo $ext->extensions_img . "|" . $ext->extensions_mov . "|" . $ext->extensions_docs . "|" . $upload->extensions_audio;
                                 ?>';
         ext = ext.replace(/\|/g, ",.");
-        var images = [];
         $j("div#my-awesome-dropzone").dropzone({
                 paramName: "uploadedFile", // The name that will be used to transfer the file
                 maxFilesize: 200048,
@@ -37,25 +36,32 @@ $url = "hooks/multipleUpload/upload-ajax.php?f={$f}&tn={$tn}&fn={$fn}&id={$id}";
                 },
                 init: function() {
                         this.on("success", function(file, response) {
-                                $j(".dropzone").css("border", "3px dotted blue");
-                                if (response["response-type"] === "success") {
+                                if (response.success) {
+                                        var dismiss = $j("<button />",{
+                                                class:"close",
+                                                type: "button",
+                                                "data-dismiss":"alert",
+                                                "aria-label":"Close"
+                                        }).append('<span aria-hidden="true">&times;</span>')
+                                        var successMsg = "<strong> Upload OK </strong>" + (response.isRenamed ? "<br>File name exist, new name: " + response.fileName + "." : response.fileName);
                                         var successDiv = $j("<div />", {
-                                                class: "alert alert-success",
-                                                style: "display: none; padding-top: 6px; padding-bottom: 6px;"
-                                        });
-                                        var successMsg = "Send OK." + (response.isRenamed ? "<br>File name exist, new name: " + response.fileName + "." : "");
+                                                class: "alert alert-success alert-dismissible",
+                                                role: "alert"
+                                        }).append(successMsg).append(dismiss);
 
-                                        images.push(response); //adding new image to array
-                                        successDiv.html(successMsg);
-                                        $j("#response").html(successDiv);
+                                        $j("#response").append(successDiv);
+                                        successDiv.fadeOut(60000); //close after 1 minute.
                                         setTimeout(deleteFile, 2500, file, this);
                                 }
                         });
                         this.on("queuecomplete", function(file, reponse) {
-                                //jsonImages(images);
-                                images = [];
+
+                                //* refresh container images
+                                load_images(false);
+
                         });
                         this.on("error", function(file, response) {
+                                debugger;
                                 if ($j.type(response) === "string") {
                                         response = "Error: " + response; //dropzone sends it's own error messages in string
                                 } else {

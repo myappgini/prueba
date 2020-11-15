@@ -1,4 +1,4 @@
-<div class="mySliders mt-2 pb-1 mb-1">
+<div class="mySliders">
     {{#each images }}
   <div
     class="mySlides lbid-{{@index}}"
@@ -17,7 +17,7 @@
     {{/each}}
   <div class="row columns-thumbs">
     {{#each images }}
-      <div class="col-xs-4">
+      <div class="col-xs-3 col-md-4 col-lg-4">
         <img
           class="img-lite {{#if defaultImage}} active {{/if}}"
           src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"

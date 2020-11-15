@@ -16,38 +16,12 @@ class MultipleUpload
 		$this->minImageSize = 1200;
 	}
 
-	protected function error($method, $msg, $return = false)
-	{
-		$this->errors[] = array(
-			'method' => $method,
-			'msg' => $msg
-		);
-
-		return $return;
-	}
-
-	/**
-	 * get max. file size from php.ini configuration
-	 */
-	public function parse_size($size)
-	{
-		$unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
-		$size = preg_replace('/[^0-9\.]/', '', $size); 		// Remove the non-numeric characters from the size.
-		if ($unit) {
-			// Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
-			return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
-		} else {
-			return round($size);
-		}
-	}
-
 	public function process_ajax_upload()
 	{
 		$resources_dir = dirname(__FILE__);
 		$base_dir = realpath("{$resources_dir}/../..");
 		include_once("$base_dir/lib.php");
 
-		$maxFileSize = ($this->parse_size(ini_get('post_max_size')) < $this->parse_size(ini_get('upload_max_filesize')) ? ini_get('post_max_size') : ini_get('upload_max_filesize'));
 		$extensiones_docs = $this->extensions_docs;
 		$extensiones_mov = $this->extensions_mov;
 		$extensiones_img = $this->extensions_img;
@@ -56,14 +30,9 @@ class MultipleUpload
 		$extensiones = $extensiones_img . $extensiones_docs . $extensiones_mov . $extensiones_audio;
 
 		$mi = getMemberInfo();
-		$aproveUpload = FALSE;
 
-		if ($mi['admin']) {
-			$aproveUpload = true;
-		}
-
-			$folder_base = $base_dir ."/". $this->folder;
-			$original = $folder_base ."/". $this->original;
+		$folder_base = $base_dir . "/" . $this->folder;
+		$original = $folder_base . "/" . $this->original;
 
 		try {
 
@@ -119,11 +88,10 @@ class MultipleUpload
 
 			// check folder if exist and create
 			if (!is_dir($original)) {
-				if(!mkdir($original, 0777, true)) {
+				if (!mkdir($original, 0777, true)) {
 					throw new RuntimeException('File was not uploaded. The folder can\'t create, check permissions. ');
 				}
 			}
-			
 		} catch (RuntimeException $e) {
 			$a = dirname(__FILE__);
 			header('Content-Type: application/json');
@@ -133,76 +101,73 @@ class MultipleUpload
 			));
 		}
 
-			//check existing projects' names 
-			$currentFiles = scandir($original);
-			natsort($currentFiles);
-			$currentFiles = array_reverse($currentFiles);
+		//check existing projects' names 
+		$currentFiles = scandir($original);
+		natsort($currentFiles);
+		$currentFiles = array_reverse($currentFiles);
 
-			$renameFlag = false;
+		$renameFlag = false;
 
-			foreach ($currentFiles as $projName) {
-				if (preg_match('/^' . $filename . '(-[0-9]+)?\.' . $ext . '$/i', $projName)) {
-
-					$matches = array();
-					if (!strcmp($_FILES['uploadedFile']['name'], $projName)) {
-						$newName = $filename . "-" . "1" . ".$ext";
-						$new_name = $filename . "-" . "1";
-						$renameFlag = true;
-					} else {
-						//increment number at the end of the name ( sorted desc, first one is the largest number)
-						preg_match('/(-[0-9]+)\.' . $ext . '$/i', $projName, $matches);
-						$number = preg_replace("/[^0-9]/", '', $matches[0]);
-						$newName = $filename . "-" . (((int)$number) + 1) . ".$ext";
-						$new_name = $filename . "-" . (((int)$number) + 1);
-						$renameFlag = true;
-						break;
-					}
+		foreach ($currentFiles as $file_name_dir) {
+			if (preg_match('/^' . $filename . '(-[0-9]+)?\.' . $ext . '$/i', $file_name_dir)) {
+				$matches = array();
+				if (!strcmp($_FILES['uploadedFile']['name'], $file_name_dir)) {
+					$newName = $filename . "-" . "1" . ".$ext";
+					$new_name = $filename . "-" . "1";
+					$renameFlag = true;
 				} else {
-					//found name without number at the previous loop, and name with number not found at this loop
-					if ($renameFlag) {
-						break;
-					}
+					//increment number at the end of the name ( sorted desc, first one is the largest number)
+					preg_match('/(-[0-9]+)\.' . $ext . '$/i', $file_name_dir, $matches);
+					$number = preg_replace("/[^0-9]/", '', $matches[0]);
+					$newName = $filename . "-" . (((int)$number) + 1) . ".$ext";
+					$new_name = $filename . "-" . (((int)$number) + 1);
+					$renameFlag = true;
+					break;
 				}
+			} 
+		}
+
+		if ($renameFlag) {
+			$filename = $new_name;
+		}
+
+		if (!move_uploaded_file($_FILES['uploadedFile']['tmp_name'], sprintf($original . '/%s', ($renameFlag ? $newName : $_FILES['uploadedFile']['name'])))) {
+			throw new RuntimeException('Failed to move uploaded file.');
+		} else {
+			$exit = false;
+			if ($this->type === 'img' || strtolower($ext) === 'pdf' || $this->type === 'mov') {
+				//add thumbsnail
+				include '_resampledIMG.php';
+				$exit = make_thumb($renameFlag ? $newName : $file['basename'], $filename, $ext, $this);
+				//agregar a la tabla de files
 			}
+			//file uploaded successfully	
+			header('Content-Type: application/json; charset=utf-8');
 
-			if ($renameFlag) {
-				$filename = $new_name;
+			$data = array(
+				"defaultImage"  => false, // * se cambia a true si es el primer elemento en la funcion add_json
+				"isRenamed"     => $renameFlag,
+				"fileName"      => $renameFlag ? $newName : $file['basename'],
+				"extension"     => $ext,
+				"name"          => $filename,
+				"type"          => $this->type,
+				"hd_image"      => $exit,
+				"folder"        => $original,
+				"folder_base"   => $this->folder,
+				"size"          => $this->size,
+				"userUpload"    => $mi['username']
+			);
+			// * guardar registro..
+			if (!function_exists('add_json')) {
+				include("functions-ajax.php");
 			}
-
-			if (!move_uploaded_file($_FILES['uploadedFile']['tmp_name'], sprintf($original . '/%s', ($renameFlag ? $newName : $_FILES['uploadedFile']['name'])))) {
-				throw new RuntimeException('Failed to move uploaded file.');
-			} else {
-				$exit = false;
-				if ($this->type === 'img' || strtolower($ext) === 'pdf' || $this->type === 'mov') {
-					//add thumbsnail
-					include '_resampledIMG.php';
-					$exit = make_thumb($renameFlag ? $newName : $file['basename'], $filename, $ext, $this);
-					//agregar a la tabla de files
-				}
-				//file uploaded successfully	
-				header('Content-Type: application/json; charset=utf-8');
-
-				$fin = json_encode(array(
-					"response-type" => "success",
-					"defaultImage"  => false, //TODO:si es le primera imagen será true, sino seguira false
-					"isRenamed"     => $renameFlag,
-					"fileName"      => $renameFlag ? $newName : $_FILES['uploadedFile']['name'],
-					"extension"     => $ext,
-					"name"          => $filename,
-					"type"          => $this->type,
-					"hd_image"      => $exit,
-					"folder"        => $original,
-					"folder_base"   => $this->folder,
-					"size"          => $this->size,
-					"userUpload"    => $mi['username'],
-					"aproveUpload"  => $aproveUpload,
-				));
-				//TODO: guardar registro..
-				
-
-				echo $fin;
-			}
-			return;
+			$tn = Request::val('tn');
+			$fn = Request::val('fn');
+			$id = Request::val('id');
+			$res = add_json($tn, $id, $fn, $data);
+			$data['success']=$res;
+			echo json_encode($data);
+		}
+		return;
 	}
-
 }

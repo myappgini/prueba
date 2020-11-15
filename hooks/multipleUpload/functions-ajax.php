@@ -39,6 +39,20 @@ function get_json($tn, $fn, $where)
 function put_json($tn, $set, $where)
 {
     $sql = "UPDATE `{$tn}` SET {$set} WHERE 1=1 AND {$where}";
-    $res = sqlValue($sql);
+    $res = sql($sql, $e);
+    return $res;
+}
+
+function add_json($tn, $id, $fn, $data)
+{
+    $key = getPKFieldName($tn);
+
+    $where = "`{$key}`='{$id}'";
+    $res = get_json($tn, $fn, $where);
+    $set = json_decode($res, true);
+    if (is_null($set)) $data['defaultImage'] = true;
+    $set['images'][] = $data;
+    $set =  "$fn='" . json_encode($set) . "'";
+    $res = put_json($tn, $set, $where);
     return $res;
 }

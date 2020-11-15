@@ -1,7 +1,7 @@
 /* global $j */
 
 async function showTumbs(fn = "uploads") {
-    var $obj = $j('.' + thisTable() + '-image');
+    var $obj = $j('.' + AppGini.currentTableName() + '-image');
     $obj.each(function(index) {
         var $this = $j(this);
         var x = $this.data("id"); //id
@@ -11,14 +11,14 @@ async function showTumbs(fn = "uploads") {
             url: "hooks/multipleUpload/functions-ajax.php",
             data: {
                 cmd: 'get_json',
-                tn: thisTable(),
+                tn: AppGini.currentTableName(),
                 fn,
                 where: `"${key}"="${x}"`
             },
             dataType: "json",
             success: function(a) {
                 var b = 'full';
-                var title = $j('#' + thisTable() + '-' + fn + '-' + x).text();
+                var title = $j('#' + AppGini.currentTableName() + '-' + fn + '-' + x).text();
                 if (!isJson(a) || !a) {
                     a = {
                         images: []
@@ -37,7 +37,7 @@ async function showTumbs(fn = "uploads") {
                         cmd: b,
                         indice: x,
                         title: title,
-                        tableName: thisTable()
+                        tableName: AppGini.currentTableName()
                     },
                     success: function(response) {
                         var imgTumb = $j('<div />', {
@@ -305,36 +305,6 @@ function returnJsonstr(a) {
     return a;
 }
 
-async function jsonImages(data) {
-    var indice = $j('input[name=SelectedID]').val();
-    var a = await getUploadedFile(indice);
-    data.forEach(element => {
-        a.images.push(element); //adding new image to json
-    });
-
-
-    a = returnJsonstr(a);
-    $j.ajax({
-        type: "POST",
-        url: "hooks/multipleUpload/functions-ajax.php",
-        data: {
-            cmd: 'put_json',
-            tn: thisTable(),
-            set: "uploads='" + a + "'",
-            where: 'id=' + indice,
-            json: ["1", "2"]
-        },
-        dataType: "json",
-        success: function(response) {
-            //console.log(response);
-            $j('#imagesThumbs').html('');
-            loadImages('New files', indice);
-        }
-    });
-
-    return;
-}
-
 //open galery, open modal form
 async function openGalery(btn) {
     var indice = $j('input[name=SelectedID]').val();
@@ -349,7 +319,7 @@ async function openGalery(btn) {
             data: {
                 json: a,
                 cmd: 'form',
-                tableName: thisTable(),
+                tableName: AppGini.currentTableName(),
                 indice: indice
             }
         })
@@ -371,7 +341,7 @@ function save_button(data, id) {
         url: "hooks/multipleUpload/previewImages.php",
         data: {
             cmd: 'put_json',
-            tn: thisTable(),
+            tn: AppGini.currentTableName(),
             set: "uploads='" + jsn + "'",
             where: 'id=' + id,
             json: ["1", "2"]

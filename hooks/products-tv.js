@@ -1,6 +1,3 @@
-function thisTable() {
-    return AppGini.currentTableName();
-}
 $j(function() {
     //removeEmpty();
 
@@ -8,7 +5,7 @@ $j(function() {
     $row.each(function() {
         var $this = $j(this);
         var id = $this.data('id');
-        $this.children('td.row').children('div:nth-child(2)').append('<div class="' + thisTable() + '-image" data-id="' + id + '" ></div>');
+        $this.children('td.row').children('div:nth-child(2)').append('<div class="' + AppGini.currentTableName() + '-image" data-id="' + id + '" ></div>');
     });
 
     showTumbs('item');

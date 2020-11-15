@@ -1,20 +1,23 @@
 $j(function() {
-    if (!is_add_new()) {
 
-        let folder = `images/${thisTable()}/${ selected_id()}`
+    load_images(true);
+
+});
+
+function load_images(addFrame = false) {
+    if (!is_add_new()) {
+        let folder = `images/${AppGini.currentTableName()}/${ selected_id()}`
         let title = $j('#name').val();
         let data = {
-            tn: thisTable(),
+            tn: AppGini.currentTableName(),
             fn: 'uploads',
             id: selected_id(),
             key: "id",
             folder: folder,
             title: title
         }
-
-        active_upload_frame(data);
+        if (addFrame) active_upload_frame(data);
 
         loadImages(data)
     }
-
-});
+}
