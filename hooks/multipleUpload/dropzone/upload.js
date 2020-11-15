@@ -103,29 +103,22 @@ async function loadImages(settings) {
         tn: false,
         fn: 'uploads',
         key: 'id',
+        cmd: "full",
+        where: `\`${settings.key}\`="${settings.id}"`
     }
     def = $j.extend({}, def, settings);
 
-    var j = await getUploadedFile(def);
-
-    //aca iria un cambio luego cuando defina el proximo preview
-    data = {
-        cmd: "full",
-        tn: def.tn,
-        json: j,
-        title: def.title
-    }
-
-    $j('#imagesThumbs').load('hooks/multipleUpload/previewImages.php', data, function() {
+    //var j = await getUploadedFile(def);
+    $j('#imagesThumbs').load('hooks/multipleUpload/UploadsView.php', def, function() {
         if (!is_add_new()) {
-            showSlides(getDefualtImage(j));
+            //showSlides(getDefualtImage(j));
             if (content_type() === 'print-detailview') {
                 $j('div.columns-thumbs').hide();
             }
         }
-        if (j.images.length < 2) {
-            $j('div.columns-thumbs').hide();
-        }
+        // if (j.images.length < 2) {
+        //     $j('div.columns-thumbs').hide();
+        // }
     });
 }
 
@@ -419,12 +412,6 @@ function save_button(data, id) {
     return;
 }
 
-function content_type() {
-    if (typeof _contentType !== 'undefined') {
-        var ret = _contentType();
-        return ret;
-    }
-}
 
 //tn, table name
 //folder source, defualt "images"
@@ -446,8 +433,4 @@ function active_upload_frame(settings) {
             f: `${def.folder}`
         });
     }
-}
-
-function nullFunction() {
-    return;
 }

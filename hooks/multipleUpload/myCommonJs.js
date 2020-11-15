@@ -493,3 +493,14 @@ function users_dropdown(f, t) {
         $span.select2('data', { text: val, id: val });
     }
 }
+
+function content_type() {
+    if (typeof _contentType !== 'undefined') {
+        var ret = _contentType();
+        return ret;
+    }
+}
+
+function nullFunction() {
+    return;
+}

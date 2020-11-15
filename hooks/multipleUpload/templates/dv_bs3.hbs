@@ -1,27 +1,31 @@
-{{#if condition}}{{/if}}
 <div class="mySliders mt-2 pb-1 mb-1">
+{{#each images }}
   <div
     class="mySlides lbid-"
     style="border-bottom: 1px solid rgb(239, 239, 239); display: block;"
   >
     <a
-      onclick="showPdf('images/products/1/file-sample_150kB(1).pdf' , '' , '1' , '')"
+      onclick="showPdf('{{folder_base}}/{{fileName}}' , '' , '1' , '')"
     >
       <img
         class="img-slide elevation-2"
-        src="images/products/1/file-sample_150kB(1)_th.jpg?m=1605381321"
-        alt="file-sample_150kB(1).pdf"
+        src="{{folder_base}}/{{name}}_th.jpg?m={{#filetime this}}"
+        alt="{{fileName}}"
       />
     </a>
   </div>
+{{/each}}
+{{#each images }}
   <div class="row columns-thumbs">
     <div class="col-xs-4">
       <img
         class="img-lite active"
-        src="images/products/1/file-sample_150kB(1)_th.jpg?m=1605381321"
+        src="{{folder_base}}/{{name}}_th.jpg?m={{#filetime this}}"
         onclick="currentSlide(1,)"
-        alt="file-sample_150kB(1)"
+        alt="{{name}}"
       />
     </div>
   </div>
+{{/each}}
+  
 </div>
