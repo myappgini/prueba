@@ -1,5 +1,4 @@
 <?php
-
 class MultipleUpload
 {
 	protected $title, $name, $logo, $errors, $extensions;
@@ -8,24 +7,13 @@ class MultipleUpload
 	{
 		error_reporting(E_ERROR | E_WARNING | E_PARSE);
 		$this->errors = array();
-
-		$this->title = 'Upload files';
-		$this->name = 'plugin';
-		$this->logo = '';
-
 		$this->extensions_img  = '|jpg|jpeg|gif|png|tif';
 		$this->extensions_mov  = '|mov|avi|swf|asf|wmv|mpg|mpeg|mp4|flv';
 		$this->extensions_docs = '|txt|doc|docx|pdf|zip';
 		$this->extensions_audio = '|wav|mp3';
 		$this->type = 'img';
-
 		$this->original = '';
 		$this->minImageSize = 1200;
-
-
-		if (isset($config['title'])) $this->title = $config['title'];
-		if (isset($config['name'])) $this->name = $config['name'];
-		if (isset($config['logo'])) $this->logo = $config['logo'];
 	}
 
 	protected function error($method, $msg, $return = false)
@@ -36,19 +24,6 @@ class MultipleUpload
 		);
 
 		return $return;
-	}
-
-	/**
-	 * Check if the current logged-in user is an adminstrator
-	 * @return  boolean
-	 */
-	public function is_admin()
-	{
-		$mi = getMemberInfo();
-		if (!($mi['admin'] && ((is_string($mi['group']) && $mi['group'] == 'Admins') || (is_array($mi['group']) && array_search("Admins", $mi['group']))))) {
-			return false;
-		}
-		return true;
 	}
 
 	/**
@@ -64,24 +39,6 @@ class MultipleUpload
 		} else {
 			return round($size);
 		}
-	}
-
-	/**
-	 * Loads a given view, passing the given data to it
-	 * @param $view the path of a php file to be loaded
-	 * @return the output of the parsed view as a string
-	 */
-	public function view($view)
-	{
-		if (!is_file($view)) {
-			return $this->error('view', "'{$view}' is not a file");
-		}
-		ob_start();
-		@include($view);
-		$out = ob_get_contents();
-		ob_end_clean();
-
-		return $out;
 	}
 
 	public function process_ajax_upload()
@@ -223,10 +180,11 @@ class MultipleUpload
 					//agregar a la tabla de files
 				}
 				//file uploaded successfully	
-				header('Content-Type: application/json; charset=utf-8');						
-				echo json_encode(array(
+				header('Content-Type: application/json; charset=utf-8');
+
+				$fin = json_encode(array(
 					"response-type" => "success",
-					"defaultImage"  => false,
+					"defaultImage"  => false, //TODO:si es le primera imagen será true, sino seguira false
 					"isRenamed"     => $renameFlag,
 					"fileName"      => $renameFlag ? $newName : $_FILES['uploadedFile']['name'],
 					"extension"     => $ext,
@@ -239,6 +197,10 @@ class MultipleUpload
 					"userUpload"    => $mi['username'],
 					"aproveUpload"  => $aproveUpload,
 				));
+				//TODO: guardar registro..
+				
+
+				echo $fin;
 			}
 			return;
 	}

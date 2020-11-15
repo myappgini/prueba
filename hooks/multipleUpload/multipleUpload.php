@@ -2,12 +2,17 @@
 $currDir = dirname(__FILE__);
 $base_dir = realpath("{$currDir}/../..");
 include($currDir.'/MultipleUpload.php');
-if (!isset($_REQUEST['f'])) die("You can't call this file directly.");
+if (!isset($_REQUEST['folder'])) die("You can't call this file directly.");
 $ext = new MultipleUpload();
 if (!function_exists('makeSafe')) {
         include("$base_dir/lib.php");
 }
-$f = new Request('f');
+$f = Request::val('folder');
+$tn = Request::val('tn');
+$fn = Request::val('fn');
+$id = Request::val('id');
+
+$url = "hooks/multipleUpload/upload-ajax.php?f={$f}&tn={$tn}&fn={$fn}&id={$id}";
 
 ?>
 <div class="dz-container">
@@ -24,7 +29,7 @@ $f = new Request('f');
         $j("div#my-awesome-dropzone").dropzone({
                 paramName: "uploadedFile", // The name that will be used to transfer the file
                 maxFilesize: 200048,
-                url: "hooks/multipleUpload/upload-ajax.php?f=" + "<?php echo $f->raw; ?>",
+                url: '<?php echo $url; ?>',
                 acceptedFiles: ext,
                 uploadMultiple: false,
                 accept: function(file, done) {
@@ -47,7 +52,7 @@ $f = new Request('f');
                                 }
                         });
                         this.on("queuecomplete", function(file, reponse) {
-                                jsonImages(images);
+                                //jsonImages(images);
                                 images = [];
                         });
                         this.on("error", function(file, response) {
@@ -59,7 +64,7 @@ $f = new Request('f');
                                 $j("#response").html("<div class='alert alert-danger'>" + response + "</div>");
                                 $j(".dropzone").css("border", "3px dotted red");
 
-                                setTimeout(deleteFile, 4000, file, this);
+                                setTimeout(deleteFile(), 4000, file, this);
                         });
                 }
         })

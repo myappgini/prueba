@@ -1,31 +1,30 @@
 <div class="mySliders mt-2 pb-1 mb-1">
-{{#each images }}
+    {{#each images }}
   <div
-    class="mySlides lbid-"
-    style="border-bottom: 1px solid rgb(239, 239, 239); display: block;"
+    class="mySlides lbid-{{@index}}"
+    style="border-bottom: 1px solid rgb(239, 239, 239); {{#if defaultImage}} display: block;{{/if}}"
   >
-    <a
-      onclick="showPdf('{{folder_base}}/{{fileName}}' , '' , '1' , '')"
-    >
-      <img
-        class="img-slide elevation-2"
-        src="{{folder_base}}/{{name}}_th.jpg?m={{#filetime this}}"
-        alt="{{fileName}}"
-      />
-    </a>
+      <a
+        onclick="showPdf('{{folder_base}}/{{fileName}}' , '' , '1' , '')" 
+      >
+        <img
+          class="img-slide elevation-2"
+          src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+          alt="{{fileName}}"
+        />
+      </a>
   </div>
-{{/each}}
-{{#each images }}
+    {{/each}}
   <div class="row columns-thumbs">
-    <div class="col-xs-4">
-      <img
-        class="img-lite active"
-        src="{{folder_base}}/{{name}}_th.jpg?m={{#filetime this}}"
-        onclick="currentSlide(1,)"
-        alt="{{name}}"
-      />
-    </div>
+    {{#each images }}
+      <div class="col-xs-4">
+        <img
+          class="img-lite {{#if defaultImage}} active {{/if}}"
+          src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+          onclick="currentSlide({{@index}})"
+          alt="{{name}}"
+        />
+      </div>
+    {{/each}}
   </div>
-{{/each}}
-  
 </div>

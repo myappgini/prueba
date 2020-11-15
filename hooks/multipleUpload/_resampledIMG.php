@@ -1,13 +1,4 @@
 <?php
-if (isset($_POST['cmd']) && $_POST['cmd'] === 'newPDF'){
-    include('multipleUpload/loader.php');
-    
-    $folder = new MultipleUpload();
-    $folder -> folder=$_POST['$folder'];
-    make_thumb($_POST['$fileName'], $_POST['$source'], $_POST['$ext'] ,$folder,$_POST['$page']);
-    echo 'true';
-    
-}
 function make_thumb($source, $fileName, $ext ,&$folder,$page = 0){
         $exit = false;
         $currDir = dirname(__FILE__);

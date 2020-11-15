@@ -111,14 +111,10 @@ async function loadImages(settings) {
     //var j = await getUploadedFile(def);
     $j('#imagesThumbs').load('hooks/multipleUpload/UploadsView.php', def, function() {
         if (!is_add_new()) {
-            //showSlides(getDefualtImage(j));
             if (content_type() === 'print-detailview') {
                 $j('div.columns-thumbs').hide();
             }
         }
-        // if (j.images.length < 2) {
-        //     $j('div.columns-thumbs').hide();
-        // }
     });
 }
 
@@ -186,25 +182,14 @@ async function setPdfThumb(i, tv) {
     }
 }
 
-function showSlides(n, x) {
-    if (x === undefined || x === null) {
-        x = '';
-    }
-    var slides = $j(".lbid-" + x);
+function showSlides(n) {
+    var slides = $j(".lbid-" + n);
     var dots = $j(".img-lite");
-
-    if (slides.length === 0) return;
-    if (n > slides.length) {
-        n = 1;
-    }
-    if (n < 1) {
-        n = slides.length;
-    }
-
-    slides.hide();
+    $j('.mySlides').hide();
     dots.removeClass("active");
-    slides[n - 1].style.display = "block";
-    dots[n - 1].className += " active";
+    slides.css("display", "block");
+    //dots[n].addClass("active");
+    dots[n].className += " active";
 }
 
 function showMov(file, n, t = 'video/mp4') {
@@ -331,7 +316,7 @@ async function jsonImages(data) {
     a = returnJsonstr(a);
     $j.ajax({
         type: "POST",
-        url: "hooks/multipleUpload/previewImages.php",
+        url: "hooks/multipleUpload/functions-ajax.php",
         data: {
             cmd: 'put_json',
             tn: thisTable(),
@@ -429,8 +414,6 @@ function active_upload_frame(settings) {
         var $actionButtons = $j('#' + def.tn + '_dv_action_buttons');
         $actionButtons.prepend(' <div id="imagesThumbs"></div>');
         $actionButtons.append('<p></p><div id="uploadFrame" class="col-12"></div>');
-        $j('#uploadFrame').load('hooks/multipleUpload/multipleUpload.php', {
-            f: `${def.folder}`
-        });
+        $j('#uploadFrame').load('hooks/multipleUpload/multipleUpload.php', def);
     }
 }

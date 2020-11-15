@@ -34,7 +34,7 @@ if ($cmd !== '') {
 
             $j = json_decode($j, true);
 
-
+            $j['id']=$id;
 
             # Set the partials files
             $partialsDir = __DIR__ . "/templates";
