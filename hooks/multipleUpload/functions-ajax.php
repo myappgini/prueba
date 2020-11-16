@@ -45,9 +45,8 @@ function put_json($tn, $set, $where)
 
 function add_json($tn, $id, $fn, $data)
 {
-    $key = getPKFieldName($tn);
 
-    $where = "`{$key}`='{$id}'";
+    $where = whereConstruct($tn,$id);
     $res = get_json($tn, $fn, $where);
     $set = json_decode($res, true);
     if (is_null($set)) $data['defaultImage'] = true;
@@ -55,4 +54,9 @@ function add_json($tn, $id, $fn, $data)
     $set =  "$fn='" . json_encode($set) . "'";
     $res = put_json($tn, $set, $where);
     return $res;
+}
+
+function whereConstruct($tn,$id){
+    $key = getPKFieldName($tn);
+    return "`{$key}`='{$id}'";
 }

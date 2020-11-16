@@ -48,7 +48,7 @@ if ($cmd !== '') {
                 foreach ($json['images'] as $image => $a) {
                     $fo = $a['folder_base'];
                     $ext = strtolower($a['extension']);
-                    $url = $fo ."/" . $a['fileName'];
+                    $url = $fo . "/" . $a['fileName'];
                     if ($a['hd_image'] === 'true') {
                         $url = $fo . $a['name'] . '_LO.jpg';
                     }

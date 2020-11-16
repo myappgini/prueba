@@ -1,0 +1,68 @@
+<div id="images-modal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Gallery</h4>
+      </div>
+        <div class="modal-body">    
+<ul class="list-gropu" >
+          {{#each images}}  
+        <li class=" list-group-item {{#if defaultImage}} list-group-item-success {{/if}}">
+          <div class="row">
+            <div class="col-lg-4">
+              <div
+                class="lbid-{{@index}} d-flex justify-content-center"
+                style="border-bottom: 1px solid rgb(239, 239, 239);   "
+              >   
+                  <a href="#" class="es-pdf"
+                    onclick="showPdf('{{folder_base}}/{{fileName}}' , '{{name}}' )" 
+                  >
+                    <img
+                      class="img-slide elevation-2"
+                      src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+                      alt="{{fileName}}"
+                    />
+                  </a>
+              </div>
+
+            </div>
+            <div class="col-lg-8">
+              <ul class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active"
+                  onclick="showPdf('{{folder_base}}/{{fileName}}' , '' , '1' , '')" 
+                >
+                  <h5 class="mb-1">
+                    {{name}}
+                  </h5>
+                </a>
+                <li class=" list-group-item">extension: {{extension}}</li>
+                <li class=" list-group-item">upload by: {{userUpload}}</li>
+                <div class="list-group-item default-image">
+                    defualt:  {{#if defaultImage}}
+                                  true
+                              {{else}} 
+                                false 
+                                  <button type="button" class="btn btn-primary btn-xs set-default-image" data-index="{{index}}">
+                                    Set as defualt
+                                  </button>
+                              {{/if}}
+                  </div>
+                <li class=" list-group-item">reanamed: {{isRenamed}}</li>
+                <li class=" list-group-item">type - size: {{type}} - {{size}}</li>
+                <li class=" list-group-item">folder: {{folder_base}}</li>
+                <li class=" list-group-item">date - time: {{dateUpload}} - {{timeUpload}}</li>
+              </ul>
+            </div>
+          </div>
+</li>
+          {{/each}}
+</ul>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

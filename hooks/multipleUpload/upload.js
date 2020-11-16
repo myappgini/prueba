@@ -122,12 +122,12 @@ function currentSlide(n, x) {
     showSlides(slideIndex = n, x);
 }
 
-function showPdf(file, n, i, tv) {
+function showPdf(file, title) {
     var visible = 'hidden';
     var msg = '<div style ="height:100%;"><embed src="' + file + '#view=Fit"  width="100%" height="100%" style="z-index: 2;"></div>';
     modal_window({
         message: msg,
-        title: n,
+        title: title,
         size: 'full',
         footer: [{
                 label: '<i class="glyphicon glyphicon-cloud-download"></i> Download',
@@ -140,7 +140,7 @@ function showPdf(file, n, i, tv) {
                 causes_closing: true
             },
             {
-                label: '<i class="glyphicon glyphicon-remove"></i> Fechar',
+                label: '<i class="glyphicon glyphicon-remove"></i> Close',
                 bs_class: 'primary',
                 click: function() {
                     if (content_type() === 'tableview') {
@@ -211,7 +211,7 @@ function showMov(file, n, t = 'video/mp4') {
     //               causes_closing: true
     //               },
     //               {
-    //               label: '<i class="glyphicon glyphicon-remove"></i> Fechar',
+    //               label: '<i class="glyphicon glyphicon-remove"></i> Close',
     //               bs_class: 'primary',
     //               click: function(){
     //                   return true;
@@ -272,7 +272,7 @@ async function openOtherFiles(id) {
                 message: msg,
                 title: 'Arquivos',
                 footer: [{
-                    label: '<i class="glyphicon glyphicon-remove"></i> Fechar',
+                    label: '<i class="glyphicon glyphicon-remove"></i> Close',
                     bs_class: 'primary',
                     click: function() {
                         return true;
@@ -307,21 +307,20 @@ function returnJsonstr(a) {
 
 //open galery, open modal form
 async function openGalery(btn) {
-    var indice = $j('input[name=SelectedID]').val();
-    if (is_add_new()) {
-        indice = '';
+    var id = selected_id();
+
+    let data = {
+        cmd: "form",
+        tn: AppGini.currentTableName(),
+        id: id,
+        fn: "uploads"
     }
-    var a = await getUploadedFile(indice);
+
     $j.ajax({
             method: "POST",
             dataType: "text",
-            url: 'hooks/multipleUpload/previewImages.php',
-            data: {
-                json: a,
-                cmd: 'form',
-                tableName: AppGini.currentTableName(),
-                indice: indice
-            }
+            url: 'hooks/multipleUpload/UploadsView.php',
+            data: data
         })
         .done(function(msg) {
             $j('body').append(msg);

@@ -128,6 +128,7 @@ class MultipleUpload
 		}
 
 		if ($renameFlag) {
+			$oldName = $filename;
 			$filename = $new_name;
 		}
 
@@ -142,10 +143,14 @@ class MultipleUpload
 				//agregar a la tabla de files
 			}
 			//file uploaded successfully	
+			$tn = Request::val('tn');
+			$fn = Request::val('fn');
+			$id = Request::val('id');
+			
 			header('Content-Type: application/json; charset=utf-8');
-
+			// * defaultImage => se cambia a true si es el primer elemento en la funcion add_json
 			$data = array(
-				"defaultImage"  => false, // * se cambia a true si es el primer elemento en la funcion add_json
+				"defaultImage"  => FALSE, 
 				"isRenamed"     => $renameFlag,
 				"fileName"      => $renameFlag ? $newName : $file['basename'],
 				"extension"     => $ext,
@@ -155,15 +160,20 @@ class MultipleUpload
 				"folder"        => $original,
 				"folder_base"   => $this->folder,
 				"size"          => $this->size,
-				"userUpload"    => $mi['username']
+				"userUpload"    => $mi['username'],
+				"dateUpload"	=> date("d.m.y"),
+				"timeUpload"	=> date("H:i:s"),
+				"oldName"		=> $oldName ? $oldName : "",
+				"tn"			=> $tn,
+				"fn"			=> $fn,
+				"id"			=> $id
 			);
+			
 			// * guardar registro..
 			if (!function_exists('add_json')) {
 				include("functions-ajax.php");
 			}
-			$tn = Request::val('tn');
-			$fn = Request::val('fn');
-			$id = Request::val('id');
+			
 			$res = add_json($tn, $id, $fn, $data);
 			$data['success']=$res;
 			echo json_encode($data);

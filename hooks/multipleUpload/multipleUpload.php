@@ -16,6 +16,10 @@ $url = "hooks/multipleUpload/upload-ajax.php?f={$f}&tn={$tn}&fn={$fn}&id={$id}";
 
 ?>
 <div class="dz-container">
+        <div class="btn-group-vertical btn-group-lg" style="width: 100%;"> 
+                <button class="btn btn-info col-lg-12" type="button" onclick="openGalery();" >Open Galary</button>
+        </div>
+        <p></p>
         <div id="response" class="row"></div>
         <div id="my-awesome-dropzone" class="dropzone">
                 <i class="glyphicon glyphicon-upload"></i>
@@ -61,7 +65,6 @@ $url = "hooks/multipleUpload/upload-ajax.php?f={$f}&tn={$tn}&fn={$fn}&id={$id}";
 
                         });
                         this.on("error", function(file, response) {
-                                debugger;
                                 if ($j.type(response) === "string") {
                                         response = "Error: " + response; //dropzone sends it's own error messages in string
                                 } else {
