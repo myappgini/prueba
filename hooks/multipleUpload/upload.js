@@ -307,12 +307,11 @@ function returnJsonstr(a) {
 
 //open galery, open modal form
 async function openGalery(btn) {
-    var id = selected_id();
 
     let data = {
         cmd: "form",
         tn: AppGini.currentTableName(),
-        id: id,
+        id: selected_id(),
         fn: "uploads"
     }
 
@@ -323,47 +322,20 @@ async function openGalery(btn) {
             data: data
         })
         .done(function(msg) {
+            let $modal = $j('#images-modal');
+            if( $modal.length > 0) {
+                $modal.remove();
+            }
             $j('body').append(msg);
             $j('#images-modal').modal('show')
-
         });
 
 }
 
-function save_button(data, id) {
-    //encuentro valor devuelto del modal.
-    var jsn = returnJsonstr(data.j);
-    var del = data.d;
+function save_button(tn, id) {
 
-    $j.ajax({
-        type: "POST",
-        url: "hooks/multipleUpload/previewImages.php",
-        data: {
-            cmd: 'put_json',
-            tn: AppGini.currentTableName(),
-            set: "uploads='" + jsn + "'",
-            where: 'id=' + id,
-            json: ["1", "2"]
-        },
-        dataType: "json",
-        success: function(response) {
-            console.log(response);
-        }
-    });
-
-    $j.ajax({
-        url: 'hooks/deleteFile.php',
-        data: {
-            'file': del
-        },
-        dataType: 'json',
-        success: function(response) {
-            if (response.status === true) {}
-        }
-    });
-    $j('#imagesThumbs').html('');
-    loadImages($j('#titulo').val(), id);
-    return;
+    alert('save_button '+tn);
+ 
 }
 
 

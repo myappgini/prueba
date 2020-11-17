@@ -91,10 +91,10 @@ img.hover-shadow {
 }
 
 .img-slide {
-    max-width: 80%;
+    /* max-width: 80%; */
     max-height: 290px;
     border-radius: 5px;
-    margin-bottom: 6px;
+    /* margin-bottom: 6px;
     margin-left: 10%;
-    margin-right: 10%;
+    margin-right: 10%; */
 }

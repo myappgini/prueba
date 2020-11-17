@@ -143,9 +143,6 @@ class MultipleUpload
 				//agregar a la tabla de files
 			}
 			//file uploaded successfully	
-			$tn = Request::val('tn');
-			$fn = Request::val('fn');
-			$id = Request::val('id');
 			
 			header('Content-Type: application/json; charset=utf-8');
 			// * defaultImage => se cambia a true si es el primer elemento en la funcion add_json
@@ -164,16 +161,17 @@ class MultipleUpload
 				"dateUpload"	=> date("d.m.y"),
 				"timeUpload"	=> date("H:i:s"),
 				"oldName"		=> $oldName ? $oldName : "",
-				"tn"			=> $tn,
-				"fn"			=> $fn,
-				"id"			=> $id
+				"title"			=> $filename
 			);
 			
 			// * guardar registro..
 			if (!function_exists('add_json')) {
 				include("functions-ajax.php");
 			}
-			
+
+			$tn = Request::val('tn');
+			$fn = Request::val('fn');
+			$id = Request::val('id');
 			$res = add_json($tn, $id, $fn, $data);
 			$data['success']=$res;
 			echo json_encode($data);

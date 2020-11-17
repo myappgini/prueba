@@ -40,7 +40,7 @@ $handlebars = new Handlebars([
     "partials_loader" => $partialsLoader
 ]);
 
-registerHelpers($handlebars);
+$handlebars = registerHelpers($handlebars);
 
 if ($cmd !== '') {
     if (!$where){
@@ -88,7 +88,8 @@ if ($cmd !== '') {
 //   'userUpload' => string 'admin' (length=5)
 //   'aproveUpload' => boolean true
 
-function registerHelpers(&$handlebars){
+function registerHelpers($handlebars){
+
     $handlebars->addHelper(
         "filemtime",
         function ($template, $context, $args, $source) {
@@ -100,24 +101,33 @@ function registerHelpers(&$handlebars){
             return 0;
         }
     );
+
     $handlebars->addHelper(
-        "compare",
+        "when",
         function ($template, $context, $args, $source) {
-            $args = explode(" ", $args);
-            // var_dump($args);
-            // var_dump($context);
+
+            //preg_match("/(.*?)\s+(?:(?:\"|\')(.*?)(?:\"|\'))/", $args, $m);
+            $m = explode(" ",$args );
+            $keyname = $m[0];
+            $when = $m[1];
+            $compare = $m[2];
+            $data = $context->get($keyname);
+
+
+            //$args = explode(" ", $args);
             // var_dump($source);
             // var_dump($template);
-            switch ($args[1]) {
+            switch ($when) {
                 case 'eq':
-                    if ($args[0] == $args[2]) return $context;
+                    if ($data == $compare) return $template->render($context);
                     break;
 
                 default:
-                    # code...
                     break;
             }
+            return false;// $data.' ::: '.$when.':::'.$comapare.':::'.count($m);
         }
     );
 
+    return $handlebars;
 }

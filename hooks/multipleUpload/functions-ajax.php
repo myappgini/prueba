@@ -51,6 +51,9 @@ function add_json($tn, $id, $fn, $data)
     $set = json_decode($res, true);
     if (is_null($set)) $data['defaultImage'] = true;
     $set['images'][] = $data;
+    $set['id']=$id;
+    $set['tn']=$tn;
+    $set['fn']=$fn;
     $set =  "$fn='" . json_encode($set) . "'";
     $res = put_json($tn, $set, $where);
     return $res;

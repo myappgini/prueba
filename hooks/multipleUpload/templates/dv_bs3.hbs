@@ -1,25 +1,30 @@
 <div class="mySliders">
+  <div class="row">
     {{#each images }}
   <div
-    class="mySlides lbid-{{@index}}"
-    style="border-bottom: 1px solid rgb(239, 239, 239); {{#if defaultImage}} display: block;{{/if}}"
+    class="mySlides lbid-{{@index}} col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2"
+    style="{{#if defaultImage}} display: block;{{/if}}"
   >   
-      <a class="es-pdf"
-        onclick="showPdf('{{folder_base}}/{{fileName}}' , '{{name}}' )" 
-      >
+    {{#when extension eq pdf}} 
+      <a href="#" class=" thumbnail" onclick="showPdf('{{folder_base}}/{{fileName}}' , '{{name}}' )">
+    {{/when}}
+    {{#when type eq img}}
+      <a class="thumbnail" href="{{folder_base}}/{{fileName}}" data-lightbox="set-{{@index}}" data-title="{{title}}">
+    {{/when}}
         <img
-          class="img-slide elevation-2"
+          class=""
           src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
           alt="{{fileName}}"
         />
       </a>
   </div>
     {{/each}}
+    </div>
   <div class="row columns-thumbs">
     {{#each images }}
-      <div class="col-xs-3 col-md-4 col-lg-4">
+      <div class="col-xs-3 col-md-6">
         <img
-          class="img-lite {{#if defaultImage}} active {{/if}}"
+          class="img-lite thumbnail {{#if defaultImage}} active {{/if}}"
           src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
           onclick="currentSlide({{@index}})"
           alt="{{name}}"
