@@ -7,7 +7,7 @@ function make_thumb($source, $fileName, $ext, &$folder, $page = 0)
     header('Content-type: images');
 
     if ($folder->type === 'mov') {
-        //make_thumb_mov($source, $fileName, $ext ,$folder, $ret);
+        make_thumb_mov($source, $fileName, $ext ,$folder, $ret);
         return;
     }
 
