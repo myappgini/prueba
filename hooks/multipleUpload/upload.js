@@ -104,7 +104,7 @@ async function loadImages(settings) {
         fn: 'uploads',
         key: 'id',
         cmd: "full",
-        where: `\`${settings.key}\`="${settings.id}"`
+        where: `\`${settings.key}\`='${settings.id}'`
     }
     def = $j.extend({}, def, settings);
 

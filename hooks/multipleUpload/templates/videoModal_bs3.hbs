@@ -1,0 +1,51 @@
+<div
+  class='myVideo modal fade in'
+  id="modal-video-{{@index}}"
+  tabindex='-1'
+  role='dialog'
+  aria-labelledby='modal-video-label'
+>
+  <div class='myVideo modal-dialog' role='document'>
+    <div class='myVideo modal-content'>
+      <div class='myVideo modal-header'>
+        <button
+          type='button'
+          class='myVideo close'
+          data-dismiss='modal'
+          aria-label='Close'
+        >
+          <span aria-hidden='true'>
+            &times;
+          </span>
+        </button>
+        <h3 class='myVideo modal-title'>
+          {{title}}
+        </h3>
+      </div>
+      <div class='myVideo modal-body'>
+        <div class='myVideo modal-video'>
+          <div align='center' class='embed-responsive embed-responsive-16by9'>
+            <video
+              id="video-mp4-{{@index}}"
+              controls
+              class='embed-responsive-item'
+            >
+              <source src="{{folder_base}}/{{fileName}}" type='video/mp4' />
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <script>
+            var indice = '{{@index}}';
+            //windows modal for video
+            $j('body form').on('click',".launch-modal", function(e) {
+                e.preventDefault();
+                $j('#' + $j(this).data('modal-id')).modal();
+            });
+            $j('.close').click(function() {
+                $j('#video-mp4-' + indice).trigger('load');
+            });
+    </script>
