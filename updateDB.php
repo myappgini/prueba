@@ -46,12 +46,7 @@
 				`name` VARCHAR(40) NULL,
 				`uploads` TEXT NULL
 			) CHARSET utf8",
-			$silent, [
-				"ALTER TABLE `product` RENAME `products`",
-				"UPDATE `membership_userrecords` SET `tableName`='products' WHERE `tableName`='product'",
-				"UPDATE `membership_userpermissions` SET `tableName`='products' WHERE `tableName`='product'",
-				"UPDATE `membership_grouppermissions` SET `tableName`='products' WHERE `tableName`='product'",
-			]
+			$silent
 		);
 
 

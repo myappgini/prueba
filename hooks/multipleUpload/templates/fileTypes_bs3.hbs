@@ -1,0 +1,15 @@
+<a
+{{#when extension eq pdf}} 
+    class="thumbnail" href="#" onclick="showPdf('{{folder_base}}/{{fileName}}' , '{{name}}' )"
+{{/when}}
+{{#when type eq img}}
+    class="thumbnail" href="{{folder_base}}/{{fileName}}" data-lightbox="set-{{@index}}" data-title="{{title}}"
+{{/when}}
+{{#when type eq mov}}
+    class="thumbnail launch-modal" href="#" data-modal-id="modal-video-{{@index}}"
+{{/when}}
+>
+    <img  class=""
+        src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+        alt="{{fileName}}"/>
+</a>

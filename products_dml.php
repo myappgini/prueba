@@ -14,6 +14,7 @@ function products_insert(&$error_message = '') {
 
 	$data = [
 		'name' => Request::val('name', ''),
+		'uploads' => br2nl(Request::val('uploads', '')),
 	];
 
 
@@ -109,6 +110,7 @@ function products_update(&$selected_id, &$error_message = '') {
 
 	$data = [
 		'name' => Request::val('name', ''),
+		'uploads' => br2nl(Request::val('uploads', '')),
 	];
 
 	// get existing values
@@ -323,7 +325,11 @@ function products_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 		if( $dvprint) $templateCode = str_replace('<%%VALUE(name)%%>', safe_html($urow['name']), $templateCode);
 		if(!$dvprint) $templateCode = str_replace('<%%VALUE(name)%%>', html_attr($row['name']), $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(name)%%>', urlencode($urow['name']), $templateCode);
-		$templateCode = str_replace('<%%VALUE(uploads)%%>', safe_html($urow['uploads']), $templateCode);
+		if($dvprint || (!$AllowUpdate && !$AllowInsert)) {
+			$templateCode = str_replace('<%%VALUE(uploads)%%>', safe_html($urow['uploads']), $templateCode);
+		} else {
+			$templateCode = str_replace('<%%VALUE(uploads)%%>', html_attr($row['uploads']), $templateCode);
+		}
 		$templateCode = str_replace('<%%URLVALUE(uploads)%%>', urlencode($urow['uploads']), $templateCode);
 	} else {
 		$templateCode = str_replace('<%%VALUE(id)%%>', '', $templateCode);
