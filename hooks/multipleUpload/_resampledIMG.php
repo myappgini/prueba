@@ -106,39 +106,5 @@ function make_thumb_mov($source, $fileName, $ext, $folder, &$ret)
     $video
         ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(10))
         ->save($target);
-
-
-    // $currDir = dirname(__FILE__);
-    // $base_dir = realpath("{$currDir}/..");
-    // $fo = $base_dir. $folder->folder;
-    // $source = $fo.$folder->original.'/'.$source;
-
-    // require $base_dir.'/vendor/autoload.php';
-    // $ffmpeg = FFMpeg\FFMpeg::create();
-    // $ffprobe = FFMpeg\FFProbe::create();
-
-
-    // $duration = $ffprobe
-    //     ->format($source) // extracts file informations
-    //     ->get('duration');             // returns the duration property
-
-    // $video = $ffmpeg->open($source);
-    // $video
-    //     ->filters()
-    //     ->resize(new FFMpeg\Coordinate\Dimension(320, 240))
-    //     ->synchronize();
-
-
-    // $th = 5;
-    // $intervalo = $duration/$th;
-
-
-    // for ($x = 1; $x <= 4; $x++) {
-    //     $video
-    //         ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds($intervalo * $x))
-    //         ->save($target);
-    //     $target = $fo.$folder->thumbs.'/'. $fileName .'('. $x . ')_th.jpg';
-    // } 
-
     return;
 }

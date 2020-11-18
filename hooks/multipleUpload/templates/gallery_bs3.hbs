@@ -11,32 +11,24 @@
             <li class=" list-group-item {{#if defaultImage}} list-group-item-success {{/if}}">
               <div class="row">
                 <div class=" col-xs-4  col-md-4">
-                  <div
-                    class="lbid-{{@index}} d-flex justify-content-center">
-
-
-                      {{#when extension eq pdf}} 
-                        <a href="#" class=" thumbnail" onclick="showPdf('{{folder_base}}/{{fileName}}' , '{{name}}' )">
-                      {{/when}}
-                      {{#when type eq img}}
-                        <a class="thumbnail" href="{{folder_base}}/{{fileName}}" data-lightbox="set-{{@index}}" data-title="{{title}}">
-                      {{/when}}
-                          <img  class=""
-                                src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
-                                alt="{{fileName}}"/>
-                        </a>
+                  <div class="lbid-{{@index}}">
+                      {{> fileTypes_bs3}}
                   </div>
                 </div>
 
-
                 <div class="col-xs-8 col-md-8">
                   <ul class="list-group">
+                    <a class="list-group-item list-group-item-action active"
                      {{#when extension eq pdf}} 
-                        <a href="#" class=" list-group-item list-group-item-action active" onclick="showPdf('{{folder_base}}/{{fileName}}' , '{{name}}' )">
+                         href="#" onclick="showPdf('{{folder_base}}/{{fileName}}' , '{{name}}' )"
                       {{/when}}
                       {{#when type eq img}}
-                        <a class="list-group-item list-group-item-action active" href="{{folder_base}}/{{fileName}}" data-lightbox="set-{{@index}}" data-title="{{title}}">
+                        href="{{folder_base}}/{{fileName}}" data-lightbox="set-{{@index}}" data-title="{{title}}"
                       {{/when}}
+                      {{#when type eq mov}}
+                        href="#" data-modal-id="modal-video-{{@index}}"
+                      {{/when}}
+                    >
                       <h5 class="">
                         {{name}}
                       </h5>
@@ -62,8 +54,23 @@
                         {{/if}}
                       </div>
                     </div>
-                    <li class=" list-group-item">reanamed: {{isRenamed}}</li>
-                    <li class=" list-group-item">type - size: {{type}} - {{size}}</li>
+                    {{#if isRenamed}}
+                      <li class=" list-group-item">The file whas renamed. Old name: {{oldName}}</li>
+                    {{/if}}
+                    <li class=" list-group-item">
+
+                      <div class="row">
+                        <div class=" col-xs-3">type - size:</div>
+                        <div class=" col-xs-4">{{type}} - {{size}}</div>
+                        {{#when extension eq pdf}} 
+                        <div class=" col-xs-5">
+                          <button type="button" class="btn btn-primary btn-xs set-thumbnail-page" data-index="{{index}}">
+                            Set thumbnail page
+                          </button>
+                        </div>
+                        {{/when}}
+                      </div>
+
                     <li class=" list-group-item">folder: {{folder_base}}</li>
                     <li class=" list-group-item">date - time: {{dateUpload}} - {{timeUpload}}</li>
                   </ul>

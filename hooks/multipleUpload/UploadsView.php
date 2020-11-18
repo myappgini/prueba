@@ -43,8 +43,8 @@ $handlebars = new Handlebars([
 $handlebars = registerHelpers($handlebars);
 
 if ($cmd !== '') {
-    if (!$where){
-        $where = whereConstruct($tn,$id);
+    if (!$where) {
+        $where = whereConstruct($tn, $id);
     }
     $j = get_json($tn, $fn, $where);
     $j = json_decode($j, true);
@@ -55,14 +55,13 @@ if ($cmd !== '') {
             # Will render the model to the template
             $html =  $handlebars->render("dv_bs3", $j);
             echo $html;
-            
-        break;
+
+            break;
         case 'form':
-            
             # Will render the model to the template
             $html =  $handlebars->render("gallery_bs3", $j);
             echo $html;
-            
+
             break;
         default:
             # code...
@@ -88,7 +87,8 @@ if ($cmd !== '') {
 //   'userUpload' => string 'admin' (length=5)
 //   'aproveUpload' => boolean true
 
-function registerHelpers($handlebars){
+function registerHelpers($handlebars)
+{
 
     $handlebars->addHelper(
         "filemtime",
@@ -107,7 +107,7 @@ function registerHelpers($handlebars){
         function ($template, $context, $args, $source) {
 
             //preg_match("/(.*?)\s+(?:(?:\"|\')(.*?)(?:\"|\'))/", $args, $m);
-            $m = explode(" ",$args );
+            $m = explode(" ", $args);
             $keyname = $m[0];
             $when = $m[1];
             $compare = $m[2];
@@ -125,7 +125,7 @@ function registerHelpers($handlebars){
                 default:
                     break;
             }
-            return false;// $data.' ::: '.$when.':::'.$comapare.':::'.count($m);
+            return false; // $data.' ::: '.$when.':::'.$comapare.':::'.count($m);
         }
     );
 

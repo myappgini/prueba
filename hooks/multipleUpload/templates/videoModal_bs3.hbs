@@ -5,12 +5,12 @@
   role='dialog'
   aria-labelledby='modal-video-label'
 >
-  <div class='myVideo modal-dialog' role='document'>
-    <div class='myVideo modal-content'>
-      <div class='myVideo modal-header'>
+  <div class='modal-dialog' role='document'>
+    <div class='modal-content'>
+      <div class='modal-header'>
         <button
           type='button'
-          class='myVideo close'
+          class='close'
           data-dismiss='modal'
           aria-label='Close'
         >
@@ -18,12 +18,12 @@
             &times;
           </span>
         </button>
-        <h3 class='myVideo modal-title'>
+        <h3 class='modal-title'>
           {{title}}
         </h3>
       </div>
-      <div class='myVideo modal-body'>
-        <div class='myVideo modal-video'>
+      <div class='modal-body'>
+        <div class='modal-video'>
           <div align='center' class='embed-responsive embed-responsive-16by9'>
             <video
               id="video-mp4-{{@index}}"
@@ -39,13 +39,12 @@
   </div>
 </div>
     <script>
-            var indice = '{{@index}}';
             //windows modal for video
             $j('body form').on('click',".launch-modal", function(e) {
                 e.preventDefault();
                 $j('#' + $j(this).data('modal-id')).modal();
             });
             $j('.close').click(function() {
-                $j('#video-mp4-' + indice).trigger('load');
+                $j('#video-mp4-' + '{{@index}}').trigger('load');
             });
     </script>

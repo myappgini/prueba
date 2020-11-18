@@ -123,7 +123,6 @@ function currentSlide(n, x) {
 }
 
 function showPdf(file, title) {
-    var visible = 'hidden';
     var msg = '<div style ="height:100%;"><embed src="' + file + '#view=Fit"  width="100%" height="100%" style="z-index: 2;"></div>';
     modal_window({
         message: msg,
@@ -143,11 +142,11 @@ function showPdf(file, title) {
                 label: '<i class="glyphicon glyphicon-remove"></i> Close',
                 bs_class: 'primary',
                 click: function() {
-                    if (content_type() === 'tableview') {
-                        showTumbs();
-                    } else {
-                        loadImages();
-                    }
+                    // if (content_type() === 'tableview') {
+                    //     showTumbs();
+                    // } else {
+                    //     loadImages();
+                    // }
                     return true;
                 },
                 causes_closing: true //el valor indica que cuando hace click se cierra la ventana.
@@ -192,35 +191,6 @@ function showSlides(n) {
     dots[n].className += " active";
 }
 
-function showMov(file, n, t = 'video/mp4') {
-
-    //    modal_window({
-    //        message: '<div align="center"><video controls style="height:auto"><source src="' + file + '" type="' + t + '"></video></div>',
-    //        title: n,
-    //        size: 'full',
-    //        footer: [
-    //              {
-    //               label: '<i class="glyphicon glyphicon-cloud-download"></i> Download',
-    //               bs_class: 'default',
-    //               click: function(e){
-    //                   //download y new window
-    //                    var windowName = "popUp";//$(this).attr("name");
-    //                    window.open(file, windowName);
-    //                    e.preventDefault();  //stop the browser from following
-    //                   },
-    //               causes_closing: true
-    //               },
-    //               {
-    //               label: '<i class="glyphicon glyphicon-remove"></i> Close',
-    //               bs_class: 'primary',
-    //               click: function(){
-    //                   return true;
-    //                   },
-    //               causes_closing: true //el valor indica que cuando hace click se cierra la ventana.
-    //               }
-    //       ]
-    //    });
-}
 
 /**
  * Get upLoadedFile from ajax async function
@@ -326,7 +296,7 @@ async function openGalery(btn) {
             if( $modal.length > 0) {
                 $modal.remove();
             }
-            $j('body').append(msg);
+            $j('body form').append(msg);
             $j('#images-modal').modal('show')
         });
 
