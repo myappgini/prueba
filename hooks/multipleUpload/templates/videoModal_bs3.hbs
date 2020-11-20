@@ -38,13 +38,3 @@
     </div>
   </div>
 </div>
-    <script>
-            //windows modal for video
-            $j('body form').on('click',".launch-modal", function(e) {
-                e.preventDefault();
-                $j('#' + $j(this).data('modal-id')).modal();
-            });
-            $j('.close').click(function() {
-                $j('#video-mp4-' + '{{@index}}').trigger('load');
-            });
-    </script>

@@ -69,24 +69,6 @@ if ($cmd !== '') {
     }
 }
 
-
-
-// /srv/www/htdocs/prueba/hooks/multipleUpload/UploadsView.php:58:
-// array (size=13)
-//   'response-type' => string 'success' (length=7)
-//   'defaultImage' => boolean false
-//   'isRenamed' => boolean false
-//   'fileName' => string 'file-sample_150kB(1).pdf' (length=24)
-//   'extension' => string 'pdf' (length=3)
-//   'name' => string 'file-sample_150kB(1)' (length=20)
-//   'type' => string 'doc' (length=3)
-//   'hd_image' => boolean false
-//   'folder' => string '/srv/www/htdocs/prueba/images/products/1/' (length=41)
-//   'folder_base' => string 'images/products/1' (length=17)
-//   'size' => string 'false' (length=5)
-//   'userUpload' => string 'admin' (length=5)
-//   'aproveUpload' => boolean true
-
 function registerHelpers($handlebars)
 {
 

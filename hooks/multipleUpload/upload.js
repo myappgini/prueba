@@ -1,5 +1,16 @@
 /* global $j */
 
+openVideo = (i)=>{
+    $j('body form').on('click',".launch-modal", function(e) {
+        e.preventDefault();
+        $j('#' + $j(this).data('modal-id')).modal();
+    });
+    $j('.close').click(function() {
+        $j('#video-mp4-' + i).trigger('load');
+    });
+};
+
+
 async function showTumbs(fn = "uploads") {
     var $obj = $j('.' + AppGini.currentTableName() + '-image');
     $obj.each(function(index) {
@@ -142,11 +153,6 @@ function showPdf(file, title) {
                 label: '<i class="glyphicon glyphicon-remove"></i> Close',
                 bs_class: 'primary',
                 click: function() {
-                    // if (content_type() === 'tableview') {
-                    //     showTumbs();
-                    // } else {
-                    //     loadImages();
-                    // }
                     return true;
                 },
                 causes_closing: true //el valor indica que cuando hace click se cierra la ventana.
@@ -308,10 +314,17 @@ function save_button(tn, id) {
  
 }
 
-
-//tn, table name
-//folder source, defualt "images"
-//fn field name, default "uploads"
+/**
+* add a upload frame in dv
+* 
+* @param {object} settings - user seting from calling.
+*   need 
+*   tn (tableName) neceesarry, 
+*   fn (fieldName), defualt uploads if the user make in your table afiled asis
+*   folder name destiny, by default is images
+* @return {bollean} - true is everithink ok, otherwise false
+* 
+**/
 function active_upload_frame(settings) {
 
     let def = {
@@ -325,6 +338,8 @@ function active_upload_frame(settings) {
         var $actionButtons = $j('#' + def.tn + '_dv_action_buttons');
         $actionButtons.prepend(' <div id="imagesThumbs"></div>');
         $actionButtons.append('<p></p><div id="uploadFrame" class="col-12"></div>');
-        $j('#uploadFrame').load('hooks/multipleUpload/multipleUpload.php', def);
+        $j('#uploadFrame').load('hooks/multipleUpload/_multipleUpload.php', def);
+        return true
     }
+    return false
 }

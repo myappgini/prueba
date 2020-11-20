@@ -6,7 +6,7 @@
     class="thumbnail" href="{{folder_base}}/{{fileName}}" data-lightbox="set-{{@index}}" data-title="{{title}}"
 {{/when}}
 {{#when type eq mov}}
-    class="thumbnail launch-modal" href="#" data-modal-id="modal-video-{{@index}}"
+    class="thumbnail launch-modal" onclick="openVideo({{@index}})" href="#" data-modal-id="modal-video-{{@index}}"
 {{/when}}
 >
     <img  class=""
