@@ -6,15 +6,15 @@ function make_thumb($source, $fileName, $ext, &$folder, $page = 0)
     $base_dir = realpath("{$currDir}/../..");
     header('Content-type: images');
 
-    if ($folder->type === 'mov') {
-        make_thumb_mov($source, $fileName, $ext ,$folder, $ret);
-        return;
-    }
-
-
     $fo = $base_dir . "/" . $folder->folder;
     $source = $fo . $folder->original . '/' . $source;
     $target = $fo . $folder->original . '/' . $fileName . '_th.jpg';
+
+
+    if ($folder->type === 'mov') {
+        make_thumb_mov($source, $target);
+        return;
+    }
 
 
     if (extension_loaded('imagick')) {
@@ -66,34 +66,16 @@ function make_thumb($source, $fileName, $ext, &$folder, $page = 0)
             ));
             die();
         }
-        if ($w > 1200 && strtolower($ext) !== 'pdf') {
-            //create friendlyimage
-            $target = $fo . $folder->loRes . '/' . $fileName . '_LO.jpg';
-            $im   = new Imagick($source); // 0-first page, 1-second page
-            $color = new ImagickPixel();
-
-            //$im   ->setImageColorspace(255); // prevent image colors from inverting
-            $im->setimageformat("jpeg");
-            $im->setresolution(1200, 1200);
-            $im->borderImage($color, 1, 1);
-            $im->thumbnailimage(1200, 0); // width and height
-            $im->writeimage($target);
-            $im->clear();
-            $im->destroy();
-            $exit = true;
-        }
-        return $exit;
+        return true;
     } else {
-        //                    echo 'imagick not installed';
         throw new RuntimeException('i can\'t make a thumb imagenMagick not installed ');
+        return false;
     }
+    return false;
 }
 
-function make_thumb_mov($source, $fileName, $ext, $folder, &$ret)
+function make_thumb_mov($source, $target)
 {
-    $currDir = dirname(__FILE__);
-    $base_dir = realpath("{$currDir}/../..");
-    $fo = $base_dir . "/" . $folder->folder;
     require 'vendor/autoload.php';
     $source = $fo . $folder->original . '/' . $source;
     $ffmpeg = FFMpeg\FFMpeg::create();
@@ -102,7 +84,6 @@ function make_thumb_mov($source, $fileName, $ext, $folder, &$ret)
         ->filters()
         ->resize(new FFMpeg\Coordinate\Dimension(320, 240))
         ->synchronize();
-    $target =  $fo . $folder->original . '/' . $fileName . '_th.jpg';
     $video
         ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(10))
         ->save($target);

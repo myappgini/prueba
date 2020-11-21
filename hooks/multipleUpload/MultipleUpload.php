@@ -153,7 +153,6 @@ class MultipleUpload
 				"extension"     => $ext,
 				"name"          => $filename,
 				"type"          => $this->type,
-				"hd_image"      => $exit,
 				"folder"        => $original,
 				"folder_base"   => $this->folder,
 				"size"          => $this->size,

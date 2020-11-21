@@ -88,17 +88,12 @@ function registerHelpers($handlebars)
         "when",
         function ($template, $context, $args, $source) {
 
-            //preg_match("/(.*?)\s+(?:(?:\"|\')(.*?)(?:\"|\'))/", $args, $m);
             $m = explode(" ", $args);
             $keyname = $m[0];
             $when = $m[1];
             $compare = $m[2];
             $data = $context->get($keyname);
 
-
-            //$args = explode(" ", $args);
-            // var_dump($source);
-            // var_dump($template);
             switch ($when) {
                 case 'eq':
                     if ($data == $compare) return $template->render($context);
@@ -113,3 +108,5 @@ function registerHelpers($handlebars)
 
     return $handlebars;
 }
+//SELECT json_extract(uploads,'$.images[0].defaultImage') from products where id = 2
+//update products uploads set uploads=json_set(uploads,'$.images[0].defaultImage',false) where id = 2

@@ -229,28 +229,6 @@ function showCardsTV(field, dest, url) {
     }
 }
 
-function showItem(id, dest, url) {
-    //field = field to get the ID from
-    //dest = ID where to put the html result
-    //url = url&cmd for ajax
-    if (id > 0) {
-        $j.ajax({
-                method: 'post', //post, get
-                dataType: 'html', //json,text,html
-                url: 'hooks/' + url + '_card_AJAX.php',
-                cache: 'false',
-                data: { id: id, cmd: 'record' }
-            })
-            .done(function(msg) {
-                //function at response
-                //            var data = $j.parseJSON(msg);
-                //            ajaxCard( data[`${field}`], url, dest );
-                $j(dest).html(msg);
-                showTumbs();
-            });
-    }
-}
-
 function showParent(Data) {
     var parent_id = parseInt(Data.attributes.myid.value);
     var pt = Data.attributes.pt.value;
