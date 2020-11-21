@@ -17,13 +17,10 @@ $boostrap = "ver3";
 
 $currDir = dirname(__FILE__);
 
-$title = Request::val('title');
 $id = Request::val('id');
 $tn = Request::val('tn');
 $fn = Request::val('fn');
-$key = Request::val('key');
 $cmd = Request::val('cmd');
-$where = Request::val('where');
 
 # Set the partials files
 $partialsDir = __DIR__ . "/templates";
