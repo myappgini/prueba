@@ -13,13 +13,10 @@ openVideo = (i)=>{
 async function loadImages(settings) {
 
     let def = {
-        title: "missing title",
         id: false,
         tn: false,
         fn: 'uploads',
-        key: 'id',
-        cmd: "full",
-        where: `\`${settings.key}\`='${settings.id}'`
+        cmd: "full"
     }
     def = $j.extend({}, def, settings);
 
