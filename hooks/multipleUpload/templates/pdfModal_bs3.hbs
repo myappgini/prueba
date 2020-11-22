@@ -1,8 +1,8 @@
 <div
   class='modal fade in'
-  id="modal-video-{{@index}}"
+  id="modal-pdf-{{@index}}"
   role='dialog'
-  aria-labelledby='modal-video-label'
+  aria-labelledby='modal-pdf-label'
 >
   <div 
     class='modal-dialog modal-lg' 
@@ -25,17 +25,13 @@
         </h4>
       </div>
       <div class='modal-body'>
-        <div class='modal-video'>
-          <div align='center' class='embed-responsive embed-responsive-16by9'>
-            <video
-              id="video-mp4-{{@index}}"
-              controls
-              class='embed-responsive-item'
-              style='z-index: 20;'
-            >
-              <source src="{{folder_base}}/{{fileName}}" type='video/mp4' />
-            </video>
-          </div>
+        <div style='height:100%;'>
+          <embed
+            src="{{folder_base}}/{{fileName}}#view=Fit"
+            width='100%'
+            height='100%'
+            style='z-index: 20;'
+          />
         </div>
       </div>
       <div class='modal-footer'>

@@ -1,12 +1,21 @@
 <a
 {{#when extension eq pdf}} 
-    class="thumbnail" href="#" onclick="showPdf('{{folder_base}}/{{fileName}}' , '{{name}}' )"
+    class="thumbnail launch-modal" 
+    href="#" 
+    onclick="openPdf({{@index}})"
+    data-modal-id="modal-pdf-{{@index}}"
 {{/when}}
 {{#when type eq img}}
-    class="thumbnail" href="{{folder_base}}/{{fileName}}" data-lightbox="set-{{@index}}" data-title="{{title}}"
+    class="thumbnail" 
+    href="{{folder_base}}/{{fileName}}" 
+    data-lightbox="set-{{@index}}" 
+    data-title="{{title}}"
 {{/when}}
 {{#when type eq mov}}
-    class="thumbnail launch-modal" onclick="openVideo({{@index}})" href="#" data-modal-id="modal-video-{{@index}}"
+    class="thumbnail launch-modal" 
+    href="#" 
+    onclick="openVideo({{@index}})" 
+    data-modal-id="modal-video-{{@index}}"
 {{/when}}
 >
     <img  class=""

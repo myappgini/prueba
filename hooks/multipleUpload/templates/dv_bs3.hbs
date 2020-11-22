@@ -6,9 +6,14 @@
     style="{{#if defaultImage}} display: block;{{/if}}"
   >   
     {{> fileTypes_bs3}}
+
     {{#when type eq mov}}
       {{> videoModal_bs3}}
     {{/when}}
+    {{#when extension eq pdf}} 
+      {{> pdfModal_bs3}}
+    {{/when}}
+    
   </div>
     {{/each}}
     </div>

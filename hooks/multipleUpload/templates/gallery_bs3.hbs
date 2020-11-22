@@ -1,9 +1,28 @@
-<div id="images-modal" class="modal fade" tabindex="-1" role="dialog">
-  <div class=" modal-dialog modal-lg " role="document">
+<div 
+  class="modal fade" 
+  id="modal-gallery" 
+  role="dialog"
+  aria-labelledby='modal-gallery-label'
+  >
+  <div 
+    class=" modal-dialog modal-lg " 
+    role="document"
+  >
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Gallery</h4>
+        <button 
+          type="button" 
+          class="close" 
+          data-dismiss="modal" 
+          aria-label="Close"
+        >
+          <span aria-hidden="true">
+            &times;
+          </span>
+        </button>
+        <h4 class="modal-title">
+          Gallery
+        </h4>
       </div>
         <div class="modal-body">    
           <ul class="list-gropu" >
@@ -30,7 +49,7 @@
                       {{/when}}
                     >
                       <h5 class="">
-                        {{name}}
+                        {{title}}
                       </h5>
                     </a>
                     <li class=" list-group-item">extension: {{extension}}</li>

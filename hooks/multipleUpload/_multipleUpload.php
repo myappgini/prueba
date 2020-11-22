@@ -12,7 +12,7 @@ $tn = Request::val('tn');
 $fn = Request::val('fn');
 $id = Request::val('id');
 
-$url = "hooks/multipleUpload/upload-ajax.php?f={$f}&tn={$tn}&fn={$fn}&id={$id}";
+$url = "hooks/multipleUpload/MultipleUpload.php?f={$f}&tn={$tn}&fn={$fn}&id={$id}";
 
 ?>
 <div class="dz-container">

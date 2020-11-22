@@ -5,9 +5,19 @@ openVideo = (i)=>{
         e.preventDefault();
         $j('#' + $j(this).data('modal-id')).modal();
     });
-    $j('.close').click(function() {
-        $j('#video-mp4-' + i).trigger('load');
+    // $j('.close').click(function() {
+    //     $j('#video-mp4-' + i).trigger('load');
+    // });
+};
+
+openPdf = (i)=>{
+    $j('body form').on('click',".launch-modal", function(e) {
+        e.preventDefault();
+        $j('#' + $j(this).data('modal-id')).modal();
     });
+    // $j('.close').click(function() {
+    //     $j('#video-mp4-' + i).trigger('load');
+    // });
 };
 
 async function loadImages(settings) {
@@ -38,35 +48,6 @@ function currentSlide(n) {
     dots[n].className += " active";
 }
 
-function showPdf(file, title) {
-    var msg = '<div style ="height:100%;"><embed src="' + file + '#view=Fit"  width="100%" height="100%" style="z-index: 2;"></div>';
-    modal_window({
-        message: msg,
-        title: title,
-        size: 'full',
-        footer: [{
-                label: '<i class="glyphicon glyphicon-cloud-download"></i> Download',
-                bs_class: 'default',
-                click: function(e) {
-                    var windowName = "popUp"; //$(this).attr("name");
-                    window.open(file, windowName);
-                    e.preventDefault(); //stop the browser from following
-                },
-                causes_closing: true
-            },
-            {
-                label: '<i class="glyphicon glyphicon-remove"></i> Close',
-                bs_class: 'primary',
-                click: function() {
-                    return true;
-                },
-                causes_closing: true //el valor indica que cuando hace click se cierra la ventana.
-            }
-        ]
-    });
-}
-
-
 //open galery, open modal form
 async function openGalery(btn) {
 
@@ -84,12 +65,12 @@ async function openGalery(btn) {
             data: data
         })
         .done(function(msg) {
-            let $modal = $j('#images-modal');
+            let $modal = $j('#modal-gallery');
             if( $modal.length > 0) {
                 $modal.remove();
             }
             $j('body form').append(msg);
-            $j('#images-modal').modal('show')
+            $j('#modal-gallery').modal('show')
         });
 
 }
@@ -116,7 +97,7 @@ function active_upload_frame(settings) {
     let def = {
         tn: false,
         fn: 'uploads',
-        folder: 'iamges',
+        folder: 'images',
     }
     def = $j.extend({}, def, settings);
 
