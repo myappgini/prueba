@@ -1,57 +1,14 @@
-<div
-  class='modal fade in'
-  id="modal-video-{{@index}}"
-  role='dialog'
-  aria-labelledby='modal-video-label'
->
-  <div 
-    class='modal-dialog modal-lg' 
-    role='document'
-  >
-    <div class='modal-content'>
-      <div class='modal-header'>
-        <button
-          type='button'
-          class='close'
-          data-dismiss='modal'
-          aria-label='Close'
-        >
-          <span aria-hidden='true'>
-            &times;
-          </span>
-        </button>
-        <h4 class='modal-title'>
-          {{title}}
-        </h4>
-      </div>
-      <div class='modal-body'>
-        <div class='modal-video'>
-          <div align='center' class='embed-responsive embed-responsive-16by9'>
+{{> modalHeader_bs3}}
+        <div class="modal-video">
+          <div align="center" class="embed-responsive embed-responsive-16by9">
             <video
               id="video-mp4-{{@index}}"
               controls
-              class='embed-responsive-item'
-              style='z-index: 20;'
+              class="embed-responsive-item"
+              style="z-index: 20;"
             >
-              <source src="{{folder_base}}/{{fileName}}" type='video/mp4' />
+              <source src="{{folder_base}}/{{fileName}}" type="video/mp4" />
             </video>
           </div>
         </div>
-      </div>
-      <div class='modal-footer'>
-        <button
-          type='button'
-          class='btn btn-secondary'
-          onclick="download_button('{{tn}}','{{id}}');"
-        >
-          <i class='glyphicon glyphicon-cloud-download'></i>
-          Download
-        </button>
-        <button type='button' class='btn btn-default' data-dismiss='modal'>
-          <i class='glyphicon glyphicon-remove'></i>
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+{{> modalFooter_bs3}}

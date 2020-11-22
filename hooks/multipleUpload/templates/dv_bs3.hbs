@@ -5,14 +5,17 @@
     class="mySlides lbid-{{@index}} col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2"
     style="{{#if defaultImage}} display: block;{{/if}}"
   >   
-    {{> fileTypes_bs3}}
-
-    {{#when type eq mov}}
-      {{> videoModal_bs3}}
-    {{/when}}
-    {{#when extension eq pdf}} 
-      {{> pdfModal_bs3}}
-    {{/when}}
+  <a {{> fileTypes_bs3}}>
+    <img  class=""
+        src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+        alt="{{fileName}}"/>
+  </a>
+  {{#when type eq mov}}
+    {{> videoModal_bs3}}
+  {{/when}}
+  {{#when extension eq pdf}} 
+    {{> pdfModal_bs3}}
+  {{/when}}
     
   </div>
     {{/each}}

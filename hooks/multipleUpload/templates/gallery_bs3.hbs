@@ -1,11 +1,11 @@
 <div 
-  class="modal fade" 
-  id="modal-gallery" 
+  class="modal fade in" 
+  id="modal-media-gallery" 
   role="dialog"
   aria-labelledby='modal-gallery-label'
-  >
+>
   <div 
-    class=" modal-dialog modal-lg " 
+    class="modal-dialog modal-lg " 
     role="document"
   >
     <div class="modal-content">
@@ -31,23 +31,21 @@
               <div class="row">
                 <div class=" col-xs-4  col-md-4">
                   <div class="lbid-{{@index}}">
-                      {{> fileTypes_bs3}}
+                        <a
+                          {{> fileTypes_bs3}}
+                        >
+                            <img  class=""
+                                src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+                                alt="{{fileName}}"/>
+                        </a>
                   </div>
                 </div>
 
                 <div class="col-xs-8 col-md-8">
                   <ul class="list-group">
                     <a class="list-group-item list-group-item-action active"
-                     {{#when extension eq pdf}} 
-                         href="#" onclick="showPdf('{{folder_base}}/{{fileName}}' , '{{name}}' )"
-                      {{/when}}
-                      {{#when type eq img}}
-                        href="{{folder_base}}/{{fileName}}" data-lightbox="set-{{@index}}" data-title="{{title}}"
-                      {{/when}}
-                      {{#when type eq mov}}
-                        href="#" data-modal-id="modal-video-{{@index}}"
-                      {{/when}}
-                    >
+                        {{> fileTypes_bs3}}
+                      >
                       <h5 class="">
                         {{title}}
                       </h5>

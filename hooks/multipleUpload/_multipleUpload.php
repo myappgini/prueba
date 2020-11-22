@@ -17,7 +17,7 @@ $url = "hooks/multipleUpload/MultipleUpload.php?f={$f}&tn={$tn}&fn={$fn}&id={$id
 ?>
 <div class="dz-container">
         <div class="btn-group-vertical btn-group-lg" style="width: 100%;"> 
-                <button class="btn btn-info col-lg-12" type="button" onclick="openGalery();" >Open Galary</button>
+                <button class="btn btn-info col-lg-12" type="button" onclick="openGalery({fn:'<?php echo $fn; ?>'});" >Open Galary</button>
         </div>
         <p></p>
         <div id="response" class="row"></div>
@@ -26,8 +26,7 @@ $url = "hooks/multipleUpload/MultipleUpload.php?f={$f}&tn={$tn}&fn={$fn}&id={$id
         </div>
 </div>
 <script>
-        var ext = "." + '<?php echo $ext->extensions_img . "|" . $ext->extensions_mov . "|" . $ext->extensions_docs . "|" . $upload->extensions_audio;
-                                ?>';
+        var ext = "." + '<?php echo $ext->extensions_img . "|" . $ext->extensions_mov . "|" . $ext->extensions_docs . "|" . $upload->extensions_audio; ?>';
         ext = ext.replace(/\|/g, ",.");
         $j("div#my-awesome-dropzone").dropzone({
                 paramName: "uploadedFile", // The name that will be used to transfer the file

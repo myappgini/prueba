@@ -1,24 +1,15 @@
-<a
-{{#when extension eq pdf}} 
-    class="thumbnail launch-modal" 
-    href="#" 
-    onclick="openPdf({{@index}})"
-    data-modal-id="modal-pdf-{{@index}}"
-{{/when}}
-{{#when type eq img}}
-    class="thumbnail" 
-    href="{{folder_base}}/{{fileName}}" 
-    data-lightbox="set-{{@index}}" 
+    class="thumbnail modal-media" 
+    data-modal-id="modal-media-{{@index}}"
     data-title="{{title}}"
-{{/when}}
-{{#when type eq mov}}
-    class="thumbnail launch-modal" 
-    href="#" 
-    onclick="openVideo({{@index}})" 
-    data-modal-id="modal-video-{{@index}}"
-{{/when}}
->
-    <img  class=""
-        src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
-        alt="{{fileName}}"/>
-</a>
+    {{#when type eq img}}
+        href="{{folder_base}}/{{fileName}}" 
+        data-lightbox="set-{{@index}}" 
+    {{/when}}
+    {{#when extension eq pdf}} 
+        href="#" 
+        onclick="openMedia({{@index}})"
+    {{/when}}
+    {{#when type eq mov}}
+        href="#" 
+        onclick="openMedia({{@index}})" 
+    {{/when}}

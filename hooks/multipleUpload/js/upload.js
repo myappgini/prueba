@@ -1,26 +1,24 @@
 /* global $j */
 
-openVideo = (i)=>{
-    $j('body form').on('click',".launch-modal", function(e) {
+openMedia = (i)=>{
+    $j('body form').on('click',".modal-media", function(e) {
         e.preventDefault();
-        $j('#' + $j(this).data('modal-id')).modal();
+        var mod = $j('#' + $j(this).data('modal-id'));
+        if(!mod.length) return;
+        mod.modal();
+        setTimeout(() => {
+            var wh = $j(window).height(),
+                mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight();
+            let val = wh - mhfoh - 80;
+            mod.find('.modal-body').css({
+                height: val
+            });
+        }, 300);
     });
-    // $j('.close').click(function() {
-    //     $j('#video-mp4-' + i).trigger('load');
-    // });
 };
 
-openPdf = (i)=>{
-    $j('body form').on('click',".launch-modal", function(e) {
-        e.preventDefault();
-        $j('#' + $j(this).data('modal-id')).modal();
-    });
-    // $j('.close').click(function() {
-    //     $j('#video-mp4-' + i).trigger('load');
-    // });
-};
 
-async function loadImages(settings) {
+function loadImages(settings) {
 
     let def = {
         id: false,
@@ -49,28 +47,28 @@ function currentSlide(n) {
 }
 
 //open galery, open modal form
-async function openGalery(btn) {
+function openGalery(settings) {
 
-    let data = {
+    let def = {
         cmd: "form",
         tn: AppGini.currentTableName(),
         id: selected_id(),
         fn: "uploads"
     }
-
+    def = $j.extend({}, def, settings);
     $j.ajax({
             method: "POST",
             dataType: "text",
             url: 'hooks/multipleUpload/UploadsView.php',
-            data: data
+            data: def
         })
         .done(function(msg) {
-            let $modal = $j('#modal-gallery');
+            let $modal = $j('#modal-media-gallery');
             if( $modal.length > 0) {
                 $modal.remove();
             }
             $j('body form').append(msg);
-            $j('#modal-gallery').modal('show')
+            $j('#modal-media-gallery').modal('show')
         });
 
 }
