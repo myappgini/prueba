@@ -21,7 +21,7 @@
           </span>
         </button>
         <h4 class="modal-title">
-          Gallery
+          {{#default title 'Gallery'}}
         </h4>
       </div>
         <div class="modal-body">    
@@ -64,7 +64,12 @@
                           false 
                         </div>
                         <div class="col-xs-5" >
-                          <button type="button" class="btn btn-primary btn-xs set-default-image" data-index="{{index}}">
+                          <button 
+                            type="button" 
+                            class="btn btn-primary btn-xs set-default-image" 
+                            data-index="{{@index}}"
+                            onclick="setDefault({{@index}})"
+                            >
                             Set as defualt
                           </button>
                         </div>
@@ -81,7 +86,7 @@
                         <div class=" col-xs-4">{{type}} - {{size}}</div>
                         {{#when extension eq pdf}} 
                         <div class=" col-xs-5">
-                          <button type="button" class="btn btn-primary btn-xs set-thumbnail-page" data-index="{{index}}">
+                          <button type="button" class="btn btn-primary btn-xs set-thumbnail-page" data-index="{{@index}}">
                             Set thumbnail page
                           </button>
                         </div>

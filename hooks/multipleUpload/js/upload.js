@@ -17,6 +17,13 @@ openMedia = (i)=>{
     });
 };
 
+setDefault = (i)=>{
+    $j('body form').one('click','.set-default-image', function(e){
+        e.preventDefault();
+        alert("setdefault!" + i);
+    })
+}
+
 
 function loadImages(settings) {
 

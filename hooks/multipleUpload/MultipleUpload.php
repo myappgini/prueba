@@ -1,7 +1,7 @@
 <?php
 class MultipleUpload
 {
-	protected $title, $name, $logo, $errors, $extensions;
+	protected $errors;
 
 	public function __construct($config = array())
 	{
@@ -11,28 +11,24 @@ class MultipleUpload
 		$this->extensions_mov  = '|mov|avi|swf|asf|wmv|mpg|mpeg|mp4|flv';
 		$this->extensions_docs = '|txt|doc|docx|pdf|zip';
 		$this->extensions_audio = '|wav|mp3';
+		$this->extensions = $this->extensions_docs . $this->extensions_img . $this->extensions_mov . $this->extensions_audio ;
 		$this->type = 'img';
-		$this->original = '';
 		$this->minImageSize = 1200;
+		$this->size = 'false';
+		$this->tn="";
+		$this->fn = "uploads";
+		$this->id;
+		$this->prueba="";
 	}
 
 	public function process_ajax_upload()
 	{
 		$resources_dir = dirname(__FILE__);
-		$base_dir = realpath("{$resources_dir}/../..");
-		include_once("$base_dir/lib.php");
-
-		$extensiones_docs = $this->extensions_docs;
-		$extensiones_mov = $this->extensions_mov;
-		$extensiones_img = $this->extensions_img;
-		$extensiones_audio = $this->extensions_audio;
-		$this->size = 'false';
-		$extensiones = $extensiones_img . $extensiones_docs . $extensiones_mov . $extensiones_audio;
+		$base_dir = realpath("$resources_dir/../..");
 
 		$mi = getMemberInfo();
 
-		$folder_base = $base_dir . "/" . $this->folder;
-		$original = $folder_base . "/" . $this->original;
+		$original =$base_dir . "/" . $this->folder . "/" ;
 
 		try {
 
@@ -44,6 +40,8 @@ class MultipleUpload
 			$file = pathinfo($_FILES['uploadedFile']['name']);
 			$ext = strtolower($file['extension']); // get the extension of the file	
 			$filename = $file['filename'];
+
+			$this->check_extension($ext);
 
 			// Undefined | Multiple Files | $_FILES Corruption Attack
 			// If this request falls under any of them, treat it invalid.
@@ -61,24 +59,8 @@ class MultipleUpload
 					throw new RuntimeException('Unknown errors.');
 			}
 
-			//Check extention
-			if (strpos($extensiones_docs, $ext)) {
-				//it is a doc
-				$this->type = 'doc';
-			}
-
-			if (strpos($extensiones_mov, $ext)) {
-				//it is movie
-				$this->type = 'mov';
-			}
-			if (strpos($extensiones_audio, $ext)) {
-				//it is movie
-				$this->type = 'audio';
-			}
-
-			$extensiones = explode('|', $extensiones);
-			if (!in_array(strtolower($ext), $extensiones)) {
-				throw new RuntimeException('You must upload a (' . implode("|", $extensiones) . ') file');
+			if (!strpos( $this->extensions, $ext)) {
+				throw new RuntimeException('You must upload a (' . $this->extensions . ') file');
 			}
 
 			// $_FILES['uploadedFile']['name'] validation
@@ -168,21 +150,36 @@ class MultipleUpload
 				include("functions-ajax.php");
 			}
 
-			$tn = Request::val('tn');
-			$fn = Request::val('fn');
-			$id = Request::val('id');
-			$res = add_json($tn, $id, $fn, $data);
+			$res = add_json($this->tn, $this->id , $this->fn, $data);
 			$data['success']=$res;
 			echo json_encode($data);
 		}
 		return;
 	}
+	private function check_extension($ext){
+		//Check extention
+		if (strpos( $this->extensions_docs, $ext)) {
+			$this->type = 'doc';
+		}
+		if (strpos($this->extensions_mov, $ext)) {
+			$this->type = 'mov';
+		}
+		if (strpos($this->extensions_audio, $ext)) {
+			$this->type = 'audio';
+		}
+	}
 }
 
-$folder = '';
+$currDir = dirname(__FILE__);
+$base_dir = realpath("{$currDir}/../..");
+if (!function_exists('makeSafe')) {
+	include("$base_dir/lib.php");
+}
 if (isset($_GET['f'])) {
-	$folder = $_GET['f'];
 	$mu = new MultipleUpload();
-	$mu->folder = $folder;
+	$mu->folder = Request::val('f');
+	$mu->tn = Request::val('tn');
+	$mu->fn = Request::val('fn');
+	$mu->id = Request::val('id');
 	$mu->process_ajax_upload();
 }

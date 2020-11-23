@@ -3,14 +3,17 @@ $currDir = dirname(__FILE__);
 $base_dir = realpath("{$currDir}/../..");
 if (!isset($_REQUEST['folder'])) die("You can't call this file directly.");
 include($currDir . '/MultipleUpload.php');
-$ext = new MultipleUpload();
 if (!function_exists('makeSafe')) {
         include("$base_dir/lib.php");
 }
+
+$mu = new MultipleUpload();
 $f = Request::val('folder');
 $tn = Request::val('tn');
 $fn = Request::val('fn');
 $id = Request::val('id');
+
+$mu->prueba="hola mundo";
 
 $url = "hooks/multipleUpload/MultipleUpload.php?f={$f}&tn={$tn}&fn={$fn}&id={$id}";
 
@@ -26,7 +29,7 @@ $url = "hooks/multipleUpload/MultipleUpload.php?f={$f}&tn={$tn}&fn={$fn}&id={$id
         </div>
 </div>
 <script>
-        var ext = "." + '<?php echo $ext->extensions_img . "|" . $ext->extensions_mov . "|" . $ext->extensions_docs . "|" . $upload->extensions_audio; ?>';
+        var ext = '<?php echo $mu->extensions; ?>';
         ext = ext.replace(/\|/g, ",.");
         $j("div#my-awesome-dropzone").dropzone({
                 paramName: "uploadedFile", // The name that will be used to transfer the file
@@ -72,7 +75,7 @@ $url = "hooks/multipleUpload/MultipleUpload.php?f={$f}&tn={$tn}&fn={$fn}&id={$id
                                 $j("#response").html("<div class='alert alert-danger'>" + response + "</div>");
                                 $j(".dropzone").css("border", "3px dotted red");
 
-                                setTimeout(deleteFile(), 4000, file, this);
+                                setTimeout(deleteFile, 4000, file, this);
                         });
                 }
         })
