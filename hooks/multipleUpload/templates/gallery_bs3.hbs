@@ -1,111 +1,80 @@
-<div 
-  class="modal fade in" 
-  id="modal-media-gallery" 
-  role="dialog"
-  aria-labelledby='modal-gallery-label'
->
-  <div 
-    class="modal-dialog modal-lg " 
-    role="document"
-  >
-    <div class="modal-content">
-      <div class="modal-header">
-        <button 
-          type="button" 
-          class="close" 
-          data-dismiss="modal" 
-          aria-label="Close"
-        >
-          <span aria-hidden="true">
-            &times;
-          </span>
-        </button>
-        <h4 class="modal-title">
-          {{#default title 'Gallery'}}
-        </h4>
-      </div>
-        <div class="modal-body">    
-          <ul class="list-gropu" >
-              {{#each images}}  
-            <li class=" list-group-item {{#if defaultImage}} list-group-item-success {{/if}}">
-              <div class="row">
-                <div class=" col-xs-4  col-md-4">
-                  <div class="lbid-{{@index}}">
-                        <a
-                          {{> fileTypes_bs3}}
-                        >
-                            <img  class=""
-                                src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
-                                alt="{{fileName}}"/>
-                        </a>
-                  </div>
-                </div>
-
-                <div class="col-xs-8 col-md-8">
-                  <ul class="list-group">
-                    <a class="list-group-item list-group-item-action active"
-                        {{> fileTypes_bs3}}
-                      >
-                      <h5 class="">
-                        {{title}}
-                      </h5>
-                    </a>
-                    <li class=" list-group-item">extension: {{extension}}</li>
-                    <li class=" list-group-item">upload by: {{userUpload}}</li>
-                    <div class="list-group-item default-image">
-                      <div class="row">
-                        <div class="col-xs-3">
-                        defualt:  
-                        </div>
-                        {{#if defaultImage}}
-                          <div class="col-xs-9">true</div>
-                        {{else}} 
-                        <div class="col-xs-4">
-                          false 
-                        </div>
-                        <div class="col-xs-5" >
-                          <button 
-                            type="button" 
-                            class="btn btn-primary btn-xs set-default-image" 
-                            data-index="{{@index}}"
-                            onclick="setDefault({{@index}})"
-                            >
-                            Set as defualt
-                          </button>
-                        </div>
+{{> modalHeader_bs3}}    
+        <ul class="list-gropu">
+            {{#each images}}  
+          <li class=" list-group-item {{#if defaultImage}} list-group-item-success {{/if}}" data-ix="{{@index}}">
+            <div class="row">
+              <div class=" col-xs-4  col-md-4">
+                <div class="lbid-{{@index}}">
+                      <a {{> fileTypes_bs3}}>
+                        {{#if thumbnail}} 
+                          <img  class=""
+                              src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+                              alt="{{fileName}}"/>
+                        {{else}}
+                          <span class="attachment-thumbnail">{{extension}}</span>
+                          <small class="">{{title}}</small>
                         {{/if}}
-                      </div>
-                    </div>
-                    {{#if isRenamed}}
-                      <li class=" list-group-item">The file whas renamed. Old name: {{oldName}}</li>
-                    {{/if}}
-                    <li class=" list-group-item">
+                      </a>
+                </div>
+              </div>
 
-                      <div class="row">
-                        <div class=" col-xs-3">type - size:</div>
-                        <div class=" col-xs-4">{{type}} - {{size}}</div>
+              <div class="col-xs-8 col-md-8">
+                <ul class="list-group">
+                  <a class="list-group-item list-group-item-action active"
+                      {{> fileTypes_bs3}}
+                    >
+                    <h5 class="">
+                      {{title}}
+                    </h5>
+                  </a>
+                  <li class=" list-group-item">upload by: {{userUpload}}</li>
+                  <div class="list-group-item default-image">
+                    <div class="row">
+                      <div class="col-xs-3">
+                      defualt:  
+                      </div>
+                      {{#if defaultImage}}
+                        <div class="col-xs-9"><span class="glyphicon glyphicon-check"></span></div>
+                      {{else}} 
+                      <div class="col-xs-4">
+                        <span class="glyphicon glyphicon-unchecked"></span> 
+                      </div>
+                      <div class="col-xs-5" >
+                        <button 
+                          type="button" 
+                          class="btn btn-primary btn-xs set-default-image" 
+                          data-ix="{{@index}}"
+                          data-cmd="set-default"
+                          onclick="setDefault({{@index}})"
+                          >
+                          Set as defualt
+                        </button>
+                      </div>
+                      {{/if}}
+                    </div>
+                  </div>
+                  {{#if isRenamed}}
+                    <li class=" list-group-item">The file whas renamed. Old name: {{oldName}}</li>
+                  {{/if}}
+                  <li class=" list-group-item">
+                    <div class="row">
+                      <div class=" col-xs-6">type - {{type}}</div>
+                      <div class=" col-xs-6">size - {{size}}</div>
+                      {{#if thumbnail}}
                         {{#when extension eq pdf}} 
-                        <div class=" col-xs-5">
+                        <div class=" col-xs-12">
                           <button type="button" class="btn btn-primary btn-xs set-thumbnail-page" data-index="{{@index}}">
                             Set thumbnail page
                           </button>
                         </div>
                         {{/when}}
-                      </div>
-
-                    <li class=" list-group-item">folder: {{folder_base}}</li>
-                    <li class=" list-group-item">date: {{dateUpload}}  - time: {{timeUpload}}</li>
-                  </ul>
-                </div>
+                      {{/if}}
+                    </div>
+                  <li class=" list-group-item">date: {{dateUpload}}  - time: {{timeUpload}}</li>
+                </ul>
               </div>
-            </li>
-              {{/each}}
-          </ul>
-        </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="save_button('{{tn}}','{{id}}');">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
+            </div>
+          </li>
+            {{/each}}
+        </ul>
+{{> modalFooter_bs3}}

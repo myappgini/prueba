@@ -6,9 +6,14 @@
     style="{{#if defaultImage}} display: block;{{/if}}"
   >   
   <a {{> fileTypes_bs3}}>
-    <img  class=""
-        src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
-        alt="{{fileName}}"/>
+    {{#if thumbnail}} 
+      <img  class=""
+          src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+          alt="{{fileName}}"/>
+    {{else}}
+      <span class="attachment-thumbnail">{{extension}}</span>
+      <small class="">{{title}}</small>
+    {{/if}}
   </a>
   {{#when type eq mov}}
     {{> videoModal_bs3}}
@@ -23,12 +28,20 @@
   <div class="row columns-thumbs">
     {{#each images }}
       <div class="col-xs-3 col-md-6">
-        <img
-          class="img-lite thumbnail {{#if defaultImage}} active {{/if}}"
-          src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
-          onclick="currentSlide({{@index}})"
-          alt="{{name}}"
-        />
+        {{#if thumbnail}} 
+          <img
+            class="img-lite thumbnail {{#if defaultImage}} active {{/if}}"
+            src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+            onclick="currentSlide({{@index}})"
+            alt="{{name}}"
+          />
+        {{else}}
+          <a class="attachment-thumbnail-preview img-lite thumbnail {{#if defaultImage}} active {{/if}}"
+            title="{{title}}" 
+            onclick="currentSlide({{@index}})">
+            <span class="attachment-thumbnail">{{extension}}</span>
+          </a>
+        {{/if}}
       </div>
     {{/each}}
   </div>

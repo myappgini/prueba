@@ -1,17 +1,25 @@
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          onclick="download_button('{{tn}}','{{id}}');"
-        >
-          <i class="glyphicon glyphicon-cloud-download"></i>
-          Download
-        </button>
         <button type="button" class="btn btn-default" data-dismiss="modal">
           <i class="glyphicon glyphicon-remove"></i>
           Close
         </button>
+          <button 
+            type="button" 
+        {{#if gallery}}
+            class="btn btn-primary" 
+            onclick="save_button('{{tn}}','{{id}}');"
+          >
+            <i class="glyphicon glyphicon-save"></i>
+            Save changes
+        {{else}}
+            class="btn btn-secondary"
+            onclick="download_button('{{tn}}','{{id}}');"
+          >
+            <i class="glyphicon glyphicon-cloud-download"></i>
+            Download
+        {{/if}}
+          </button>
       </div>
     </div>
   </div>

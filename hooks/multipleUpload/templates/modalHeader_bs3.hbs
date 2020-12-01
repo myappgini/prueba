@@ -1,8 +1,8 @@
 <div
   class="modal fade in"
-  id="modal-media-{{@index}}"
+  id="modal-media-{{#if gallery}}gallery{{else}}{{@index}}{{/if}}"
   role="dialog"
-  aria-labelledby="modal-video-label"
+  aria-labelledby="modal-media-label"
 >
   <div 
     class="modal-dialog modal-lg" 
@@ -21,7 +21,7 @@
           </span>
         </button>
         <h4 class="modal-title">
-          {{title}}
+          {{#default title 'Gallery'}}
         </h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" data-id = "{{id}}" data-fn = "{{fn}}" data-tn = "{{tn}}">
