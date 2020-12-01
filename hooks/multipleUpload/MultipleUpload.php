@@ -18,7 +18,7 @@ class MultipleUpload
 		$this->tn="";
 		$this->fn = "uploads";
 		$this->id;
-		$this->prueba="";
+		$this->folder_base="images";
 	}
 
 	public function process_ajax_upload()
@@ -176,11 +176,14 @@ $base_dir = realpath("{$currDir}/../..");
 if (!function_exists('makeSafe')) {
 	include("$base_dir/lib.php");
 }
-if (isset($_GET['f'])) {
+if (isset($_GET['tn'])) {
 	$mu = new MultipleUpload();
-	$mu->folder = Request::val('f');
 	$mu->tn = Request::val('tn');
 	$mu->fn = Request::val('fn');
 	$mu->id = Request::val('id');
+	//define folder
+	//$mu->folder = Request::val('f');
+	$mu->folder = "{$mu->folder_base}/{$mu->tn}/{$mu->id}";
+	//
 	$mu->process_ajax_upload();
 }

@@ -28,15 +28,12 @@ setDefault = (i)=>{
         if ( typeof lastix !== 'undefined'){
             data.lastix = lastix.ix;
         }
-        console.log(data);
         $j.ajax({
             type: "post",
             url: "hooks/multipleUpload/functions-ajax.php",
             data: data,
             dataType: "json",
             success: function (res) {
-                //alert ("defualt setting");
-                console.log(res);
                 let gallery = $j('#modal-media-gallery');
                 gallery.modal('hide');
                 gallery.on('hidden.bs.modal', function() {
@@ -44,13 +41,11 @@ setDefault = (i)=>{
                 });
             }
         });
-
     })
 }
 
 
 function loadImages(settings) {
-
     let def = {
         id: false,
         tn: false,
@@ -58,7 +53,6 @@ function loadImages(settings) {
         cmd: "full"
     }
     def = $j.extend({}, def, settings);
-
     $j('#imagesThumbs').load('hooks/multipleUpload/UploadsView.php', def, function() {
         if (!is_add_new()) {
             if (content_type() === 'print-detailview') {
@@ -127,7 +121,6 @@ function active_upload_frame(settings) {
     let def = {
         tn: false,
         fn: 'uploads',
-        folder: 'images',
     }
     def = $j.extend({}, def, settings);
 

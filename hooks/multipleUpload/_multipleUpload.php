@@ -1,21 +1,18 @@
 <?php
 $currDir = dirname(__FILE__);
 $base_dir = realpath("{$currDir}/../..");
-if (!isset($_REQUEST['folder'])) die("You can't call this file directly.");
+if (!isset($_REQUEST['tn'])) die("You can't call this file directly.");
 include($currDir . '/MultipleUpload.php');
 if (!function_exists('makeSafe')) {
         include("$base_dir/lib.php");
 }
 
 $mu = new MultipleUpload();
-$f = Request::val('folder');
 $tn = Request::val('tn');
 $fn = Request::val('fn');
 $id = Request::val('id');
 
-$mu->prueba="hola mundo";
-
-$url = "hooks/multipleUpload/MultipleUpload.php?f={$f}&tn={$tn}&fn={$fn}&id={$id}";
+$url = "hooks/multipleUpload/MultipleUpload.php?&tn={$tn}&fn={$fn}&id={$id}";
 
 ?>
 <div class="dz-container">

@@ -17,7 +17,8 @@ function make_thumb($source, $fileName, $ext, &$folder, $page = 0)
     }
 
 
-    if (extension_loaded('imagick')) {
+    if ($exit) {
+    //if (extension_loaded('imagick')) {
         try {
             $im = new \imagick();
             $color = new ImagickPixel();
@@ -68,7 +69,7 @@ function make_thumb($source, $fileName, $ext, &$folder, $page = 0)
         }
         return true;
     } else {
-        throw new RuntimeException('i can\'t make a thumb imagenMagick not installed ');
+        //throw new RuntimeException('i can\'t make a thumb imagenMagick not installed ');
         return false;
     }
     return false;
