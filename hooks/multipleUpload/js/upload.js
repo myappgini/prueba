@@ -44,6 +44,13 @@ setDefault = (i)=>{
     })
 }
 
+$j(document).on('show.bs.modal', '.modal', function () {
+    var zIndex = 1040 + (10 * $j('.modal:visible').length);
+    $j(this).css('z-index', zIndex);
+    setTimeout(function() {
+        $j('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+    }, 0);
+});
 
 function loadImages(settings) {
     let def = {

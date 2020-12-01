@@ -12,13 +12,10 @@ function make_thumb($source, $fileName, $ext, &$folder, $page = 0)
 
 
     if ($folder->type === 'mov') {
-        make_thumb_mov($source, $target);
-        return;
+        return make_thumb_mov($source, $target);
     }
 
-
-    if ($exit) {
-    //if (extension_loaded('imagick')) {
+    if (extension_loaded('imagick')) {
         try {
             $im = new \imagick();
             $color = new ImagickPixel();
@@ -88,5 +85,5 @@ function make_thumb_mov($source, $target)
     $video
         ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(10))
         ->save($target);
-    return;
+    return true;
 }
