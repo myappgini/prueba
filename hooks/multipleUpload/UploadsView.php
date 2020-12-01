@@ -1,7 +1,7 @@
 <?php
 // 
 // Author: Alejandro Landini
-// previewImages.php 7/4/18
+// from previewImages.php 7/4/18
 // update 10/9/20
 //get functions
 include('functions-ajax.php');
@@ -13,7 +13,7 @@ Handlebars\Autoloader::register();
 use Handlebars\Handlebars;
 use Handlebars\Loader\FilesystemLoader;
 
-$boostrap = "ver3";
+$boostrap = "bs3";
 
 $currDir = dirname(__FILE__);
 
@@ -45,7 +45,6 @@ if ($cmd !== '') {
     }
     $j = get_json($tn, $fn, $where);
     $j = json_decode($j, true);
-    $j['id'] = $id;
 
     switch ($cmd) {
         case 'full':
@@ -54,8 +53,9 @@ if ($cmd !== '') {
             echo $html;
 
             break;
-        case 'form':
+        case 'gallery':
             # Will render the model to the template
+            $j['gallery']=true;
             $html =  $handlebars->render("gallery_bs3", $j);
             echo $html;
 
@@ -95,7 +95,8 @@ function registerHelpers($handlebars)
                 case 'eq':
                     if ($data == $compare) return $template->render($context);
                     break;
-
+                case '!eq':
+                    if ($data !== $compare) return $template->render($context);
                 default:
                     break;
             }

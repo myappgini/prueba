@@ -3,24 +3,48 @@
 openMedia = (i)=>{
     $j('body form').on('click',".modal-media", function(e) {
         e.preventDefault();
-        var mod = $j('#' + $j(this).data('modal-id'));
+        let mod = $j('#' + $j(this).data('modal-id'));
         if(!mod.length) return;
         mod.modal();
-        setTimeout(() => {
+        mod.on('shown.bs.modal', function(){
             var wh = $j(window).height(),
-                mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight();
+            mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight();
             let val = wh - mhfoh - 80;
             mod.find('.modal-body').css({
                 height: val
             });
-        }, 300);
+        })
     });
 };
 
 setDefault = (i)=>{
     $j('body form').one('click','.set-default-image', function(e){
         e.preventDefault();
-        alert("setdefault!" + i);
+        let $this = $j(this);
+        let lastix = $j('li.list-group-item-success').data();
+        let data = $this.closest(".modal-body").data();
+        
+        data = $j.extend({},$this.data(), data)
+        if ( typeof lastix !== 'undefined'){
+            data.lastix = lastix.ix;
+        }
+        console.log(data);
+        $j.ajax({
+            type: "post",
+            url: "hooks/multipleUpload/functions-ajax.php",
+            data: data,
+            dataType: "json",
+            success: function (res) {
+                //alert ("defualt setting");
+                console.log(res);
+                let gallery = $j('#modal-media-gallery');
+                gallery.modal('hide');
+                gallery.on('hidden.bs.modal', function() {
+                    openGalery({fn:data.fn});
+                });
+            }
+        });
+
     })
 }
 
@@ -57,12 +81,13 @@ function currentSlide(n) {
 function openGalery(settings) {
 
     let def = {
-        cmd: "form",
+        cmd: "gallery",
         tn: AppGini.currentTableName(),
         id: selected_id(),
         fn: "uploads"
     }
     def = $j.extend({}, def, settings);
+
     $j.ajax({
             method: "POST",
             dataType: "text",

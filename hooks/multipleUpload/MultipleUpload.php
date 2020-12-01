@@ -126,8 +126,6 @@ class MultipleUpload
 			}
 			//file uploaded successfully	
 			
-			header('Content-Type: application/json; charset=utf-8');
-			// * defaultImage => se cambia a true si es el primer elemento en la funcion add_json
 			$data = array(
 				"defaultImage"  => FALSE, 
 				"isRenamed"     => $renameFlag,
@@ -142,14 +140,17 @@ class MultipleUpload
 				"dateUpload"	=> date("d.m.y"),
 				"timeUpload"	=> date("H:i:s"),
 				"oldName"		=> $oldName ? $oldName : "",
-				"title"			=> $filename
+				"title"			=> $filename,
+				"thumbnail"		=> $exit
 			);
 			
 			// * guardar registro..
 			if (!function_exists('add_json')) {
 				include("functions-ajax.php");
 			}
-
+			
+			header('Content-Type: application/json; charset=utf-8');
+			// * defaultImage => se cambia a true si es el primer elemento en la funcion add_json
 			$res = add_json($this->tn, $this->id , $this->fn, $data);
 			$data['success']=$res;
 			echo json_encode($data);

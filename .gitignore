@@ -1,2 +1,3 @@
 images/products/
 hooks/multipleUpload.zip
+hooks/multipleUpload/templates/trello.html

@@ -5,18 +5,32 @@ if (!function_exists('getMemberInfo')) {
 $cmd = Request::val('cmd');
 $tn = Request::val('tn');
 $fn = Request::val('fn');
+$id = Request::val('id');
+$ix = Request::val('ix');
+$lastix = Request::val('lastix');
 $where = Request::val('where');
 
 if ($cmd !== '') {
+    header('Content-Type: application/json; charset=utf-8');
     switch ($cmd) {
         case 'get_json':
             $rslt = get_json($tn, $fn, $where);
-            header('Content-Type: application/json; charset=utf-8');
             echo json_encode($rslt);
             break;
         case 'put_json':
             $rslt = put_json($tn, $set, $where);
-            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode($rslt);
+        break;
+        case 'set-default':
+            $where = whereConstruct($tn,$id);
+            if ($lastix != ""){
+                $sql ="UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$lastix}].defaultImage',false) WHERE {$where}";
+                $res = sqlValue($sql);
+            }
+            $sql ="UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$ix}].defaultImage',true) WHERE {$where}";
+            $res = sqlValue($sql);
+            //$sql ="UPDATE {$tn} {$fn} SET uploads=json_set(uploads,'$.images[{$ix}].defaultImage',true) WHERE {$where}";
+            $rslt ['res'] = $sql;
             echo json_encode($rslt);
             break;
     }
