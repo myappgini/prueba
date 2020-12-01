@@ -16,12 +16,12 @@ $url = "hooks/multipleUpload/MultipleUpload.php?&tn={$tn}&fn={$fn}&id={$id}";
 
 ?>
 <div class="dz-container">
-        <div class="btn-group-vertical btn-group-lg" style="width: 100%;"> 
-                <button class="btn btn-info col-lg-12" type="button" onclick="openGalery({fn:'<?php echo $fn; ?>'});" >Open Galary</button>
+        <div class="btn-group-vertical btn-group-lg" style="width: 100%;">
+                <button class="btn btn-info col-lg-12" type="button" onclick="openGalery({fn:'<?php echo $fn; ?>'});">Open Galary</button>
         </div>
         <p></p>
         <div id="response" class="row"></div>
-        <div id="my-awesome-dropzone" class="dropzone">
+        <div id="my-awesome-dropzone"  class="dropzone">
                 <i class="glyphicon glyphicon-upload"></i>
         </div>
 </div>
@@ -40,11 +40,11 @@ $url = "hooks/multipleUpload/MultipleUpload.php?&tn={$tn}&fn={$fn}&id={$id}";
                 init: function() {
                         this.on("success", function(file, response) {
                                 if (response.success) {
-                                        var dismiss = $j("<button />",{
-                                                class:"close",
+                                        var dismiss = $j("<button />", {
+                                                class: "close",
                                                 type: "button",
-                                                "data-dismiss":"alert",
-                                                "aria-label":"Close"
+                                                "data-dismiss": "alert",
+                                                "aria-label": "Close"
                                         }).append('<span aria-hidden="true">&times;</span>')
                                         var successMsg = "<strong> Upload OK </strong>" + (response.isRenamed ? "<br>File name exist, new name: " + response.fileName + "." : response.fileName);
                                         var successDiv = $j("<div />", {
@@ -80,4 +80,5 @@ $url = "hooks/multipleUpload/MultipleUpload.php?&tn={$tn}&fn={$fn}&id={$id}";
         function deleteFile(file, elm) {
                 elm.removeFile(file);
         }
+
 </script>
