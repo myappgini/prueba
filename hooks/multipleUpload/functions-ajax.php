@@ -29,7 +29,6 @@ if ($cmd !== '') {
             }
             $sql ="UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$ix}].defaultImage',true) WHERE {$where}";
             $res = sqlValue($sql);
-            //$sql ="UPDATE {$tn} {$fn} SET uploads=json_set(uploads,'$.images[{$ix}].defaultImage',true) WHERE {$where}";
             $rslt ['res'] = $sql;
             echo json_encode($rslt);
             break;
@@ -59,7 +58,6 @@ function put_json($tn, $set, $where)
 
 function add_json($tn, $id, $fn, $data)
 {
-
     $where = whereConstruct($tn,$id);
     $res = get_json($tn, $fn, $where);
     $set = json_decode($res, true);

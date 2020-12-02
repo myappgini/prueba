@@ -37,6 +37,7 @@ setDefault = (i)=>{
                 let gallery = $j('#modal-media-gallery');
                 gallery.modal('hide');
                 gallery.on('hidden.bs.modal', function() {
+                    load_images(false);
                     openGalery({fn:data.fn});
                 });
             }
@@ -45,6 +46,7 @@ setDefault = (i)=>{
 }
 
 $j(document).on('show.bs.modal', '.modal', function () {
+    //stackeable modal
     var zIndex = 1040 + (10 * $j('.modal:visible').length);
     $j(this).css('z-index', zIndex);
     setTimeout(function() {
@@ -103,7 +105,6 @@ function openGalery(settings) {
             $j('body form').append(msg);
             $j('#modal-media-gallery').modal('show')
         });
-
 }
 
 function save_button(tn, id) {
@@ -119,7 +120,6 @@ function save_button(tn, id) {
 *   need 
 *   tn (tableName) neceesarry, 
 *   fn (fieldName), defualt uploads if the user make in your table afiled asis
-*   folder name destiny, by default is images
 * @return {bollean} - true is everithink ok, otherwise false
 * 
 **/
