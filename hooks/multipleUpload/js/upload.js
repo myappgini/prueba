@@ -1,5 +1,3 @@
-/* global $j */
-
 openMedia = (i)=>{
     $j('body form').on('click',".modal-media", function(e) {
         e.preventDefault();
