@@ -20,13 +20,14 @@
 
               <div class="col-xs-8 col-md-8">
                 <ul class="list-group">
-                  <a class="list-group-item list-group-item-action active"
-                      {{> fileTypes_bs3}}
-                    >
-                    <h5 class="">
-                      {{title}}
-                    </h5>
-                  </a>
+                  <li class="list-group-item list-group-item-action active">
+                    <a {{> fileTypes_bs3}} >
+                      <h5 class="">
+                        {{title}}
+                      </h5>
+                    </a>
+                   <a class="remove-media" href="#" onclick="removeMedia({{@index}});" ><span class="glyphicon glyphicon-trash text-danger" ></span></a>
+                  </li>
                   <li class=" list-group-item">upload by: {{userUpload}}</li>
                   <div class="list-group-item default-image">
                     <div class="row">
@@ -42,7 +43,7 @@
                       <div class="col-xs-5" >
                         <button 
                           type="button" 
-                          class="btn btn-primary btn-xs set-default-image" 
+                          class="btn btn-primary btn-xs set-default-media" 
                           data-ix="{{@index}}"
                           data-cmd="set-default"
                           onclick="setDefault({{@index}})"
@@ -58,18 +59,23 @@
                   {{/if}}
                   <li class=" list-group-item">
                     <div class="row">
-                      <div class=" col-xs-6">type - {{type}}</div>
-                      <div class=" col-xs-6">size - {{size}}</div>
+                      <div class=" col-xs-6"> <p>type - {{type}}</p> </div>
+                      <div class=" col-xs-6"> <p> size - <code>{{size}}</code></p> </div>
                       {{#if thumbnail}}
                         {{#when extension eq pdf}} 
+                        <br>
                         <div class=" col-xs-12">
-                          <button type="button" class="btn btn-primary btn-xs set-thumbnail-page" data-index="{{@index}}">
-                            Set thumbnail page
-                          </button>
+                          <div class="input-group">
+                            <span class="input-group-addon">Set thumbnail page</span>
+                            <input type="text" name="page" class="form-control" id="paganumber{{@index}}">
+                            <span class="input-group-btn">
+                              <button type="button" class="btn btn-info btn-flat set-default-page" onclick="setDefaulPage({{@index}},'{{size}}')" >Go!</button>
+                            </span>
+                          </div>
                         </div>
                         {{/when}}
-                      {{/if}}
                     </div>
+                      {{/if}}
                   <li class=" list-group-item">date: {{dateUpload}}  - time: {{timeUpload}}</li>
                 </ul>
               </div>

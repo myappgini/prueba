@@ -16,3 +16,10 @@
     text-align: center;
     text-decoration: none;
 }
+ul li.list-group-item.list-group-item-action.active a{
+    background-color: transparent;
+    color: white;
+    border: transparent;
+    padding: 0;
+    margin-bottom: 0;
+} 

@@ -1,5 +1,6 @@
 <?php
 ?>
+
 <script>
 /**
  * Construct a selectable drop down list with registered users.

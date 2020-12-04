@@ -1,29 +1,33 @@
-openMedia = (i)=>{
-    $j('body form').on('click',".modal-media", function(e) {
+openMedia = (i) => {
+    $j('body form').one('click', ".modal-media", function (e) {
         e.preventDefault();
         let mod = $j('#' + $j(this).data('modal-id'));
-        if(!mod.length) return;
+        if (!mod.length) return;
         mod.modal();
-        mod.on('shown.bs.modal', function(){
-            var wh = $j(window).height(),
-            mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight();
-            let val = wh - mhfoh - 80;
-            mod.find('.modal-body').css({
-                height: val
-            });
-        })
+        resizeModal(mod)
     });
 };
 
-setDefault = (i)=>{
-    $j('body form').one('click','.set-default-image', function(e){
+function resizeModal(mod) {
+    mod.on('shown.bs.modal', function () {
+        var wh = $j(window).height(),
+            mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight();
+        let val = wh - mhfoh - 80;
+        mod.find('.modal-body').css({
+            height: val
+        });
+    })
+}
+
+setDefault = (i) => {
+    $j('body form').one('click', '.set-default-media', function (e) {
         e.preventDefault();
         let $this = $j(this);
         let lastix = $j('li.list-group-item-success').data();
         let data = $this.closest(".modal-body").data();
-        
-        data = $j.extend({},$this.data(), data)
-        if ( typeof lastix !== 'undefined'){
+
+        data = $j.extend({}, $this.data(), data)
+        if (typeof lastix !== 'undefined') {
             data.lastix = lastix.ix;
         }
         $j.ajax({
@@ -34,12 +38,36 @@ setDefault = (i)=>{
             success: function (res) {
                 let gallery = $j('#modal-media-gallery');
                 gallery.modal('hide');
-                gallery.on('hidden.bs.modal', function() {
+                gallery.on('hidden.bs.modal', function () {
                     load_images(false);
-                    openGalery({fn:data.fn});
+                    openGalery({
+                        fn: data.fn
+                    });
                 });
             }
         });
+    })
+}
+
+setDefaulPage = (ix, max) => {
+    $j('body form').one('click', '.set-default-page', function (e) {
+        $j(this).closest('.input-group').removeClass('has-error');
+        max = getNumbers(max);
+        page = $j('#paganumber' + ix).val();
+        if (page < 1 || page > max[0] || max[0] < 1) {
+            $j(this).closest('.input-group').addClass('has-error')
+            return;
+        }
+        console.log(max[0], page);
+
+    })
+}
+
+removeMedia = (ix) => {
+    $j('body form').one('click', ".remove-media", function (e) {
+        e.preventDefault();
+        alert('remove' + ix)
+
     })
 }
 
@@ -47,9 +75,10 @@ $j(document).on('show.bs.modal', '.modal', function () {
     //stackeable modal
     var zIndex = 1040 + (10 * $j('.modal:visible').length);
     $j(this).css('z-index', zIndex);
-    setTimeout(function() {
+    setTimeout(function () {
         $j('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
     }, 0);
+    console.log('stackeable')
 });
 
 function loadImages(settings) {
@@ -60,7 +89,7 @@ function loadImages(settings) {
         cmd: "full"
     }
     def = $j.extend({}, def, settings);
-    $j('#imagesThumbs').load('hooks/multipleUpload/UploadsView.php', def, function() {
+    $j('#imagesThumbs').load('hooks/multipleUpload/UploadsView.php', def, function () {
         if (!is_add_new()) {
             if (content_type() === 'print-detailview') {
                 $j('div.columns-thumbs').hide();
@@ -95,9 +124,9 @@ function openGalery(settings) {
             url: 'hooks/multipleUpload/UploadsView.php',
             data: def
         })
-        .done(function(msg) {
+        .done(function (msg) {
             let $modal = $j('#modal-media-gallery');
-            if( $modal.length > 0) {
+            if ($modal.length > 0) {
                 $modal.remove();
             }
             $j('body form').append(msg);
@@ -107,20 +136,20 @@ function openGalery(settings) {
 
 function save_button(tn, id) {
 
-    alert('save_button '+tn);
- 
+    alert('save_button ' + tn);
+
 }
 
 /**
-* add a upload frame in dv
-* 
-* @param {object} settings - user seting from calling.
-*   need 
-*   tn (tableName) neceesarry, 
-*   fn (fieldName), defualt uploads if the user make in your table afiled asis
-* @return {bollean} - true is everithink ok, otherwise false
-* 
-**/
+ * add a upload frame in dv
+ * 
+ * @param {object} settings - user seting from calling.
+ *   need 
+ *   tn (tableName) neceesarry, 
+ *   fn (fieldName), defualt uploads if the user make in your table afiled asis
+ * @return {bollean} - true is everithink ok, otherwise false
+ * 
+ **/
 function active_upload_frame(settings) {
 
     let def = {
