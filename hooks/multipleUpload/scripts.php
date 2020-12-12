@@ -7,5 +7,6 @@
 <link rel="stylesheet" href="hooks/multipleUpload/css/attachment_thumbnail.css">
 <script src="hooks/multipleUpload/dropzone/dropzone.min.js" ></script>
 <script src="hooks/multipleUpload/js/myCommonJs.js" ></script>
+<script src="hooks/multipleUpload/js/pdf.js" ></script>
 <script src="hooks/multipleUpload/js/upload.js" ></script>
 <!-- multiple upload libraries -->
