@@ -75,15 +75,20 @@ function make_thumb($source, $fileName, $ext, &$folder, $page = 0)
 function make_thumb_mov($source, $target)
 {
     require 'vendor/autoload.php';
-    $source = $fo . $folder->original . '/' . $source;
-    $ffmpeg = FFMpeg\FFMpeg::create();
-    $video = $ffmpeg->open($source);
-    $video
-        ->filters()
-        ->resize(new FFMpeg\Coordinate\Dimension(320, 240))
-        ->synchronize();
-    $video
-        ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(10))
-        ->save($target);
-    return true;
+    if (class_exists('FFMpeg')){
+        $source = $fo . $folder->original . '/' . $source;
+        $ffmpeg = FFMpeg\FFMpeg::create();
+        $video = $ffmpeg->open($source);
+        $video
+            ->filters()
+            ->resize(new FFMpeg\Coordinate\Dimension(320, 240))
+            ->synchronize();
+        $video
+            ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(10))
+            ->save($target);
+        return true;
+
+    }else{
+        return false;
+    }
 }
