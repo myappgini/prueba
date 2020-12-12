@@ -3,6 +3,8 @@
 
 	function products_init(&$options, $memberInfo, &$args) {
 
+		//$options->AllowFilters = 0;
+
 		return TRUE;
 	}
 
@@ -43,6 +45,18 @@
 
 		switch($contentType) {
 			case 'tableview':
+				// $js = "";
+				// ob_start();
+				?>
+					<script>
+				// 	$j(function(){
+				// 		$j("button").remove('#NoFilter');
+				// 	});
+					</script>
+				 <?php
+				// $js = ob_get_contents();
+				// ob_end_clean();
+				// $footer .= $js;
 				$footer='';
 				break;
 
