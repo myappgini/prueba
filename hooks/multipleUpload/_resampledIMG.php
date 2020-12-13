@@ -75,7 +75,7 @@ function make_thumb($source, $fileName, $ext, &$folder, $page = 0)
 function make_thumb_mov($source, $target)
 {
     require 'vendor/autoload.php';
-    if (class_exists('FFMpeg')){
+    if (class_exists('FFMpeg\FFMpeg')){
         $source = $fo . $folder->original . '/' . $source;
         $ffmpeg = FFMpeg\FFMpeg::create();
         $video = $ffmpeg->open($source);
