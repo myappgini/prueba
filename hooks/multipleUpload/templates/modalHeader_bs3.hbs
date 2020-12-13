@@ -2,8 +2,7 @@
   class="modal fade in"
   id="modal-media-{{#if gallery}}gallery{{else}}{{@index}}{{/if}}"
   role="dialog"
-  aria-labelledby="modalTitle"
-  aria-hidden="true"
+  aria-labelledby="modalTitle-{{#if gallery}}gallery{{else}}{{@index}}{{/if}}"
 >
   <div 
     class="modal-dialog modal-lg" 
@@ -21,7 +20,7 @@
             &times;
           </span>
         </button>
-        <h4 class="modal-title" id="modalTitle" >
+        <h4 class="modal-title" id="modalTitle-{{#if gallery}}gallery{{else}}{{@index}}{{/if}}" >
           {{#default title 'Gallery'}}
         </h4>
       </div>

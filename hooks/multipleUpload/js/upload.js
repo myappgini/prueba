@@ -71,15 +71,27 @@ removeMedia = (ix) => {
     })
 }
 
-$j(document).on('show.bs.modal', '.modal', function () {
-    //stackeable modal
-    var zIndex = 1040 + (10 * $j('.modal:visible').length);
-    $j(this).css('z-index', zIndex);
-    setTimeout(function () {
-        $j('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
-    }, 0);
-    console.log('stackeable')
-});
+$j(document).on({
+    'show.bs.modal': function () {
+        var $mod = $j(this);
+        var zIndex = 1040 + (10 * $j('.modal:visible').length);
+        console.log(zIndex);
+        $mod.css('z-index', zIndex);
+        setTimeout(function() {
+            $j('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    },
+    'hidden.bs.modal': function() {
+        if ($j('.modal:visible').length > 0) {
+            // restore the modal-open class to the body element, so that scrolling works
+            // properly after de-stacking a modal.
+            $j(this).modal('handleUpdate');
+            setTimeout(function() {
+                $j  (document.body).addClass('modal-open');
+            },0);
+        }
+    }
+}, '.modal');
 
 function loadImages(settings) {
     let def = {
@@ -129,7 +141,7 @@ function openGalery(settings) {
             if ($modal.length > 0) {
                 $modal.remove();
             }
-            $j('body form').append(msg);
+            $j('#imagesThumbs').append(msg);
             $j('#modal-media-gallery').modal('show')
         });
 }
