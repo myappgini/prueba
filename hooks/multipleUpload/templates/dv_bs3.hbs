@@ -11,8 +11,14 @@
           src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
           alt="{{fileName}}"/>
     {{else}}
-      <span class="attachment-thumbnail">{{extension}}</span>
+      {{#when extension eq pdf}}
+        <img data-pdf-file="{{folder_base}}/{{name}}.pdf" src="hooks/multipleUpload/pdf.png">
+      {{/when}}
+      {{#when extension !eq pdf}}
+        <span class="attachment-thumbnail">{{extension}}</span>
+      {{/when}}
       <small class="">{{title}}</small>
+
     {{/if}}
   </a>
   </div>
@@ -39,7 +45,12 @@
           <a class="attachment-thumbnail-preview img-lite thumbnail {{#if defaultImage}} active {{/if}}"
             title="{{title}}" 
             onclick="currentSlide({{@index}})">
-            <span class="attachment-thumbnail">{{extension}}</span>
+            {{#when extension eq pdf}}
+              <img data-pdf-file="{{folder_base}}/{{name}}.pdf" src="hooks/multipleUpload/pdf.png">
+            {{/when}}
+            {{#when extension !eq pdf}}
+              <span class="attachment-thumbnail">{{extension}}</span>
+            {{/when}}
           </a>
         {{/if}}
       </div>

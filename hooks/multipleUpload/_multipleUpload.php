@@ -61,6 +61,9 @@ $url = "hooks/multipleUpload/MultipleUpload.php?&tn={$tn}&fn={$fn}&id={$id}";
 
                 //* refresh container images
                 load_images(false);
+                setTimeout(() => {
+                    createPDFThumbnails();
+                }, 500);
 
             });
             this.on("error", function(file, response) {

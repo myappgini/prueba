@@ -2,7 +2,7 @@ $j(function () {
 
     load_images(true);
     
-    $j('#products_dv_form').append(add_card("hello world"));
+    //$j('#products_dv_form').append(add_card("hello world"));
 
 });
 
