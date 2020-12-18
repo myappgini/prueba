@@ -118,7 +118,7 @@ class MultipleUpload
 			throw new RuntimeException('Failed to move uploaded file.');
 		} else {
 			$exit = false;
-			if ($this->type === 'img' || strtolower($ext) === 'pdf' || $this->type === 'mov') {
+			if ($this->type === 'img' || $this->type === 'mov') {
 				//add thumbsnail
 				include '_resampledIMG.php';
 				$exit = make_thumb($renameFlag ? $newName : $file['basename'], $filename, $ext, $this);
@@ -141,7 +141,8 @@ class MultipleUpload
 				"timeUpload"	=> date("H:i:s"),
 				"oldName"		=> $oldName ? $oldName : "",
 				"title"			=> $filename,
-				"thumbnail"		=> $exit
+				"thumbnail"		=> $exit,
+				"pdf-page"		=> 1
 			);
 			
 			// * guardar registro..

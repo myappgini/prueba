@@ -11,7 +11,7 @@
                               src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
                               alt="{{fileName}}"/>
                         {{else}}
-                          <span class="attachment-thumbnail">{{extension}}</span>
+                           {{> ispdf_bs3}}
                           <small class="">{{title}}</small>
                         {{/if}}
                       </a>

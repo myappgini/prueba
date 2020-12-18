@@ -1,34 +1,28 @@
+
+
 <div class="mySliders">
   <div class="row">
     {{#each images }}
-  <div
-    class="mySlides lbid-{{@index}} col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2"
-    style="{{#if defaultImage}} display: block;{{/if}}"
-  >   
-  <a {{> fileTypes_bs3}}>
-    {{#if thumbnail}} 
-      <img  class=""
-          src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
-          alt="{{fileName}}"/>
-    {{else}}
-      {{#when extension eq pdf}}
-        <img data-pdf-file="{{folder_base}}/{{name}}.pdf" src="hooks/multipleUpload/pdf.png">
+      <div
+        class="mySlides lbid-{{@index}} col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2"
+        style="{{#if defaultImage}} display: block;{{/if}}"
+      >   
+      <a {{> fileTypes_bs3}}>
+        {{#if thumbnail}} 
+          <img src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+              alt="{{fileName}}"/>
+        {{else}}
+          {{> ispdf_bs3}}
+          <small class="">{{title}}</small>
+        {{/if}}
+      </a>
+      </div>
+      {{#when type eq mov}}
+        {{> videoModal_bs3}}
       {{/when}}
-      {{#when extension !eq pdf}}
-        <span class="attachment-thumbnail">{{extension}}</span>
+      {{#when extension eq pdf}} 
+        {{> pdfModal_bs3}}
       {{/when}}
-      <small class="">{{title}}</small>
-
-    {{/if}}
-  </a>
-  </div>
-  {{#when type eq mov}}
-    {{> videoModal_bs3}}
-  {{/when}}
-  {{#when extension eq pdf}} 
-    {{> pdfModal_bs3}}
-  {{/when}}
-    
     {{/each}}
     </div>
   <div class="row columns-thumbs">
@@ -45,15 +39,11 @@
           <a class="attachment-thumbnail-preview img-lite thumbnail {{#if defaultImage}} active {{/if}}"
             title="{{title}}" 
             onclick="currentSlide({{@index}})">
-            {{#when extension eq pdf}}
-              <img data-pdf-file="{{folder_base}}/{{name}}.pdf" src="hooks/multipleUpload/pdf.png">
-            {{/when}}
-            {{#when extension !eq pdf}}
-              <span class="attachment-thumbnail">{{extension}}</span>
-            {{/when}}
+            {{> ispdf_bs3}}
           </a>
         {{/if}}
       </div>
     {{/each}}
   </div>
 </div>
+

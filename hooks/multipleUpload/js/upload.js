@@ -144,6 +144,7 @@ function openGalery(settings) {
             }
             $j('#imagesThumbs').append(msg);
             $j('#modal-media-gallery').modal('show')
+            createPDFThumbnails();
         });
 }
 
