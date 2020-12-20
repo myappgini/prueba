@@ -15,16 +15,15 @@ function make_thumb($source, $fileName, $ext, &$folder, $page = 0)
         return make_thumb_mov($source, $target);
     }
 
-    $specs = array ("width" =>"200","height"=>"200","identifier"=>"_th");
+    $specs = array("width" => "200", "height" => "200", "identifier" => "_th");
     if (createThumbnail($source, $specs)) return true;
     return false;
-    
 }
 
 function make_thumb_mov($source, $target)
 {
     require 'vendor/autoload.php';
-    if (class_exists('FFMpeg\FFMpeg')){
+    if (class_exists('FFMpeg\FFMpeg')) {
         $source = $fo . $folder->original . '/' . $source;
         $ffmpeg = FFMpeg\FFMpeg::create();
         $video = $ffmpeg->open($source);
@@ -36,8 +35,7 @@ function make_thumb_mov($source, $target)
             ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(10))
             ->save($target);
         return true;
-
-    }else{
+    } else {
         return false;
     }
 }
