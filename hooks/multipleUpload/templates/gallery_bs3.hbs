@@ -1,86 +1,95 @@
 {{> modalHeader_bs3}}    
         <ul class="list-gropu">
-            {{#each images}}  
-          <li class=" list-group-item {{#if defaultImage}} list-group-item-success {{/if}}" data-ix="{{@index}}">
-            <div class="row">
-              <div class=" col-xs-4  col-md-4">
-                <div class="lbid-{{@index}}">
-                      <a {{> fileTypes_bs3}}>
-                        {{#if thumbnail}} 
-                          <img  class=""
-                              src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
-                              alt="{{fileName}}"/>
-                        {{else}}
-                           {{> ispdf_bs3}}
-                          <small class="">{{title}}</small>
+          {{#each images}}  
+            <li class=" list-group-item {{#if defaultImage}} list-group-item-success {{/if}}" data-ix="{{@index}}">
+              <div class="row">
+                <div class=" col-xs-4  col-md-4">
+                  <div class="lbid-{{@index}} gallery">
+                        <a {{> fileTypes_bs3}}>
+                          {{#if thumbnail}} 
+                            <img  class=""
+                                src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+                                alt="{{fileName}}"/>
+                          {{else}}
+                            {{> ispdf_bs3}}
+                            <small class="">{{title}}</small>
+                          {{/if}}
+                        </a>
+                  </div>
+                </div>
+
+                <div class="col-xs-8 col-md-8">
+                  <ul class="list-group">
+                    <li class="list-group-item list-group-item-action active">
+                      <div class="box-header" >
+                        <a {{> fileTypes_bs3}} >
+                          <h5 class="">
+                            {{title}}
+                          </h5>
+                        </a>
+                        <div class="box-tools">
+                          <button type="button" class=" remove-media btn btn-tool" onclick="removeMedia({{@index}});" >
+                            <span class="glyphicon glyphicon-trash"></span>
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                    <li class=" list-group-item">upload by: {{userUpload}}</li>
+                    <div class="list-group-item default-image">
+                      <div class="row">
+                        <div class="col-xs-3">
+                        defualt:  
+                        </div>
+                        {{#if defaultImage}}
+                          <div class="col-xs-9"><span class="glyphicon glyphicon-check"></span></div>
+                        {{else}} 
+                        <div class="col-xs-4">
+                          <span class="glyphicon glyphicon-unchecked"></span> 
+                        </div>
+                        <div class="col-xs-5" >
+                          <button 
+                            type="button" 
+                            class="btn btn-primary btn-xs set-default-media" 
+                            data-ix="{{@index}}"
+                            data-cmd="set-default"
+                            onclick="setDefault({{@index}})"
+                            >
+                            Set as defualt
+                          </button>
+                        </div>
                         {{/if}}
-                      </a>
+                      </div>
+                    </div>
+                    {{#if isRenamed}}
+                      <li class=" list-group-item">The file whas renamed. Old name: {{oldName}}</li>
+                    {{/if}}
+                    <li class=" list-group-item">
+                      <div class="row">
+                        <div class=" col-xs-6"> <p>type - {{type}}</p> </div>
+                        <div class=" col-xs-6"> <p> size - <code class="code-pdfsize-{{@index}}">{{size}}</code></p> </div>
+                          {{#when extension eq pdf}} 
+                          <br>
+                          <div class="col-xs-12">
+                            <div class="input-group">
+                              <span class="input-group-addon">Set thumbnail page</span>
+                              <input type="text" name="page" class="form-control" id="pdf-page-{{@index}}">
+                              <span class="input-group-btn">
+                                <button type="button" 
+                                        class="btn btn-info btn-flat set-default-page" 
+                                        onclick="setDefaultPage({{@index}})" 
+                                        data-cmd="set-pdf-page"
+                                        data-ix="{{@index}}"
+                                >Go!</button>
+                              </span>
+                            </div>
+                          </div>
+                          {{/when}}
+                      </div>
+                    <li class=" list-group-item">date: {{dateUpload}}  - time: {{timeUpload}}</li>
+                  </ul>
                 </div>
               </div>
-
-              <div class="col-xs-8 col-md-8">
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-action active">
-                    <a {{> fileTypes_bs3}} >
-                      <h5 class="">
-                        {{title}}
-                      </h5>
-                    </a>
-                   <a class="remove-media" href="#" onclick="removeMedia({{@index}});" ><span class="glyphicon glyphicon-trash text-danger" ></span></a>
-                  </li>
-                  <li class=" list-group-item">upload by: {{userUpload}}</li>
-                  <div class="list-group-item default-image">
-                    <div class="row">
-                      <div class="col-xs-3">
-                      defualt:  
-                      </div>
-                      {{#if defaultImage}}
-                        <div class="col-xs-9"><span class="glyphicon glyphicon-check"></span></div>
-                      {{else}} 
-                      <div class="col-xs-4">
-                        <span class="glyphicon glyphicon-unchecked"></span> 
-                      </div>
-                      <div class="col-xs-5" >
-                        <button 
-                          type="button" 
-                          class="btn btn-primary btn-xs set-default-media" 
-                          data-ix="{{@index}}"
-                          data-cmd="set-default"
-                          onclick="setDefault({{@index}})"
-                          >
-                          Set as defualt
-                        </button>
-                      </div>
-                      {{/if}}
-                    </div>
-                  </div>
-                  {{#if isRenamed}}
-                    <li class=" list-group-item">The file whas renamed. Old name: {{oldName}}</li>
-                  {{/if}}
-                  <li class=" list-group-item">
-                    <div class="row">
-                      <div class=" col-xs-6"> <p>type - {{type}}</p> </div>
-                      <div class=" col-xs-6"> <p> size - <code>{{size}}</code></p> </div>
-                      {{#if thumbnail}}
-                        {{#when extension eq pdf}} 
-                        <br>
-                        <div class=" col-xs-12">
-                          <div class="input-group">
-                            <span class="input-group-addon">Set thumbnail page</span>
-                            <input type="text" name="page" class="form-control" id="paganumber{{@index}}">
-                            <span class="input-group-btn">
-                              <button type="button" class="btn btn-info btn-flat set-default-page" onclick="setDefaulPage({{@index}},'{{size}}')" >Go!</button>
-                            </span>
-                          </div>
-                        </div>
-                        {{/when}}
-                    </div>
-                      {{/if}}
-                  <li class=" list-group-item">date: {{dateUpload}}  - time: {{timeUpload}}</li>
-                </ul>
-              </div>
-            </div>
-          </li>
-            {{/each}}
+            </li>
+          {{/each}}
         </ul>
 {{> modalFooter_bs3}}

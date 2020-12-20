@@ -8,6 +8,7 @@ $fn = Request::val('fn');
 $id = Request::val('id');
 $ix = Request::val('ix');
 $lastix = Request::val('lastix');
+$page = Request::val('page');
 $where = Request::val('where');
 
 if ($cmd !== '') {
@@ -29,7 +30,15 @@ if ($cmd !== '') {
             }
             $sql ="UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$ix}].defaultImage',true) WHERE {$where}";
             $res = sqlValue($sql);
-            $rslt ['res'] = $sql;
+            $rslt ['res'] = $res;
+            echo json_encode($rslt);
+            break;
+        case "set-pdf-page":
+            //"pdfPage":2
+            $where = whereConstruct($tn,$id);
+            $sql ="UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$ix}].pdfPage',$page) WHERE {$where}";
+            $res = sqlValue($sql);
+            $rslt ['res']= $res;
             echo json_encode($rslt);
             break;
     }

@@ -49,17 +49,34 @@ setDefault = (i) => {
     })
 }
 
-setDefaulPage = (ix, max) => {
+setDefaultPage = (ix) => {
     $j('body form').one('click', '.set-default-page', function (e) {
-        $j(this).closest('.input-group').removeClass('has-error');
-        max = getNumbers(max);
-        page = $j('#paganumber' + ix).val();
-        if (page < 1 || page > max[0] || max[0] < 1) {
-            $j(this).closest('.input-group').addClass('has-error')
+        var $this = $j(this);
+        let $input = $j('#pdf-page-'+ix);
+        let $group = $this.closest('.input-group');
+        var max = parseInt($input.attr('data-max-page')) || 1;
+        var page = parseInt($input.val()) || 0;
+        let data = $this.closest(".modal-body").data();
+        data = $j.extend({}, $this.data(), data)
+        $group.removeClass('has-error');
+        if (page < 1 || page > max || max < 1) {
+            $group.addClass('has-error')
             return;
         }
-        console.log(max[0], page);
+        $j(".img-pdf-"+ix).attr("data-pdfPage",page);
+        data.page = page;
+        $j.ajax({
+            type: "post",
+            url: "hooks/multipleUpload/functions-ajax.php",
+            data: data,
+            dataType: "json",
+            success: function (res) {
+                //load_images(false);
+                createPDFThumbnails();
+            }
+        });
 
+        console.log(max, page);
     })
 }
 
@@ -105,8 +122,7 @@ function loadImages(settings) {
             if (content_type() === 'print-detailview') {
                 $j('div.columns-thumbs').hide();
             }
-            
-            createPDFThumbnails();
+            createPDFThumbnails('.mySliders ');
         }
     });
 }
@@ -144,7 +160,7 @@ function openGalery(settings) {
             }
             $j('#imagesThumbs').append(msg);
             $j('#modal-media-gallery').modal('show')
-            createPDFThumbnails();
+            createPDFThumbnails('.gallery ');
         });
 }
 

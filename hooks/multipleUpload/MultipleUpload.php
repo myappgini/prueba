@@ -119,10 +119,8 @@ class MultipleUpload
 		} else {
 			$exit = false;
 			if ($this->type === 'img' || $this->type === 'mov') {
-				//add thumbsnail
 				include '_resampledIMG.php';
 				$exit = make_thumb($renameFlag ? $newName : $file['basename'], $filename, $ext, $this);
-				//agregar a la tabla de files
 			}
 			//file uploaded successfully	
 			
@@ -142,7 +140,7 @@ class MultipleUpload
 				"oldName"		=> $oldName ? $oldName : "",
 				"title"			=> $filename,
 				"thumbnail"		=> $exit,
-				"pdf-page"		=> 1
+				"pdfPage"		=> 1
 			);
 			
 			// * guardar registro..

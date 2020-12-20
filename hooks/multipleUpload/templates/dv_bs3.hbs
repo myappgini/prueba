@@ -1,12 +1,10 @@
-
-
 <div class="mySliders">
   <div class="row">
     {{#each images }}
       <div
         class="mySlides lbid-{{@index}} col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2"
         style="{{#if defaultImage}} display: block;{{/if}}"
-      >   
+      >
       <a {{> fileTypes_bs3}}>
         {{#if thumbnail}} 
           <img src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
@@ -24,7 +22,7 @@
         {{> pdfModal_bs3}}
       {{/when}}
     {{/each}}
-    </div>
+  </div>
   <div class="row columns-thumbs">
     {{#each images }}
       <div class="col-xs-3 col-md-6">
@@ -46,4 +44,3 @@
     {{/each}}
   </div>
 </div>
-

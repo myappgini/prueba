@@ -23,3 +23,33 @@ ul li.list-group-item.list-group-item-action.active a{
     padding: 0;
     margin-bottom: 0;
 } 
+
+.box-tools .btn {
+    border: 0;
+    box-shadow: none;
+}
+
+
+.box-header>.box-tools {
+    float: right;
+    margin-top: -5px;
+    margin-bottom: -5px;
+}
+
+.btn-tool {
+    padding: 5px;
+    font-size: 12px;
+    background: transparent;
+    color: #97a0b3;
+    position:absolute;
+    top: 10px;
+    right:0;
+}
+
+.btn-tool:hover {
+    color: #dee3ee;
+}
+
+.btn-tool.btn:active {
+    box-shadow: none;
+}
