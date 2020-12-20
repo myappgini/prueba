@@ -75,8 +75,6 @@ setDefaultPage = (ix) => {
                 createPDFThumbnails();
             }
         });
-
-        console.log(max, page);
     })
 }
 
@@ -162,12 +160,6 @@ function openGalery(settings) {
             $j('#modal-media-gallery').modal('show')
             createPDFThumbnails('.gallery ');
         });
-}
-
-function save_button(tn, id) {
-
-    alert('save_button ' + tn);
-
 }
 
 /**

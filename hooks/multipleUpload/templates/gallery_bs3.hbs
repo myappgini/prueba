@@ -12,7 +12,7 @@
                                 alt="{{fileName}}"/>
                           {{else}}
                             {{> ispdf_bs3}}
-                            <small class="">{{title}}</small>
+                            <small class="">{{title}}</small>{{#when extension eq pdf}}<br><code>page: {{pdfPage}}</code>{{/when}}
                           {{/if}}
                         </a>
                   </div>

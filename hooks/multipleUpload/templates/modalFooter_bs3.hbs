@@ -4,22 +4,16 @@
           <i class="glyphicon glyphicon-remove"></i>
           Close
         </button>
+        {{#unless gallery}}
           <button 
             type="button" 
-        {{#if gallery}}
-            class="btn btn-primary" 
-            onclick="save_button('{{tn}}','{{id}}');"
-          >
-            <i class="glyphicon glyphicon-save"></i>
-            Save changes
-        {{else}}
-            class="btn btn-secondary"
+            class ="btn btn-secondary"
             onclick="download_button('{{tn}}','{{id}}');"
           >
             <i class="glyphicon glyphicon-cloud-download"></i>
             Download
-        {{/if}}
           </button>
+        {{/unless}}
       </div>
     </div>
   </div>
