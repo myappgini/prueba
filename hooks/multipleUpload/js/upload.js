@@ -1,3 +1,15 @@
+const Ajax_setting = {
+    type: "post",
+    url: "hooks/multipleUpload/functions-ajax.php",
+    dataType: "json"
+};
+const Def_Settings = {
+    id: selected_id(),
+    tn: AppGini.currentTableName(),
+    fn: 'uploads',
+    cmd: false,
+};
+
 openMedia = (i) => {
     $j('body form').one('click', ".modal-media", function (e) {
         e.preventDefault();
@@ -7,17 +19,6 @@ openMedia = (i) => {
         resizeModal(mod)
     });
 };
-
-function resizeModal(mod) {
-    mod.on('shown.bs.modal', function () {
-        var wh = $j(window).height(),
-            mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight();
-        let val = wh - mhfoh - 80;
-        mod.find('.modal-body').css({
-            height: val
-        });
-    })
-}
 
 setDefault = (i) => {
     $j('body form').one('click', '.set-default-media', function (e) {
@@ -31,10 +32,8 @@ setDefault = (i) => {
             data.lastix = lastix.ix;
         }
         $j.ajax({
-            type: "post",
-            url: "hooks/multipleUpload/functions-ajax.php",
-            data: data,
-            dataType: "json",
+            Ajax_setting,
+            data,
             success: function (res) {
                 let gallery = $j('#modal-media-gallery');
                 gallery.modal('hide');
@@ -52,7 +51,7 @@ setDefault = (i) => {
 setDefaultPage = (ix) => {
     $j('body form').one('click', '.set-default-page', function (e) {
         var $this = $j(this);
-        let $input = $j('#pdf-page-'+ix);
+        let $input = $j('#pdf-page-' + ix);
         let $group = $this.closest('.input-group');
         var max = parseInt($input.attr('data-max-page')) || 1;
         var page = parseInt($input.val()) || 0;
@@ -63,15 +62,13 @@ setDefaultPage = (ix) => {
             $group.addClass('has-error')
             return;
         }
-        $j(".img-pdf-"+ix).attr("data-pdfPage",page);
+        $j(".img-pdf-" + ix).attr("data-pdfPage", page);
         data.page = page;
+
         $j.ajax({
-            type: "post",
-            url: "hooks/multipleUpload/functions-ajax.php",
-            data: data,
-            dataType: "json",
+            Ajax_setting,
+            data,
             success: function (res) {
-                //load_images(false);
                 createPDFThumbnails();
             }
         });
@@ -88,17 +85,14 @@ removeMedia = (ix) => {
 
 $j(document).on({
     'show.bs.modal': function () {
-        var $mod = $j(this);
         var zIndex = 1040 + (10 * $j('.modal:visible').length);
-        $mod.css('z-index', zIndex);
+        $j(this).css('z-index', zIndex);
         setTimeout(function () {
             $j('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
         }, 0);
     },
     'hidden.bs.modal': function () {
         if ($j('.modal:visible').length > 0) {
-            // restore the modal-open class to the body element, so that scrolling works
-            // properly after de-stacking a modal.
             $j(this).modal('handleUpdate');
             setTimeout(function () {
                 $j(document.body).addClass('modal-open');
@@ -107,15 +101,22 @@ $j(document).on({
     }
 }, '.modal');
 
+function resizeModal(mod) {
+    mod.on('shown.bs.modal', function () {
+        var wh = $j(window).height(),
+            mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight();
+        let val = wh - mhfoh - 80;
+        mod.find('.modal-body').css({
+            height: val
+        });
+    })
+}
+
 function loadImages(settings) {
-    let def = {
-        id: false,
-        tn: false,
-        fn: 'uploads',
-        cmd: "full"
-    }
-    def = $j.extend({}, def, settings);
-    $j('#imagesThumbs').load('hooks/multipleUpload/UploadsView.php', def, function () {
+    data = $j.extend({}, Def_Settings, settings);
+    data.cmd = "full";
+
+    $j('#imagesThumbs').load('hooks/multipleUpload/UploadsView.php', data, function () {
         if (!is_add_new()) {
             if (content_type() === 'print-detailview') {
                 $j('div.columns-thumbs').hide();
@@ -137,21 +138,15 @@ function currentSlide(n) {
 //open galery, open modal form
 function openGalery(settings) {
 
-    let def = {
-        cmd: "gallery",
-        tn: AppGini.currentTableName(),
-        id: selected_id(),
-        fn: "uploads"
-    }
-    def = $j.extend({}, def, settings);
+    data = $j.extend({}, Def_Settings, settings);
+    data.cmd = "gallery";
 
     $j.ajax({
-            method: "POST",
-            dataType: "text",
-            url: 'hooks/multipleUpload/UploadsView.php',
-            data: def
-        })
-        .done(function (msg) {
+        method: "POST",
+        dataType: "text",
+        url: 'hooks/multipleUpload/UploadsView.php',
+        data,
+        success: function (msg) {
             let $modal = $j('#modal-media-gallery');
             if ($modal.length > 0) {
                 $modal.remove();
@@ -159,7 +154,8 @@ function openGalery(settings) {
             $j('#imagesThumbs').append(msg);
             $j('#modal-media-gallery').modal('show')
             createPDFThumbnails('.gallery ');
-        });
+        }
+    });
 }
 
 /**
@@ -174,17 +170,13 @@ function openGalery(settings) {
  **/
 function active_upload_frame(settings) {
 
-    let def = {
-        tn: false,
-        fn: 'uploads',
-    }
-    def = $j.extend({}, def, settings);
+    data = $j.extend({}, Def_Settings, settings);
 
-    if (def.tn) {
-        var $actionButtons = $j('#' + def.tn + '_dv_action_buttons');
+    if (data.tn) {
+        var $actionButtons = $j('#' + data.tn + '_dv_action_buttons');
         $actionButtons.prepend(' <div id="imagesThumbs"></div>');
         $actionButtons.append('<p></p><div id="uploadFrame" class="col-12"></div>');
-        $j('#uploadFrame').load('hooks/multipleUpload/_multipleUpload.php', def);
+        $j('#uploadFrame').load('hooks/multipleUpload/_multipleUpload.php', data);
         return true
     }
     return false
