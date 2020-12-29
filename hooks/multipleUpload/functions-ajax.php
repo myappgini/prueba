@@ -8,7 +8,6 @@ $fn = Request::val('fn');
 $id = Request::val('id');
 $ix = Request::val('ix');
 $lastix = Request::val('lastix');
-////$where = Request::val('where');
 
 header('Content-Type: application/json; charset=utf-8');
 if ($cmd !== '') {
