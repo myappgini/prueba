@@ -8,11 +8,16 @@ $fn = Request::val('fn');
 $id = Request::val('id');
 $ix = Request::val('ix');
 $lastix = Request::val('lastix');
-$page = Request::val('page');
-$where = Request::val('where');
+////$where = Request::val('where');
 
+header('Content-Type: application/json; charset=utf-8');
 if ($cmd !== '') {
-    header('Content-Type: application/json; charset=utf-8');
+    $where = whereConstruct($tn,$id);
+    if (!$where){
+        $rslt['error']= "NOT where found";
+        echo json_encode($rslt);
+        return;
+    } 
     switch ($cmd) {
         case 'get_json':
             $rslt = get_json($tn, $fn, $where);
@@ -23,7 +28,6 @@ if ($cmd !== '') {
             echo json_encode($rslt);
         break;
         case 'set-default':
-            $where = whereConstruct($tn,$id);
             if ($lastix != ""){
                 $sql ="UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$lastix}].defaultImage',false) WHERE {$where}";
                 $res = sqlValue($sql);
@@ -34,14 +38,21 @@ if ($cmd !== '') {
             echo json_encode($rslt);
             break;
         case "set-pdf-page":
-            //"pdfPage":2
-            $where = whereConstruct($tn,$id);
-            $sql ="UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$ix}].pdfPage',$page) WHERE {$where}";
-            $res = sqlValue($sql);
-            $rslt ['res']= $res;
+            $page = Request::val('page');
+            if ($page){
+                $sql ="UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$ix}].pdfPage',$page) WHERE {$where}";
+                $res = sqlValue($sql);
+                $rslt ['res']= $res;
+            }else{
+                $rslt['error']= "must indicate a page";
+            }
             echo json_encode($rslt);
             break;
     }
+    return;
+}else{
+    $rslt['error']= "OPPS, what you need?";
+    echo json_encode($rslt);
     return;
 }
 
@@ -84,5 +95,6 @@ function add_json($tn, $id, $fn, $data)
 
 function whereConstruct($tn,$id){
     $key = getPKFieldName($tn);
-    return "`{$key}`='{$id}'";
+    $key = $key ? "`{$key}`='{$id}'" : $key;
+    return $key;
 }

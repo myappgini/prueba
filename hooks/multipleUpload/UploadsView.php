@@ -17,11 +17,6 @@ $boostrap = "bs3";
 
 $currDir = dirname(__FILE__);
 
-$id = Request::val('id');
-$tn = Request::val('tn');
-$fn = Request::val('fn');
-$cmd = Request::val('cmd');
-
 # Set the partials files
 $partialsDir = __DIR__ . "/templates";
 $partialsLoader = new FilesystemLoader(
@@ -106,5 +101,3 @@ function registerHelpers($handlebars)
 
     return $handlebars;
 }
-//SELECT json_extract(uploads,'$.images[0].defaultImage') from products where id = 2
-//update products uploads set uploads=json_set(uploads,'$.images[0].defaultImage',false) where id = 2

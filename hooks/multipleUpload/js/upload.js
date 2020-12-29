@@ -1,8 +1,3 @@
-const Ajax_setting = {
-    type: "post",
-    url: "hooks/multipleUpload/functions-ajax.php",
-    dataType: "json"
-};
 const Def_Settings = {
     id: selected_id(),
     tn: AppGini.currentTableName(),
@@ -22,7 +17,7 @@ openMedia = (i) => {
 
 setDefault = (i) => {
     $j('body form').one('click', '.set-default-media', function (e) {
-        e.preventDefault();
+        //e.preventDefault();
         let $this = $j(this);
         let lastix = $j('li.list-group-item-success').data();
         let data = $this.closest(".modal-body").data();
@@ -32,7 +27,9 @@ setDefault = (i) => {
             data.lastix = lastix.ix;
         }
         $j.ajax({
-            Ajax_setting,
+            type: "post",
+            url: "hooks/multipleUpload/functions-ajax.php",
+            dataType: "json",
             data,
             success: function (res) {
                 let gallery = $j('#modal-media-gallery');
@@ -66,7 +63,9 @@ setDefaultPage = (ix) => {
         data.page = page;
 
         $j.ajax({
-            Ajax_setting,
+            type: "post",
+            url: "hooks/multipleUpload/functions-ajax.php",
+            dataType: "json",
             data,
             success: function (res) {
                 createPDFThumbnails();
