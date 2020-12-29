@@ -145,12 +145,12 @@ function openGalery(settings) {
         dataType: "text",
         url: 'hooks/multipleUpload/UploadsView.php',
         data,
-        success: function (msg) {
+        success: function (res) {
             let $modal = $j('#modal-media-gallery');
             if ($modal.length > 0) {
                 $modal.remove();
             }
-            $j('#imagesThumbs').append(msg);
+            $j('#imagesThumbs').append(res);
             $j('#modal-media-gallery').modal('show')
             createPDFThumbnails('.gallery ');
         }
