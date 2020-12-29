@@ -55,7 +55,8 @@ function get_json($tn, $fn, $where)
 {
     $sql = "SELECT {$fn} FROM `{$tn}` WHERE 1=1 AND {$where}";
     $res = sqlValue($sql);
-    return $res;
+    //* add this function stripslashes to make it work on windows
+    return stripslashes($res);
 }
 
 function put_json($tn, $set, $where)
