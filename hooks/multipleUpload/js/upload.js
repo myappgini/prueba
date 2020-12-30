@@ -17,7 +17,6 @@ openMedia = (i) => {
 
 setDefault = (i) => {
     $j('body form').one('click', '.set-default-media', function (e) {
-        //e.preventDefault();
         let $this = $j(this);
         let lastix = $j('li.list-group-item-success').data();
         let data = $this.closest(".modal-body").data();
@@ -78,7 +77,7 @@ removeMedia = (ix) => {
     $j('body form').one('click', ".remove-media", function (e) {
         e.preventDefault();
         alert('remove' + ix)
-
+        //TODO: remove files and data media.
     })
 }
 
