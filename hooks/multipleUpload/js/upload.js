@@ -5,6 +5,12 @@ const Def_Settings = {
     cmd: false,
 };
 
+const setting_ajax = {
+    method: "post",
+    url: "hooks/multipleUpload/functions-ajax.php",
+    dataType: "json"
+}
+
 openMedia = (i) => {
     $j('body form').one('click', ".modal-media", function (e) {
         e.preventDefault();
@@ -26,19 +32,12 @@ setDefault = (i) => {
             data.lastix = lastix.ix;
         }
         $j.ajax({
-            type: "post",
-            url: "hooks/multipleUpload/functions-ajax.php",
-            dataType: "json",
+            method: setting_ajax.method,
+            url: setting_ajax.url,
+            dataType: setting_ajax.dataType,
             data,
             success: function (res) {
-                let gallery = $j('#modal-media-gallery');
-                gallery.modal('hide');
-                gallery.on('hidden.bs.modal', function () {
-                    load_images(false);
-                    openGalery({
-                        fn: data.fn
-                    });
-                });
+                refresh_gallery(data.fn);
             }
         });
     })
@@ -46,12 +45,12 @@ setDefault = (i) => {
 
 setDefaultPage = (ix) => {
     $j('body form').one('click', '.set-default-page', function (e) {
-        var $this = $j(this);
-        let $input = $j('#pdf-page-' + ix);
-        let $group = $this.closest('.input-group');
-        var max = parseInt($input.attr('data-max-page')) || 1;
-        var page = parseInt($input.val()) || 0;
-        let data = $this.closest(".modal-body").data();
+        var $this = $j(this),
+            $group = $this.closest('.input-group'),
+            $input = $j('#pdf-page-' + ix),
+            max = parseInt($input.attr('data-max-page')) || 1,
+            page = parseInt($input.val()) || 0,
+            data = $this.closest(".modal-body").data();
         data = $j.extend({}, $this.data(), data)
         $group.removeClass('has-error');
         if (page < 1 || page > max || max < 1) {
@@ -62,9 +61,9 @@ setDefaultPage = (ix) => {
         data.page = page;
 
         $j.ajax({
-            type: "post",
-            url: "hooks/multipleUpload/functions-ajax.php",
-            dataType: "json",
+            method: setting_ajax.method,
+            url: setting_ajax.url,
+            dataType: setting_ajax.dataType,
             data,
             success: function (res) {
                 createPDFThumbnails();
@@ -75,9 +74,20 @@ setDefaultPage = (ix) => {
 
 removeMedia = (ix) => {
     $j('body form').one('click', ".remove-media", function (e) {
-        e.preventDefault();
-        alert('remove' + ix)
-        //TODO: remove files and data media.
+        var data = $j(this).closest('.modal-body').data();
+        data.ix = ix;
+        data.cmd = "del_json"
+
+        $j.ajax({
+            method: setting_ajax.method,
+            url: setting_ajax.url,
+            dataType: setting_ajax.dataType,
+            data,
+            success: function (res) {
+                console.log(res)
+                refresh_gallery(data.fn);
+            }
+        });
     })
 }
 
@@ -99,11 +109,22 @@ $j(document).on({
     }
 }, '.modal');
 
+function refresh_gallery(fn) {
+    let gallery = $j('#modal-media-gallery');
+    gallery.modal('hide');
+    gallery.on('hidden.bs.modal', function () {
+        load_images(false);
+        openGalery({
+            fn
+        });
+    });
+}
+
 function resizeModal(mod) {
     mod.on('shown.bs.modal', function () {
         var wh = $j(window).height(),
-            mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight();
-        let val = wh - mhfoh - 80;
+            mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight(),
+            val = wh - mhfoh - 80;
         mod.find('.modal-body').css({
             height: val
         });
@@ -114,12 +135,14 @@ function loadImages(settings) {
     data = $j.extend({}, Def_Settings, settings);
     data.cmd = "full";
 
-    $j('#imagesThumbs').load('hooks/multipleUpload/UploadsView.php', data, function () {
-        if (!is_add_new()) {
-            if (content_type() === 'print-detailview') {
-                $j('div.columns-thumbs').hide();
+    $j('#imagesThumbs').load(setting_ajax.url, data, function (res) {
+        if (res) {
+            if (!is_add_new()) {
+                if (content_type() === 'print-detailview') {
+                    $j('div.columns-thumbs').hide();
+                }
+                createPDFThumbnails('.mySliders ');
             }
-            createPDFThumbnails('.mySliders ');
         }
     });
 }
@@ -140,18 +163,20 @@ function openGalery(settings) {
     data.cmd = "gallery";
 
     $j.ajax({
-        method: "POST",
-        dataType: "text",
-        url: 'hooks/multipleUpload/UploadsView.php',
+        method: setting_ajax.method,
+        dataType: "html",
+        url: setting_ajax.url,
         data,
         success: function (res) {
-            let $modal = $j('#modal-media-gallery');
-            if ($modal.length > 0) {
-                $modal.remove();
+            if (!res.error) {
+                let $modal = $j('#modal-media-gallery');
+                if ($modal.length > 0) {
+                    $modal.remove();
+                }
+                $j('#imagesThumbs').append(res);
+                $j('#modal-media-gallery').modal('show')
+                createPDFThumbnails('.gallery ');
             }
-            $j('#imagesThumbs').append(res);
-            $j('#modal-media-gallery').modal('show')
-            createPDFThumbnails('.gallery ');
         }
     });
 }
