@@ -4,14 +4,17 @@
 // from previewImages.php 7/4/18
 // update 10/9/20
 
-//load handlebars php library
+if (!function_exists('getMemberInfo')) {
+    die('{ "error": "Invalid way to access." }');
+}
 require 'handlebars-php/src/Handlebars/Autoloader.php';
+//load handlebars php library
 Handlebars\Autoloader::register();
 
 use Handlebars\Handlebars;
 use Handlebars\Loader\FilesystemLoader;
 
-$boostrap = "bs3";
+//$boostrap = "bs3";
 
 $currDir = dirname(__FILE__);
 
@@ -67,6 +70,14 @@ function registerHelpers($handlebars)
                     break;
             }
             return false; // $data.' ::: '.$when.':::'.$comapare.':::'.count($m);
+        }
+    );
+
+    $handlebars->addHelper(
+        "admin",
+        function ($template, $context, $args, $source) {
+            $mi = getMemberInfo();
+            return $mi['admin'] ? $template->render($context) : false;
         }
     );
 

@@ -3,23 +3,23 @@
     {{#each images }}
       <div
         class="mySlides lbid-{{@index}} col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2"
-        style="{{#if defaultImage}} display: block;{{/if}}"
+        style="{{#when defaultImage eq true}} display: block;{{/when}}"
       >
-      <a {{> fileTypes_bs3}}>
+      <a {{> bs3_fileTypes}}>
         {{#if thumbnail}} 
           <img src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
               alt="{{fileName}}"/>
         {{else}}
-          {{> ispdf_bs3}}
+          {{> bs3_ispdf}}
           <small class="">{{title}}</small>
         {{/if}}
       </a>
       </div>
       {{#when type eq mov}}
-        {{> videoModal_bs3}}
+        {{> bs3_videoModal}}
       {{/when}}
       {{#when extension eq pdf}} 
-        {{> pdfModal_bs3}}
+        {{> bs3_pdfModal}}
       {{/when}}
     {{/each}}
   </div>
@@ -28,16 +28,16 @@
       <div class="col-xs-3 col-md-6">
         {{#if thumbnail}} 
           <img
-            class="img-lite thumbnail {{#if defaultImage}} active {{/if}}"
+            class="img-lite thumbnail {{#when defaultImage eq true}} active {{/when}}"
             src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
             onclick="currentSlide({{@index}})"
             alt="{{name}}"
           />
         {{else}}
-          <a class="attachment-thumbnail-preview img-lite thumbnail {{#if defaultImage}} active {{/if}}"
+          <a class="attachment-thumbnail-preview img-lite thumbnail {{#when defaultImage eq true}} active {{/when}}"
             title="{{title}}" 
             onclick="currentSlide({{@index}})">
-            {{> ispdf_bs3}}
+            {{> bs3_ispdf}}
           </a>
         {{/if}}
       </div>

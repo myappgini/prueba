@@ -12,7 +12,7 @@ $tn = Request::val('tn');
 $fn = Request::val('fn');
 $id = Request::val('id');
 
-$url = "hooks/multipleUpload/MultipleUpload.php?&tn={$tn}&fn={$fn}&id={$id}";
+$url = "hooks/multipleUpload/MultipleUpload.php?&tn={$tn}&fn={$fn}&id={$id}&cmd=uploading";
 
 ?>
 <div class="dz-container">
@@ -39,14 +39,14 @@ $url = "hooks/multipleUpload/MultipleUpload.php?&tn={$tn}&fn={$fn}&id={$id}";
         },
         init: function() {
             this.on("success", function(file, response) {
-                if (response.success) {
+                if (file.status === "success") {
                     var dismiss = $j("<button />", {
                         class: "close",
                         type: "button",
                         "data-dismiss": "alert",
                         "aria-label": "Close"
                     }).append('<span aria-hidden="true">&times;</span>')
-                    var successMsg = "<strong> Upload OK </strong>" + (response.isRenamed ? "<br>File name exist, new name: " + response.fileName + "." : response.fileName);
+                    var successMsg = "<strong> Upload OK </strong>"+ (response.isRenamed ? "<br>File name exist, new name: " + response.fileName + "." : response.fileName) ;
                     var successDiv = $j("<div />", {
                         class: "alert alert-success alert-dismissible",
                         role: "alert"

@@ -8,25 +8,22 @@
     text-transform: uppercase;
     text-decoration: none;
     width: 100%;
-    background-color:rgba(9, 30, 66, .04);
+    background-color: rgba(9, 30, 66, .04);
 }
+
 .attachment-thumbnail-preview {
     background-color: rgba(9, 30, 66, .04);
     border-radius: 3px;
     text-align: center;
     text-decoration: none;
 }
-ul li.list-group-item.list-group-item-action.active a{
+
+ul li.list-group-item.list-group-item-action.active a {
     background-color: transparent;
     color: white;
     border: transparent;
     padding: 0;
     margin-bottom: 0;
-} 
-
-.box-tools .btn {
-    border: 0;
-    box-shadow: none;
 }
 
 
@@ -36,14 +33,17 @@ ul li.list-group-item.list-group-item-action.active a{
     margin-bottom: -5px;
 }
 
+.box-tools .btn {
+    border: 0;
+    box-shadow: none;
+}
+
+
 .btn-tool {
     padding: 5px;
     font-size: 12px;
     background: transparent;
     color: #97a0b3;
-    position:absolute;
-    top: 10px;
-    right:0;
 }
 
 .btn-tool:hover {
@@ -52,4 +52,9 @@ ul li.list-group-item.list-group-item-action.active a{
 
 .btn-tool.btn:active {
     box-shadow: none;
+}
+
+.disable-content {
+    pointer-events: none;
+    opacity: .4;
 }

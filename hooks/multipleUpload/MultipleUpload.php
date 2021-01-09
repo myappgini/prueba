@@ -125,7 +125,7 @@ class MultipleUpload
 			//file uploaded successfully	
 			
 			$data = array(
-				"defaultImage"  => FALSE, 
+				"defaultImage"  => 'false', 
 				"isRenamed"     => $renameFlag,
 				"fileName"      => $renameFlag ? $newName : $file['basename'],
 				"extension"     => $ext,
@@ -148,10 +148,10 @@ class MultipleUpload
 				include("functions-ajax.php");
 			}
 			
-			header('Content-Type: application/json; charset=utf-8');
 			// * defaultImage => se cambia a true si es el primer elemento en la funcion add_json
 			$res = add_json($this->tn, $this->id , $this->fn, $data);
 			$data['success']=$res;
+			header('Content-Type: application/json');
 			echo json_encode($data);
 		}
 		return;

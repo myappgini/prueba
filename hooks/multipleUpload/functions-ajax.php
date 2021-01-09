@@ -18,8 +18,6 @@ if ($cmd !== '') {
     if (!$where) {
         $rslt['error'] = "NOT where found";
     } else {
-        $j = get_json($tn, $fn, $where);
-        $j = json_decode($j, true);
 
         switch ($cmd) {
             case 'get_json':
@@ -29,8 +27,20 @@ if ($cmd !== '') {
                 $rslt = put_json($tn, $set, $where);
                 break;
             case 'del_json':
-                $rslt = del_json($tn, $fn, $ix, $where);
-                //$rslt['error'] = "del json works-" . $tn . "-" . $fn;
+                //changue this if you want to preserve file on server
+                $DELETE_FILE = true;
+                if ($DELETE_FILE) {
+                    //TODO: delete file
+                    $j = get_json($tn, $fn, $where);
+                    $j = json_decode($j, true);
+                    $b = $j['images'][$ix];
+                    $rslt['file'] = unlink($b['folder'] . $b['fileName']);
+                    if ($b['thumbnail']) {
+                        $rslt = unlink($b['folder'] . $b['name'] . "_th.jpg");
+                    }
+                }
+                $rslt['json'] = del_json($tn, $fn, $ix, $where);
+
                 break;
             case 'set-default':
                 if ($lastix != "") {
@@ -48,17 +58,30 @@ if ($cmd !== '') {
                     $rslt['error'] = "must indicate a page";
                 }
                 break;
+            case "set-title":
+                $newTitle = Request::val('newtitle');
+                $res = upd_json($tn, $fn, $ix, 'title', $newTitle, $where);
+                $rslt['res'] = $res . " - " . $newTitle;
+                break;
             case 'full':
                 # Will render the model to the template
-                $html =  $handlebars->render("dv_bs3", $j);
+                $j = get_json($tn, $fn, $where);
+                $j = json_decode($j, true);
+                $html =  $handlebars->render("bs3_dv", $j);
                 echo $html;
                 return;
                 break;
             case 'gallery':
                 # Will render the model to the template
+                $j = get_json($tn, $fn, $where);
+                $j = json_decode($j, true);
                 $j['gallery'] = true;
-                $html =  $handlebars->render("gallery_bs3", $j);
+                $html =  $handlebars->render("bs3_gallery", $j);
                 echo $html;
+                return;
+                break;
+            case 'uploading':
+                //calling from uploading option
                 return;
                 break;
             default:
@@ -74,12 +97,6 @@ if ($cmd !== '') {
     return;
 }
 
-/*
-* * get_json function
-    $tn = table name
-    $fn = field name
-    $where
-*/
 function get_json($tn, $fn, $where)
 {
     $sql = "SELECT {$fn} FROM `{$tn}` WHERE 1=1 AND {$where}";
@@ -104,7 +121,7 @@ function del_json($tn, $fn, $ix, $where)
 
 function upd_json($tn, $fn, $ix, $key, $value, $where)
 {
-    $sql = "UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$ix}].{$key}',{$value}) WHERE {$where}";
+    $sql = "UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$ix}].{$key}','{$value}') WHERE {$where}";
     $res = sqlValue($sql);
     return $res;
 }

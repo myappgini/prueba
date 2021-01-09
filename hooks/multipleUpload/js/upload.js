@@ -74,40 +74,67 @@ setDefaultPage = (ix) => {
 
 removeMedia = (ix) => {
     $j('body form').one('click', ".remove-media", function (e) {
-        var data = $j(this).closest('.modal-body').data();
+        var data = $j(this).closest('.modal-body').data(),
+            content = $j("li[data-ix='" + ix + "']");
+        content.addClass('disable-content');
         data.ix = ix;
         data.cmd = "del_json"
-
         $j.ajax({
             method: setting_ajax.method,
             url: setting_ajax.url,
             dataType: setting_ajax.dataType,
             data,
             success: function (res) {
-                console.log(res)
-                refresh_gallery(data.fn);
+                //console.log(res);
+                content.remove();
             }
         });
     })
 }
 
-$j(document).on({
-    'show.bs.modal': function () {
-        var zIndex = 1040 + (10 * $j('.modal:visible').length);
-        $j(this).css('z-index', zIndex);
-        setTimeout(function () {
-            $j('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
-        }, 0);
-    },
-    'hidden.bs.modal': function () {
-        if ($j('.modal:visible').length > 0) {
-            $j(this).modal('handleUpdate');
-            setTimeout(function () {
-                $j(document.body).addClass('modal-open');
-            }, 0);
+editTitle = (ix) => {
+    $j('body form').one('click', ".edit-title", function (e) {
+        var $this = $j(this);
+        var data = $this.closest('.modal-body').data()
+        var div = $this.closest('.box-header').children('.title-media');
+        var value = div.attr('data-title');
+        var tb = div.find('input:text'); //get textbox, if exist
+
+        if (tb.length) { //text box already exist
+            var newtitle = tb.val();
+            div.text(newtitle); //remove text box & put its current value as text to the div
+            div.attr('data-title',newtitle);
+            $this.children('span').removeClass('glyphicon-ok').addClass('glyphicon-pencil');
+            data.cmd="set-title"
+            data.newtitle= newtitle;
+            data.ix = ix;
+            $j.ajax({
+                method: setting_ajax.method,
+                url: setting_ajax.url,
+                data,
+                dataType: setting_ajax.dataType,
+                success: function (res) {
+                    console.log(res)
+                }
+            });
+        } else {
+            $this.children('span').removeClass('glyphicon-pencil').addClass('glyphicon-ok')
+            tb = $j('<input>').prop({
+                'type': 'text',
+                'value': value, //set text box value from div current text
+                'style':'color: #333;'
+            });
+            div.empty().append(tb); //add new text box
+            tb.focus(); //put text box on focus
         }
+    })
+}
+
+$j(document).on({
+    'hidden.bs.modal': function () {
+        load_images(false);
     }
-}, '.modal');
+}, '#modal-media-gallery');
 
 function refresh_gallery(fn) {
     let gallery = $j('#modal-media-gallery');
@@ -120,29 +147,16 @@ function refresh_gallery(fn) {
     });
 }
 
-function resizeModal(mod) {
-    mod.on('shown.bs.modal', function () {
-        var wh = $j(window).height(),
-            mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight(),
-            val = wh - mhfoh - 80;
-        mod.find('.modal-body').css({
-            height: val
-        });
-    })
-}
-
 function loadImages(settings) {
     data = $j.extend({}, Def_Settings, settings);
     data.cmd = "full";
 
-    $j('#imagesThumbs').load(setting_ajax.url, data, function (res) {
-        if (res) {
-            if (!is_add_new()) {
-                if (content_type() === 'print-detailview') {
-                    $j('div.columns-thumbs').hide();
-                }
-                createPDFThumbnails('.mySliders ');
+    $j('#imagesThumbs').load(setting_ajax.url, data, function () {
+        if (!is_add_new()) {
+            if (content_type() === 'print-detailview') {
+                $j('div.columns-thumbs').hide();
             }
+            createPDFThumbnails('.mySliders ');
         }
     });
 }
@@ -156,7 +170,6 @@ function currentSlide(n) {
     dots[n].className += " active";
 }
 
-//open galery, open modal form
 function openGalery(settings) {
 
     data = $j.extend({}, Def_Settings, settings);
@@ -168,15 +181,13 @@ function openGalery(settings) {
         url: setting_ajax.url,
         data,
         success: function (res) {
-            if (!res.error) {
-                let $modal = $j('#modal-media-gallery');
-                if ($modal.length > 0) {
-                    $modal.remove();
-                }
-                $j('#imagesThumbs').append(res);
-                $j('#modal-media-gallery').modal('show')
-                createPDFThumbnails('.gallery ');
+            let $modal = $j('#modal-media-gallery');
+            if ($modal.length > 0) {
+                $modal.remove();
             }
+            $j('#imagesThumbs').append(res);
+            $j('#modal-media-gallery').modal('show');
+            createPDFThumbnails('.gallery ');
         }
     });
 }

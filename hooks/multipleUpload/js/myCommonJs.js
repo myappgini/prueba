@@ -541,3 +541,38 @@ function content_type() {
         return _contentType();
     }
 }
+
+/**
+ * stackeable modals
+ */
+$j(document).on({
+    'show.bs.modal': function () {
+        var zIndex = 1040 + (10 * $j('.modal:visible').length);
+        $j(this).css('z-index', zIndex);
+        setTimeout(function () {
+            $j('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    },
+    'hidden.bs.modal': function () {
+        if ($j('.modal:visible').length > 0) {
+            $j(this).modal('handleUpdate');
+            setTimeout(function () {
+                $j(document.body).addClass('modal-open');
+            }, 0);
+        }
+    }
+}, '.modal');
+
+/**
+ * resize height modals windows
+ */
+function resizeModal(mod) {
+    mod.on('shown.bs.modal', function () {
+        var wh = $j(window).height(),
+            mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight(),
+            val = wh - mhfoh - 80;
+        mod.find('.modal-body').css({
+            height: val
+        });
+    })
+}
