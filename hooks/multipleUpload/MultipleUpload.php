@@ -38,7 +38,7 @@ class MultipleUpload
 			}
 
 			$file = pathinfo($_FILES['uploadedFile']['name']);
-			$ext = strtolower($file['extension']); // get the extension of the file	
+			$ext = $file['extension']; // get the extension of the file	
 			$filename = $file['filename'];
 
 			$this->check_extension($ext);

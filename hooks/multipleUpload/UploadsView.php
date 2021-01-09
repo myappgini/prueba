@@ -43,7 +43,7 @@ function registerHelpers($handlebars)
         "filemtime",
         function ($template, $context, $args, $source) {
             $data = ($context->get($args));
-            $file = $data['folder'] . $data['name'] . '_th.JPG';
+            $file = $data['folder'] . $data['name'] . '_th.'.$data['extension'];
             if (file_exists($file)) {
                 return filemtime($file);
             }

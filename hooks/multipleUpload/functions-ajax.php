@@ -36,7 +36,7 @@ if ($cmd !== '') {
                     $b = $j['images'][$ix];
                     $rslt['file'] = unlink($b['folder'] . $b['fileName']);
                     if ($b['thumbnail']) {
-                        $rslt = unlink($b['folder'] . $b['name'] . "_th.JPG");
+                        $rslt = unlink($b['folder'] . $b['name'] . "_th.".$b['extension']);
                     }
                 }
                 $rslt['json'] = del_json($tn, $fn, $ix, $where);

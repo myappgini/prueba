@@ -8,7 +8,7 @@ function make_thumb($source, $fileName, $ext, &$folder, $page = 0)
 
     $fo = $base_dir . "/" . $folder->folder;
     $source = $fo . $folder->original . '/' . $source;
-    $target = $fo . $folder->original . '/' . $fileName . '_th.JPG';
+    $target = $fo . $folder->original . '/' . $fileName . '_th.'.$ext;
 
 
     if ($folder->type === 'mov') {
