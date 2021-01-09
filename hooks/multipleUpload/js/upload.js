@@ -23,21 +23,30 @@ openMedia = (i) => {
 
 setDefault = (i) => {
     $j('body form').one('click', '.set-default-media', function (e) {
-        let $this = $j(this);
-        let lastix = $j('li.list-group-item-success').data();
+        const $this = $j(this),
+            $currentDefault = $j('li.list-group-item-success'),
+            lastix = $currentDefault.data();
+        $currentDefault.removeClass('list-group-item-success');
+        $currentDefault.find('span.glyphicon-check').addClass('glyphicon-unchecked').removeClass('glyphicon-check');
+        $currentDefault.find('button.btn-primary').show();
         let data = $this.closest(".modal-body").data();
 
         data = $j.extend({}, $this.data(), data)
         if (typeof lastix !== 'undefined') {
             data.lastix = lastix.ix;
         }
+
         $j.ajax({
             method: setting_ajax.method,
             url: setting_ajax.url,
             dataType: setting_ajax.dataType,
             data,
             success: function (res) {
-                refresh_gallery(data.fn);
+                const content = $j("li[data-ix='" + res.setIx + "']");
+                content.addClass('list-group-item-success');
+                content.find('span.glyphicon-unchecked').addClass('glyphicon-check').removeClass('glyphicon-unchecked');
+                $this.hide();
+
             }
         });
     })
@@ -94,19 +103,19 @@ removeMedia = (ix) => {
 
 editTitle = (ix) => {
     $j('body form').one('click', ".edit-title", function (e) {
-        var $this = $j(this);
-        var data = $this.closest('.modal-body').data()
-        var div = $this.closest('.box-header').children('.title-media');
-        var value = div.attr('data-title');
-        var tb = div.find('input:text'); //get textbox, if exist
+        var $this = $j(this),
+            data = $this.closest('.modal-body').data(),
+            div = $this.closest('.box-header').children('.title-media'),
+            value = div.attr('data-title'),
+            tb = div.find('input:text'); //get textbox, if exist
 
         if (tb.length) { //text box already exist
             var newtitle = tb.val();
             div.text(newtitle); //remove text box & put its current value as text to the div
-            div.attr('data-title',newtitle);
+            div.attr('data-title', newtitle);
             $this.children('span').removeClass('glyphicon-ok').addClass('glyphicon-pencil');
-            data.cmd="set-title"
-            data.newtitle= newtitle;
+            data.cmd = "set-title"
+            data.newtitle = newtitle;
             data.ix = ix;
             $j.ajax({
                 method: setting_ajax.method,
@@ -122,7 +131,7 @@ editTitle = (ix) => {
             tb = $j('<input>').prop({
                 'type': 'text',
                 'value': value, //set text box value from div current text
-                'style':'color: #333;'
+                'style': 'color: #333;'
             });
             div.empty().append(tb); //add new text box
             tb.focus(); //put text box on focus

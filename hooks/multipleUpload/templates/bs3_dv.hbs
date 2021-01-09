@@ -7,7 +7,7 @@
       >
       <a {{> fileTypes}}>
         {{#if thumbnail}} 
-          <img src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+          <img src="{{folder_base}}/{{name}}_th.JPG?m={{#filemtime this}}"
               alt="{{fileName}}"/>
         {{else}}
           {{> ispdf}}
@@ -29,7 +29,7 @@
         {{#if thumbnail}} 
           <img
             class="img-lite thumbnail {{#when defaultImage eq true}} active {{/when}}"
-            src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
+            src="{{folder_base}}/{{name}}_th.JPG?m={{#filemtime this}}"
             onclick="currentSlide({{@index}})"
             alt="{{name}}"
           />

@@ -36,7 +36,7 @@ if ($cmd !== '') {
                     $b = $j['images'][$ix];
                     $rslt['file'] = unlink($b['folder'] . $b['fileName']);
                     if ($b['thumbnail']) {
-                        $rslt = unlink($b['folder'] . $b['name'] . "_th.jpg");
+                        $rslt = unlink($b['folder'] . $b['name'] . "_th.JPG");
                     }
                 }
                 $rslt['json'] = del_json($tn, $fn, $ix, $where);
@@ -48,6 +48,8 @@ if ($cmd !== '') {
                 }
                 $res = upd_json($tn, $fn, $ix, 'defaultImage', 'true', $where);
                 $rslt['res'] = $res;
+                $rslt['setIx'] = $ix;
+
                 break;
             case "set-pdf-page":
                 $page = Request::val('page');
