@@ -133,7 +133,7 @@ function add_json($tn, $id, $fn, $data)
     $where = whereConstruct($tn, $id);
     $res = get_json($tn, $fn, $where);
     $set = json_decode($res, true);
-    if (is_null($set)) $data['defaultImage'] = true;
+    if (is_null($set)) $data['defaultImage'] = "true";
     $set['images'][] = $data;
     $set['id'] = $id;
     $set['tn'] = $tn;
