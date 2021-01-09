@@ -23,7 +23,8 @@ $partialsDir = __DIR__ . "/templates";
 $partialsLoader = new FilesystemLoader(
     $partialsDir,
     [
-        "extension" => "hbs"
+        "extension" => "hbs",
+        "prefix"    => "bs3_"
     ]
 );
 

@@ -5,21 +5,21 @@
         class="mySlides lbid-{{@index}} col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2"
         style="{{#when defaultImage eq true}} display: block;{{/when}}"
       >
-      <a {{> bs3_fileTypes}}>
+      <a {{> fileTypes}}>
         {{#if thumbnail}} 
           <img src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
               alt="{{fileName}}"/>
         {{else}}
-          {{> bs3_ispdf}}
+          {{> ispdf}}
           <small class="">{{title}}</small>
         {{/if}}
       </a>
       </div>
       {{#when type eq mov}}
-        {{> bs3_videoModal}}
+        {{> videoModal}}
       {{/when}}
       {{#when extension eq pdf}} 
-        {{> bs3_pdfModal}}
+        {{> pdfModal}}
       {{/when}}
     {{/each}}
   </div>
@@ -37,7 +37,7 @@
           <a class="attachment-thumbnail-preview img-lite thumbnail {{#when defaultImage eq true}} active {{/when}}"
             title="{{title}}" 
             onclick="currentSlide({{@index}})">
-            {{> bs3_ispdf}}
+            {{> ispdf}}
           </a>
         {{/if}}
       </div>

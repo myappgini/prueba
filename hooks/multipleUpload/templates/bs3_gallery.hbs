@@ -1,17 +1,17 @@
-{{> bs3_modalHeader}}    
+{{> modalHeader}}    
         <ul class="list-gropu">
           {{#each images}}  
             <li class=" list-group-item {{#when defaultImage eq true}} list-group-item-success {{/when}}" data-ix="{{@index}}">
               <div class="row">
                 <div class=" col-xs-4  col-md-4">
                   <div class="lbid-{{@index}} gallery">
-                        <a {{> bs3_fileTypes}}>
+                        <a {{> fileTypes}}>
                           {{#if thumbnail}} 
                             <img  class=""
                                 src="{{folder_base}}/{{name}}_th.jpg?m={{#filemtime this}}"
                                 alt="{{fileName}}"/>
                           {{else}}
-                            {{> bs3_ispdf}}
+                            {{> ispdf}}
                             <small class="">{{title}}</small>{{#when extension eq pdf}}<br><code>page: {{pdfPage}}</code>{{/when}}
                           {{/if}}
                         </a>
@@ -33,7 +33,7 @@
                           </div>
                         {{/admin}}
                         <div class="title-media" data-title="{{title}}">
-                          <a {{> bs3_fileTypes}} >
+                          <a {{> fileTypes}} >
                             <h5 class="">
                               {{title}}
                             </h5>
@@ -100,4 +100,4 @@
             </li>
           {{/each}}
         </ul>
-{{> bs3_modalFooter}}
+{{> modalFooter}}

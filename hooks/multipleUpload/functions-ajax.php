@@ -67,7 +67,7 @@ if ($cmd !== '') {
                 # Will render the model to the template
                 $j = get_json($tn, $fn, $where);
                 $j = json_decode($j, true);
-                $html =  $handlebars->render("bs3_dv", $j);
+                $html =  $handlebars->render("dv", $j);
                 echo $html;
                 return;
                 break;
@@ -76,7 +76,7 @@ if ($cmd !== '') {
                 $j = get_json($tn, $fn, $where);
                 $j = json_decode($j, true);
                 $j['gallery'] = true;
-                $html =  $handlebars->render("bs3_gallery", $j);
+                $html =  $handlebars->render("gallery", $j);
                 echo $html;
                 return;
                 break;
