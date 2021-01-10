@@ -1,0 +1,20 @@
+{{#admin}}
+  <div class='box-tools'>
+    <button
+      type='button'
+      class='edit-title btn btn-tool'
+      onclick="editTitle({{@index}});"
+      title='Edit Title...'
+    >
+      <span class='glyphicon glyphicon-pencil'></span>
+    </button>
+    <button
+      type='button'
+      class='remove-media btn btn-tool'
+      onclick="removeMedia({{@index}});"
+      title='Remove media from library...'
+    >
+      <span class='glyphicon glyphicon-trash'></span>
+    </button>
+  </div>
+{{/admin}}

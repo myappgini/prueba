@@ -3,17 +3,18 @@
 // Author: Alejandro Landini
 // from previewImages.php 7/4/18
 // update 10/9/20
-//get functions
-include('functions-ajax.php');
 
-//load handlebars php library
+if (!function_exists('getMemberInfo')) {
+    die('{ "error": "Invalid way to access." }');
+}
 require 'handlebars-php/src/Handlebars/Autoloader.php';
+//load handlebars php library
 Handlebars\Autoloader::register();
 
 use Handlebars\Handlebars;
 use Handlebars\Loader\FilesystemLoader;
 
-$boostrap = "bs3";
+//$boostrap = "bs3";
 
 $currDir = dirname(__FILE__);
 
@@ -22,7 +23,8 @@ $partialsDir = __DIR__ . "/templates";
 $partialsLoader = new FilesystemLoader(
     $partialsDir,
     [
-        "extension" => "hbs"
+        "extension" => "hbs",
+        "prefix"    => "bs3_"
     ]
 );
 
@@ -34,33 +36,6 @@ $handlebars = new Handlebars([
 
 $handlebars = registerHelpers($handlebars);
 
-if ($cmd !== '') {
-    if (!$where) {
-        $where = whereConstruct($tn, $id);
-    }
-    $j = get_json($tn, $fn, $where);
-    $j = json_decode($j, true);
-
-    switch ($cmd) {
-        case 'full':
-            # Will render the model to the template
-            $html =  $handlebars->render("dv_bs3", $j);
-            echo $html;
-
-            break;
-        case 'gallery':
-            # Will render the model to the template
-            $j['gallery']=true;
-            $html =  $handlebars->render("gallery_bs3", $j);
-            echo $html;
-
-            break;
-        default:
-            # code...
-            break;
-    }
-}
-
 function registerHelpers($handlebars)
 {
 
@@ -68,7 +43,7 @@ function registerHelpers($handlebars)
         "filemtime",
         function ($template, $context, $args, $source) {
             $data = ($context->get($args));
-            $file = $data['folder'] . $data['name'] . '_th.jpg';
+            $file = $data['folder'] . $data['name'] . '_th.'.$data['extension'];
             if (file_exists($file)) {
                 return filemtime($file);
             }
@@ -96,6 +71,14 @@ function registerHelpers($handlebars)
                     break;
             }
             return false; // $data.' ::: '.$when.':::'.$comapare.':::'.count($m);
+        }
+    );
+
+    $handlebars->addHelper(
+        "admin",
+        function ($template, $context, $args, $source) {
+            $mi = getMemberInfo();
+            return $mi['admin'] ? $template->render($context) : false;
         }
     );
 

@@ -4,6 +4,23 @@ $j(function () {
     
     //$j('#products_dv_form').append(add_card("hello world"));
 
+    //full example settings
+    var b = {
+        class: "btn btn-success",
+        id: "mi-boton",
+        name: "sales",
+        value: "sales",
+        type: "submit",
+        onclick: "",
+        title: "Click to view sales",
+        text: "Sales ",
+    };
+
+    add_action_button(b);
+
+    //remove_text('button');
+
+
 });
 
 function load_images(addFrame = false) {

@@ -45,18 +45,3 @@ var createPDFThumbnails = function (parent = "") {
         });
     });
 };
-
-// if (
-//     document.readyState === "complete" ||
-//     (document.readyState !== "loading" && !document.documentElement.doScroll)
-// ) {
-//     setTimeout(() => {
-//         createPDFThumbnails();
-//     }, 700);
-// } else {
-//     document.addEventListener("DOMContentLoaded", function() {
-//         setTimeout(() => {
-//             createPDFThumbnails();
-//         }, 700);
-//     });
-// }
