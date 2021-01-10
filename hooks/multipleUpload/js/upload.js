@@ -11,7 +11,7 @@ const setting_ajax = {
     dataType: "json"
 }
 
-openMedia = (i) => {
+const openMedia = (i) => {
     $j('body form').one('click', ".modal-media", function (e) {
         e.preventDefault();
         let mod = $j('#' + $j(this).data('modal-id'));
@@ -21,7 +21,14 @@ openMedia = (i) => {
     });
 };
 
-setDefault = (i) => {
+const openGaleryTv = () => {
+    $j('body').one('click', ".open-gallery", function (e) {
+        data = $j(this).closest("tr").data();
+        openGalery(data);
+    });
+};
+
+const setDefault = (i) => {
     $j('body form').one('click', '.set-default-media', function (e) {
         const $this = $j(this),
             $currentDefault = $j('li.list-group-item-success'),
@@ -52,7 +59,7 @@ setDefault = (i) => {
     })
 }
 
-setDefaultPage = (ix) => {
+const setDefaultPage = (ix) => {
     $j('body form').one('click', '.set-default-page', function (e) {
         var $this = $j(this),
             $group = $this.closest('.input-group'),
@@ -81,7 +88,7 @@ setDefaultPage = (ix) => {
     })
 }
 
-removeMedia = (ix) => {
+const removeMedia = (ix) => {
     $j('body form').one('click', ".remove-media", function (e) {
         var data = $j(this).closest('.modal-body').data(),
             content = $j("li[data-ix='" + ix + "']");
@@ -101,7 +108,7 @@ removeMedia = (ix) => {
     })
 }
 
-editTitle = (ix) => {
+const editTitle = (ix) => {
     $j('body form').one('click', ".edit-title", function (e) {
         var $this = $j(this),
             data = $this.closest('.modal-body').data(),
@@ -141,9 +148,13 @@ editTitle = (ix) => {
 
 $j(document).on({
     'hidden.bs.modal': function () {
-        load_images(false);
+        if (!isTv()) oad_images(false);
     }
 }, '#modal-media-gallery');
+
+const isTv = () => {
+    return $j('.table_view').length > 0 ? true : false;
+}
 
 function refresh_gallery(fn) {
     let gallery = $j('#modal-media-gallery');
@@ -191,12 +202,11 @@ function openGalery(settings) {
         data,
         success: function (res) {
             let $modal = $j('#modal-media-gallery');
-            if ($modal.length > 0) {
-                $modal.remove();
-            }
-            $j('#imagesThumbs').append(res);
+            $modal.length > 0 && $modal.remove();
+            $j('body').append(res);
             $j('#modal-media-gallery').modal('show');
             createPDFThumbnails('.gallery ');
+
         }
     });
 }
@@ -223,4 +233,13 @@ function active_upload_frame(settings) {
         return true
     }
     return false
+}
+
+async function add_button_TV() {
+    const resp = await fetch("hooks/multipleUpload/templates/bs3_btnGalleryTv.hbs");
+    const btn = await resp.text();
+    const $controls = $j('tbody tr td.text-center');
+    $controls.each(function () {
+        $j(this).append(btn);
+    })
 }

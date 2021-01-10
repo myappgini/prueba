@@ -8,7 +8,7 @@
       <a {{> fileTypes}}>
         {{#if thumbnail}} 
           <img src="{{folder_base}}/{{name}}_th.{{extension}}?m={{#filemtime this}}"
-              alt="{{fileName}}"/>
+              alt="{{title}}"/>
         {{else}}
           {{> ispdf}}
           <small class="">{{title}}</small>
