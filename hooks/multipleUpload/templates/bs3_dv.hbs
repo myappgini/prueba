@@ -31,7 +31,7 @@
             class="img-lite thumbnail {{#when defaultImage eq true}} active {{/when}}"
             src="{{folder_base}}/{{name}}_th.{{extension}}?m={{#filemtime this}}"
             onclick="currentSlide({{@index}})"
-            alt="{{name}}"
+            alt="{{title}}"
           />
         {{else}}
           <a class="attachment-thumbnail-preview img-lite thumbnail {{#when defaultImage eq true}} active {{/when}}"

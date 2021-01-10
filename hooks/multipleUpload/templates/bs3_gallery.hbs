@@ -9,7 +9,7 @@
                           {{#if thumbnail}} 
                             <img  class=""
                                 src="{{folder_base}}/{{name}}_th.{{extension}}?m={{#filemtime this}}"
-                                alt="{{fileName}}"/>
+                                alt="{{title}}"/>
                           {{else}}
                             {{> ispdf}}
                             <small class="">{{title}}</small>{{#when extension eq pdf}}<br><code>page: {{pdfPage}}</code>{{/when}}
