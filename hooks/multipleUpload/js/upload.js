@@ -12,7 +12,7 @@ const setting_ajax = {
 }
 
 const openMedia = (i) => {
-    $j('body form').one('click', ".modal-media", function (e) {
+    $j('body').one('click', ".modal-media", function (e) {
         e.preventDefault();
         let mod = $j('#' + $j(this).data('modal-id'));
         if (!mod.length) return;
@@ -29,7 +29,7 @@ const openGaleryTv = () => {
 };
 
 const setDefault = (i) => {
-    $j('body form').one('click', '.set-default-media', function (e) {
+    $j('body').one('click', '.set-default-media', function (e) {
         const $this = $j(this),
             $currentDefault = $j('li.list-group-item-success'),
             lastix = $currentDefault.data();
@@ -60,7 +60,7 @@ const setDefault = (i) => {
 }
 
 const setDefaultPage = (ix) => {
-    $j('body form').one('click', '.set-default-page', function (e) {
+    $j('body').one('click', '.set-default-page', function (e) {
         var $this = $j(this),
             $group = $this.closest('.input-group'),
             $input = $j('#pdf-page-' + ix),
@@ -89,7 +89,7 @@ const setDefaultPage = (ix) => {
 }
 
 const removeMedia = (ix) => {
-    $j('body form').one('click', ".remove-media", function (e) {
+    $j('body').one('click', ".remove-media", function (e) {
         var data = $j(this).closest('.modal-body').data(),
             content = $j("li[data-ix='" + ix + "']");
         content.addClass('disable-content');
@@ -109,7 +109,7 @@ const removeMedia = (ix) => {
 }
 
 const editTitle = (ix) => {
-    $j('body form').one('click', ".edit-title", function (e) {
+    $j('body').one('click', ".edit-title", function (e) {
         var $this = $j(this),
             data = $this.closest('.modal-body').data(),
             div = $this.closest('.box-header').children('.title-media'),
@@ -148,7 +148,7 @@ const editTitle = (ix) => {
 
 $j(document).on({
     'hidden.bs.modal': function () {
-        if (!isTv()) oad_images(false);
+        if (!isTv()) load_images(false);
     }
 }, '#modal-media-gallery');
 
