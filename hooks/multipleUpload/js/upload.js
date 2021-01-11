@@ -11,53 +11,47 @@ const setting_ajax = {
     dataType: "json"
 }
 
-const openMedia = (i) => {
-    $j('body').one('click', ".modal-media", function (e) {
-        e.preventDefault();
-        let mod = $j('#' + $j(this).data('modal-id'));
-        if (!mod.length) return;
-        mod.modal();
-        resizeModal(mod)
-    });
-};
+$j('body').on('click', ".modal-media", function (e) {
+    //e.preventDefault();
+    let mod = $j('#' + $j(this).data('modal-id'));
+    if (!mod.length) return;
+    mod.modal();
+    resizeModal(mod)
+});
 
-const openGaleryTv = () => {
-    $j('body').one('click', ".open-gallery", function (e) {
-        data = $j(this).closest("tr").data();
-        openGalery(data);
-    });
-};
+$j('body').on('click', ".open-gallery", function (e) {
+    data = $j(this).closest("tr").data();
+    openGalery(data);
+});
 
-const setDefault = (i) => {
-    $j('body').one('click', '.set-default-media', function (e) {
-        const $this = $j(this),
-            $currentDefault = $j('li.list-group-item-success'),
-            lastix = $currentDefault.data();
-        $currentDefault.removeClass('list-group-item-success');
-        $currentDefault.find('span.glyphicon-check').addClass('glyphicon-unchecked').removeClass('glyphicon-check');
-        $currentDefault.find('button.btn-primary').show();
-        let data = $this.closest(".modal-body").data();
+$j('body').on('click', '.set-default-media', function (e) {
+    const $this = $j(this),
+        $currentDefault = $j('li.list-group-item-success'),
+        lastix = $currentDefault.data();
+    $currentDefault.removeClass('list-group-item-success');
+    $currentDefault.find('span.glyphicon-check').addClass('glyphicon-unchecked').removeClass('glyphicon-check');
+    $currentDefault.find('button.btn-primary').show();
+    let data = $this.closest(".modal-body").data();
 
-        data = $j.extend({}, $this.data(), data)
-        if (typeof lastix !== 'undefined') {
-            data.lastix = lastix.ix;
+    data = $j.extend({}, $this.data(), data)
+    if (typeof lastix !== 'undefined') {
+        data.lastix = lastix.ix;
+    }
+
+    $j.ajax({
+        method: setting_ajax.method,
+        url: setting_ajax.url,
+        dataType: setting_ajax.dataType,
+        data,
+        success: function (res) {
+            const content = $j("li[data-ix='" + res.setIx + "']");
+            content.addClass('list-group-item-success');
+            content.find('span.glyphicon-unchecked').addClass('glyphicon-check').removeClass('glyphicon-unchecked');
+            $this.hide();
+
         }
-
-        $j.ajax({
-            method: setting_ajax.method,
-            url: setting_ajax.url,
-            dataType: setting_ajax.dataType,
-            data,
-            success: function (res) {
-                const content = $j("li[data-ix='" + res.setIx + "']");
-                content.addClass('list-group-item-success');
-                content.find('span.glyphicon-unchecked').addClass('glyphicon-check').removeClass('glyphicon-unchecked');
-                $this.hide();
-
-            }
-        });
-    })
-}
+    });
+})
 
 const setDefaultPage = (ix) => {
     $j('body').one('click', '.set-default-page', function (e) {

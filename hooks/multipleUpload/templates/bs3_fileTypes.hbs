@@ -1,15 +1,15 @@
     class="thumbnail modal-media" 
-    data-modal-id="modal-media-{{@index}}"
+    data-modal-id="modal-media-{{@key}}"
     data-title="{{title}}"
     {{#when type eq img}}
         href="{{folder_base}}/{{fileName}}" 
-        data-lightbox="set-{{@index}}" 
+        data-lightbox="set-{{@key}}" 
     {{/when}}
     {{#when extension eq pdf}} 
         href="#" 
-        onclick="openMedia({{@index}})"
+        onclick="openMedia({{@key}})"
     {{/when}}
     {{#when type eq mov}}
         href="#" 
-        onclick="openMedia({{@index}})" 
+        onclick="openMedia({{@key}})" 
     {{/when}}

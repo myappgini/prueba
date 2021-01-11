@@ -2,7 +2,7 @@
   <div class="row">
     {{#each images }}
       <div
-        class="mySlides lbid-{{@index}} col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2"
+        class="mySlides lbid-{{@key}} col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2"
         style="{{#when defaultImage eq true}} display: block;{{/when}}"
       >
       <a {{> fileTypes}}>
@@ -30,13 +30,13 @@
           <img
             class="img-lite thumbnail {{#when defaultImage eq true}} active {{/when}}"
             src="{{folder_base}}/{{name}}_th.{{extension}}?m={{#filemtime this}}"
-            onclick="currentSlide({{@index}})"
+            onclick="currentSlide('{{@key}}')"
             alt="{{title}}"
           />
         {{else}}
           <a class="attachment-thumbnail-preview img-lite thumbnail {{#when defaultImage eq true}} active {{/when}}"
             title="{{title}}" 
-            onclick="currentSlide({{@index}})">
+            onclick="currentSlide('{{@key}}')">
             {{> ispdf}}
           </a>
         {{/if}}

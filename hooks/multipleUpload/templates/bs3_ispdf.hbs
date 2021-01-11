@@ -1,10 +1,10 @@
   {{#when extension eq pdf}}
-    <img  class = "img-pdf-{{@index}}"
+    <img  class = "img-pdf-{{@key}}"
           data-pdffile="{{folder_base}}/{{name}}.pdf" 
           src="hooks/multipleUpload/pdf.png" 
           data-pdfpage="{{pdfPage}}"
           data-pdfsize="false"
-          data-ix="{{@index}}"
+          data-ix="{{@key}}"
       >
   {{/when}}
   {{#when extension !eq pdf}}
