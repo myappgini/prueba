@@ -14,6 +14,8 @@ $id = Request::val('id');
 
 $url = "hooks/multipleUpload/MultipleUpload.php?&tn={$tn}&fn={$fn}&id={$id}&cmd=uploading";
 
+echo "<!-- dropzone control multipleupload -->"
+
 ?>
 <div class="dz-container">
     <div class="btn-group-vertical btn-group-lg" style="width: 100%;">
