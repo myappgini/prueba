@@ -1,10 +1,12 @@
 <?php
 $currDir = dirname(__FILE__);
 $base_dir = realpath("{$currDir}/../..");
-if (!isset($_REQUEST['tn'])) die("You can't call this file directly.");
-include($currDir . '/MultipleUpload.php');
+if (!isset($_REQUEST['tn'])) {
+    die("You can't call this file directly.");
+}
+include $currDir . '/MultipleUpload.php';
 if (!function_exists('makeSafe')) {
-    include("$base_dir/lib.php");
+    include "$base_dir/lib.php";
 }
 
 $mu = new MultipleUpload();
@@ -14,8 +16,7 @@ $id = Request::val('id');
 
 $url = "hooks/multipleUpload/MultipleUpload.php?&tn={$tn}&fn={$fn}&id={$id}&cmd=uploading";
 
-echo "<!-- dropzone control multipleupload -->"
-
+echo '<!-- dropzone control multipleupload -->';
 ?>
 <div class="dz-container">
     <div class="btn-group-vertical btn-group-lg" style="width: 100%;">
