@@ -158,7 +158,7 @@ function add_json($info, $data)
     if (is_null($set)) {
         $data['defaultImage'] = 'true';
     }
-    $set['images'][] = $data;
+    $set['images'][uniqid()] = $data;
     $set = array_merge($set, $info,array("where"=>""));
     $set['length'] = count($set['images']);
     return put_array($info, $set);
