@@ -30,13 +30,14 @@
           <img
             class="img-lite thumbnail {{#when defaultImage eq true}} active {{/when}}"
             src="{{folder_base}}/{{name}}_th.{{extension}}?m={{#filemtime this}}"
-            onclick="currentSlide('{{@key}}')"
+            data-ix={{@key}}
             alt="{{title}}"
           />
         {{else}}
           <a class="attachment-thumbnail-preview img-lite thumbnail {{#when defaultImage eq true}} active {{/when}}"
             title="{{title}}" 
-            onclick="currentSlide('{{@key}}')">
+            data-ix={{@key}}
+            >
             {{> ispdf}}
           </a>
         {{/if}}
