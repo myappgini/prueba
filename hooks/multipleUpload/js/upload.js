@@ -29,7 +29,6 @@ const isTv = function () {
 }
 
 $j('body').on('click', ".modal-media", function (e) {
-    //e.preventDefault();
     const mod = $j('#' + $j(this).data('modal-id'));
     if (!mod.length) return;
     mod.modal();
