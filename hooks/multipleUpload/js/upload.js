@@ -5,7 +5,7 @@ const Def_Settings = {
     cmd: false,
 };
 
-const setting_ajax = {
+const Ajax_Settings = {
     method: "post",
     url: "hooks/multipleUpload/functions-ajax.php",
     dataType: "json"
@@ -13,7 +13,7 @@ const setting_ajax = {
 
 $j('body').on('click', ".modal-media", function (e) {
     //e.preventDefault();
-    let mod = $j('#' + $j(this).data('modal-id'));
+    const mod = $j('#' + $j(this).data('modal-id'));
     if (!mod.length) return;
     mod.modal();
     resizeModal(mod)
@@ -38,106 +38,91 @@ $j('body').on('click', '.set-default-media', function (e) {
         data.lastix = lastix.ix;
     }
 
-    $j.ajax({
-        method: setting_ajax.method,
-        url: setting_ajax.url,
-        dataType: setting_ajax.dataType,
-        data,
-        success: function (res) {
-            const content = $j("li[data-ix='" + res.setIx + "']");
-            content.addClass('list-group-item-success');
-            content.find('span.glyphicon-unchecked').addClass('glyphicon-check').removeClass('glyphicon-unchecked');
-            $this.hide();
-
-        }
+    ajax(data).done(function(res){
+        const content = $j("li[data-ix='" + res.setIx + "']");
+        content.addClass('list-group-item-success');
+        content.find('span.glyphicon-unchecked').addClass('glyphicon-check').removeClass('glyphicon-unchecked');
+        $this.hide();
     });
 })
 
-const setDefaultPage = (ix) => {
-    $j('body').one('click', '.set-default-page', function (e) {
-        var $this = $j(this),
-            $group = $this.closest('.input-group'),
-            $input = $j('#pdf-page-' + ix),
-            max = parseInt($input.attr('data-max-page')) || 1,
-            page = parseInt($input.val()) || 0,
-            data = $this.closest(".modal-body").data();
-        data = $j.extend({}, $this.data(), data)
-        $group.removeClass('has-error');
-        if (page < 1 || page > max || max < 1) {
-            $group.addClass('has-error')
-            return;
-        }
-        $j(".img-pdf-" + ix).attr("data-pdfPage", page);
-        data.page = page;
+$j('body').on('click', '.set-default-page', function (e) {
+    const ix = selectedIx(this);
+    var $this = $j(this),
+        $group = $this.closest('.input-group'),
+        $input = $j('#pdf-page-' + ix),
+        max = parseInt($input.attr('data-max-page')) || 1,
+        page = parseInt($input.val()) || 0,
+        data = $this.closest(".modal-body").data();
+    data = $j.extend({}, $this.data(), data)
+    $group.removeClass('has-error');
+    if (page < 1 || page > max || max < 1) {
+        $group.addClass('has-error')
+        return;
+    }
+    $j(".img-pdf-" + ix).attr("data-pdfPage", page);
+    data.page = page;
+    ajax(data).done(function(res){
+        createPDFThumbnails();
+    });
 
-        $j.ajax({
-            method: setting_ajax.method,
-            url: setting_ajax.url,
-            dataType: setting_ajax.dataType,
-            data,
-            success: function (res) {
-                createPDFThumbnails();
-            }
-        });
-    })
-}
+})
 
-const removeMedia = (ix) => {
-    $j('body').one('click', ".remove-media", function (e) {
-        var data = $j(this).closest('.modal-body').data(),
-            content = $j("li[data-ix='" + ix + "']");
-        content.addClass('disable-content');
+$j('body').on('click', ".remove-media", function (e) {
+    const ix = selectedIx(this);
+    var data = $j(this).closest('.modal-body').data(),
+        content = $j("li[data-ix='" + ix + "']");
+    content.addClass('disable-content');
+    data.ix = ix;
+    data.cmd = "del-item"
+
+    ajax(data).done(function(res){
+        content.remove();
+    });
+})
+
+$j('body').on('click', ".edit-title", function (e) {
+    var $this = $j(this),
+    data = $this.closest('.modal-body').data(),
+    div = $this.closest('.box-header').children('.title-media'),
+    value = div.attr('data-title'),
+    tb = div.find('input:text'); //get textbox, if exist
+    
+    if (tb.length) { //text box already exist
+        const ix = selectedIx(this);
+        var newtitle = tb.val();
+        div.text(newtitle); //remove text box & put its current value as text to the div
+        div.attr('data-title', newtitle);
+        $this.children('span').removeClass('glyphicon-ok').addClass('glyphicon-pencil');
+        data.cmd = "set-title"
+        data.newtitle = newtitle;
         data.ix = ix;
-        data.cmd = "del_json"
-        $j.ajax({
-            method: setting_ajax.method,
-            url: setting_ajax.url,
-            dataType: setting_ajax.dataType,
-            data,
-            success: function (res) {
-                //console.log(res);
-                content.remove();
-            }
+        ajax(data).done(function(res){
+            console.log(res)
         });
-    })
+    } else {
+        $this.children('span').removeClass('glyphicon-pencil').addClass('glyphicon-ok')
+        tb = $j('<input>').prop({
+            'type': 'text',
+            'value': value, //set text box value from div current text
+            'style': 'color: #333;'
+        });
+        div.empty().append(tb); //add new text box
+        tb.focus(); //put text box on focus
+    }
+})
+
+const selectedIx = function (obj) {
+    return $j(obj).closest('li.list-group-item-container').attr('data-ix');
 }
 
-const editTitle = (ix) => {
-    $j('body').one('click', ".edit-title", function (e) {
-        var $this = $j(this),
-            data = $this.closest('.modal-body').data(),
-            div = $this.closest('.box-header').children('.title-media'),
-            value = div.attr('data-title'),
-            tb = div.find('input:text'); //get textbox, if exist
-
-        if (tb.length) { //text box already exist
-            var newtitle = tb.val();
-            div.text(newtitle); //remove text box & put its current value as text to the div
-            div.attr('data-title', newtitle);
-            $this.children('span').removeClass('glyphicon-ok').addClass('glyphicon-pencil');
-            data.cmd = "set-title"
-            data.newtitle = newtitle;
-            data.ix = ix;
-            $j.ajax({
-                method: setting_ajax.method,
-                url: setting_ajax.url,
-                data,
-                dataType: setting_ajax.dataType,
-                success: function (res) {
-                    console.log(res)
-                }
-            });
-        } else {
-            $this.children('span').removeClass('glyphicon-pencil').addClass('glyphicon-ok')
-            tb = $j('<input>').prop({
-                'type': 'text',
-                'value': value, //set text box value from div current text
-                'style': 'color: #333;'
-            });
-            div.empty().append(tb); //add new text box
-            tb.focus(); //put text box on focus
-        }
-    })
+const ajax = function (data){
+    return $j.ajax({
+        method: Ajax_Settings.method,
+        url: Ajax_Settings.url,
+        dataType: Ajax_Settings.dataType,
+        data
+    });
 }
 
 $j(document).on({
@@ -146,26 +131,15 @@ $j(document).on({
     }
 }, '#modal-media-gallery');
 
-const isTv = () => {
+const isTv = function () {
     return $j('.table_view').length > 0 ? true : false;
-}
-
-function refresh_gallery(fn) {
-    let gallery = $j('#modal-media-gallery');
-    gallery.modal('hide');
-    gallery.on('hidden.bs.modal', function () {
-        load_images(false);
-        openGalery({
-            fn
-        });
-    });
 }
 
 function loadImages(settings) {
     data = $j.extend({}, Def_Settings, settings);
     data.cmd = "full";
 
-    $j('#imagesThumbs').load(setting_ajax.url, data, function () {
+    $j('#imagesThumbs').load(Ajax_Settings.url, data, function () {
         if (!is_add_new()) {
             if (content_type() === 'print-detailview') {
                 $j('div.columns-thumbs').hide();
@@ -175,7 +149,7 @@ function loadImages(settings) {
     });
 }
 
-$j('body').on('click','.img-lite.thumbnail',function(){
+$j('body').on('click', '.img-lite.thumbnail', function () {
     const $this = $j(this);
     const ix = $this.attr('data-ix');
     $this.addClass('active');
@@ -190,9 +164,9 @@ function openGalery(settings) {
     data.cmd = "gallery";
 
     $j.ajax({
-        method: setting_ajax.method,
+        method: Ajax_Settings.method,
         dataType: "html",
-        url: setting_ajax.url,
+        url: Ajax_Settings.url,
         data,
         success: function (res) {
             let $modal = $j('#modal-media-gallery');
@@ -220,9 +194,9 @@ function active_upload_frame(settings) {
     data = $j.extend({}, Def_Settings, settings);
 
     if (data.tn) {
-        var $actionButtons = $j('#' + data.tn + '_dv_action_buttons');
-        $actionButtons.prepend(' <div id="imagesThumbs"></div>');
-        $actionButtons.append('<p></p><div id="uploadFrame" class="col-12"></div>');
+        var selector = $j('#' + data.tn + '_dv_action_buttons');
+        selector.prepend(' <div id="imagesThumbs"></div>');
+        selector.append('<p></p><div id="uploadFrame" class="col-12"></div>');
         $j('#uploadFrame').load('hooks/multipleUpload/_multipleUpload.php', data);
         return true
     }

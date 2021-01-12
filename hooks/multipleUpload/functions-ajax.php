@@ -22,7 +22,7 @@ if ($cmd !== '') {
         $rslt['error'] = 'NOT where found';
     } else {
         switch ($cmd) {
-            case 'del_json':
+            case 'del-item':
                 //changue this if you want to preserve file on server
                 $DELETE_FILE = true;
                 if ($DELETE_FILE) {
@@ -36,12 +36,15 @@ if ($cmd !== '') {
                         );
                     }
                 }
-                $rslt['json'] = del_json($info);
+                $rslt['json'] = del_item($info);
 
                 break;
             case 'set-default':
-                if ($lastix != '') {
+                if ($info['lastix'] != '') {
+                    $old_ix = $info['ix'];
+                    $info['ix'] =$info['lastix'];
                     $res = upd_json($info, 'defaultImage', 'false');
+                    $info['ix'] =$old_ix;
                 }
                 $res = upd_json($info, 'defaultImage', 'true');
                 $rslt['res'] = $res;
@@ -123,7 +126,7 @@ function put_array($info, $set)
     return put_json($info, $set);
 }
 
-function del_json($info)
+function del_item($info)
 {
     // this code require new version db
     // $sql = "UPDATE {$tn} SET {$fn}=json_remove({$fn},'$.images[{$ix}]') WHERE {$where}";
@@ -132,7 +135,7 @@ function del_json($info)
     $delete = $set['images'][$info['ix']];
     $delete = setInfo('delete', $delete);
     $set['delete'][] = $delete;
-    array_splice($set['images'], $info['ix'], 1);
+    unset($set['images'][$info['ix']]);
     $set['length'] = count($set['images']);
     return put_array($info, $set);
 }
