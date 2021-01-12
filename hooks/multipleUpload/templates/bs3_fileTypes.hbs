@@ -3,7 +3,7 @@
     data-title="{{title}}"
     {{#when type eq img}}
         href="{{folder_base}}/{{fileName}}" 
-        data-lightbox="set-{{@key}}" 
+        data-lightbox="{{#if ../gallery}}gallery{{else}}dv{{/if}}-set" 
     {{/when}}
     {{#when extension eq pdf}} 
         href="#" 
