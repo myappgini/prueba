@@ -11,6 +11,23 @@ const Ajax_Settings = {
     dataType: "json"
 }
 
+const selectedIx = function (obj) {
+    return $j(obj).closest('li.list-group-item-container').attr('data-ix');
+}
+
+const ajax = function (data){
+    return $j.ajax({
+        method: Ajax_Settings.method,
+        url: Ajax_Settings.url,
+        dataType: Ajax_Settings.dataType,
+        data
+    });
+}
+
+const isTv = function () {
+    return $j('.table_view').length > 0 ? true : false;
+}
+
 $j('body').on('click', ".modal-media", function (e) {
     //e.preventDefault();
     const mod = $j('#' + $j(this).data('modal-id'));
@@ -98,7 +115,7 @@ $j('body').on('click', ".edit-title", function (e) {
         data.newtitle = newtitle;
         data.ix = ix;
         ajax(data).done(function(res){
-            console.log(res)
+            //console.log(res)
         });
     } else {
         $this.children('span').removeClass('glyphicon-pencil').addClass('glyphicon-ok')
@@ -112,28 +129,14 @@ $j('body').on('click', ".edit-title", function (e) {
     }
 })
 
-const selectedIx = function (obj) {
-    return $j(obj).closest('li.list-group-item-container').attr('data-ix');
-}
-
-const ajax = function (data){
-    return $j.ajax({
-        method: Ajax_Settings.method,
-        url: Ajax_Settings.url,
-        dataType: Ajax_Settings.dataType,
-        data
-    });
-}
-
-$j(document).on({
-    'hidden.bs.modal': function () {
-        if (!isTv()) load_images(false);
-    }
-}, '#modal-media-gallery');
-
-const isTv = function () {
-    return $j('.table_view').length > 0 ? true : false;
-}
+$j('body').on('click', '.img-lite.thumbnail', function () {
+    const $this = $j(this);
+    const ix = $this.attr('data-ix');
+    $this.addClass('active');
+    $j(".img-lite").removeClass('active');
+    $j('.mySlides').hide();
+    $j(".lbid-" + ix).css("display", "block");
+});
 
 function loadImages(settings) {
     data = $j.extend({}, Def_Settings, settings);
@@ -148,15 +151,6 @@ function loadImages(settings) {
         }
     });
 }
-
-$j('body').on('click', '.img-lite.thumbnail', function () {
-    const $this = $j(this);
-    const ix = $this.attr('data-ix');
-    $this.addClass('active');
-    $j(".img-lite").removeClass('active');
-    $j('.mySlides').hide();
-    $j(".lbid-" + ix).css("display", "block");
-});
 
 function openGalery(settings) {
 
