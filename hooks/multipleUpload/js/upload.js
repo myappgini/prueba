@@ -175,14 +175,14 @@ function loadImages(settings) {
     });
 }
 
-function currentSlide(n) {
-    var slides = $j(".lbid-" + n);
-    var dots = $j(".img-lite");
+$j('body').on('click','.img-lite.thumbnail',function(){
+    const $this = $j(this);
+    const ix = $this.attr('data-ix');
+    $this.addClass('active');
+    $j(".img-lite").removeClass('active');
     $j('.mySlides').hide();
-    dots.removeClass("active");
-    slides.css("display", "block");
-    dots[n].className += " active";
-}
+    $j(".lbid-" + ix).css("display", "block");
+});
 
 function openGalery(settings) {
 
