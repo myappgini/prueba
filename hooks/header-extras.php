@@ -1,4 +1,8 @@
 
+<?php /* Inserted by Membership Profile Image for AppGini on 2021-01-17 05:53:12 */ ?>
+		<?php include('hooks/mpi/scripts.php');?>
+<?php /* End of Membership Profile Image for AppGini code */ ?>
+
 <?php
 ?>
 
