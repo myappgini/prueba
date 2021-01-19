@@ -97,6 +97,17 @@ $j('body').on('click', ".remove-media", function (e) {
     });
 })
 
+/**
+ * stackeable modals
+ */
+$j(document).on({
+    'hidden.bs.modal': function () {
+        //refresh images after close modal
+        load_images();
+    }
+}, '.modal');
+
+
 $j('body').on('click', ".edit-title", function (e) {
     var $this = $j(this),
     data = $this.closest('.modal-body').data(),
