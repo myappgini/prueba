@@ -3,6 +3,8 @@
 
 	function contacto_init(&$options, $memberInfo, &$args) {
 
+		$options->ColCaption = ['Name', 'User', 'Rango', 'Prox. Fecha Pago', ];
+
 		return TRUE;
 	}
 
