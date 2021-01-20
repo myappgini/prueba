@@ -1,9 +1,10 @@
-<!-- Edit this file to change the layout of the detail view form -->
+<!-- To change the layout of the detail view form, we recommend using JS code in hooks/salary-dv.js rather than editing this file -->
 
-<a name="detail-view"></a>
+<div id="detail-view"></div>
 <div class="panel-heading"><h3 class="panel-title"><strong><%%DETAIL_VIEW_TITLE%%></strong></h3></div>
 
-<div class="panel-body" id="salary_dv_container">
+<div id="salary_dv_container-loading" class="text-center text-info text-bold vspacer-lg"><i class="glyphicon glyphicon-refresh loop-rotate"></i> <%%TRANSLATION(Loading ...)%%></div>
+<div class="panel-body hidden" id="salary_dv_container">
 	<!-- child links -->
 	<div class="row vspacer-md">
 		<div class="col-xs-12 children-links">
@@ -20,7 +21,7 @@
 				<!-- Field: ID -->
 				<div class="form-group salary-id">
 					<hr class="hidden-md hidden-lg">
-					<label for="id" class="control-label col-lg-3">ID</label>
+					<label class="control-label col-lg-3" for="id">ID</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" id="id"><%%VALUE(id)%%></div>
 					</div>
@@ -29,7 +30,7 @@
 				<!-- Field: Contacto -->
 				<div class="form-group salary-contacto">
 					<hr class="hidden-md hidden-lg">
-					<label for="contacto" class="control-label col-lg-3" data-parent_link="view_parent_modal">Contacto</label>
+					<label class="control-label col-lg-3" for="contacto" data-parent_link="view_parent_modal">Contacto</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" style="white-space: nowrap; overflow-x: hidden;"><%%COMBO(contacto)%%><%%PLINK(contacto)%%><%%ADDNEW(contacto)%%><span id="contactoLoading"></span></div>
 					</div>
@@ -38,7 +39,7 @@
 				<!-- Field: Monto -->
 				<div class="form-group salary-monto">
 					<hr class="hidden-md hidden-lg">
-					<label for="monto" class="control-label col-lg-3">Monto</label>
+					<label class="control-label col-lg-3" for="monto">Monto</label>
 					<div class="col-lg-9">
 						<input maxlength="40" type="text" class="form-control" name="monto" id="monto" value="<%%VALUE(monto)%%>">
 					</div>
@@ -47,7 +48,7 @@
 				<!-- Field: Mes -->
 				<div class="form-group salary-mes">
 					<hr class="hidden-md hidden-lg">
-					<label for="mes" class="control-label col-lg-3">Mes</label>
+					<label class="control-label col-lg-3" for="mes">Mes</label>
 					<div class="col-lg-9">
 						<input maxlength="40" type="text" class="form-control" name="mes" id="mes" value="<%%VALUE(mes)%%>">
 					</div>
@@ -56,7 +57,7 @@
 				<!-- Field: Nombre -->
 				<div class="form-group salary-nombre">
 					<hr class="hidden-md hidden-lg">
-					<label for="nombre" class="control-label col-lg-3">Nombre</label>
+					<label class="control-label col-lg-3">Nombre</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" id="nombre"></div>
 					</div>
@@ -65,7 +66,7 @@
 				<!-- Field: Rango -->
 				<div class="form-group salary-rango">
 					<hr class="hidden-md hidden-lg">
-					<label for="rango" class="control-label col-lg-3">Rango</label>
+					<label class="control-label col-lg-3">Rango</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" id="rango"></div>
 					</div>
@@ -74,7 +75,7 @@
 				<!-- Field: Proxima fecha de pago -->
 				<div class="form-group salary-date">
 					<hr class="hidden-md hidden-lg">
-					<label for="date" class="control-label col-lg-3">Proxima fecha de pago</label>
+					<label class="control-label col-lg-3">Proxima fecha de pago</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" id="date"></div>
 					</div>
@@ -120,7 +121,12 @@
 			/* enable DV action buttons to float on scrolling down the form */
 			enable_dvab_floating();
 
-			setTimeout(AppGini.focusFirstFormElement, 100);
+
+			setTimeout(function() {
+				$j('#salary_dv_container-loading').addClass('hidden');
+				$j('#salary_dv_container').removeClass('hidden');
+				AppGini.focusFormElement('salary', 'contacto');
+			}, 1100);
 
 			$j('form').eq(0).change(function() {
 				if($j(this).data('already_changed')) return;
@@ -128,7 +134,7 @@
 				$j(this).data('already_changed', true);
 			});
 
-			$j('a[href="<%%TRANSLATION(ImageFolder)%%>"]').click(function() { /* */ return false; });
+			$j('a[href="<%%BASE_UPLOAD_PATH%%>"]').click(function() { return false; });
 
 
 			if(!embedded_mode) {
