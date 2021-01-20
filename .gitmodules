@@ -1,6 +1,3 @@
 [submodule "plugins/mpi"]
 	path = plugins/mpi
 	url = https://github.com/myappgini/sbm_mpi.git
-[submodule "plugins/audit"]
-	path = plugins/audit
-	url = https://github.com/myappgini/sbm_audit_log.git
