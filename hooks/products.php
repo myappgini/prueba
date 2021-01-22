@@ -2,6 +2,10 @@
 	// For help on using hooks, please refer to https://bigprof.com/appgini/help/working-with-generated-web-database-application/hooks
 
 	function products_init(&$options, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		$_SESSION ['tablenam'] = $options->TableName; $_SESSION ['tableID'] = $options->PrimaryKey; $tableID = $_SESSION ['tableID'];
+		/* End of Audit Log for AppGini code */
+
 
 		//$options->AllowFilters = 0;
 
@@ -90,26 +94,46 @@
 	}
 
 	function products_after_insert($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		table_after_change($_SESSION ['dbase'], $_SESSION['tablenam'], $memberInfo['username'], $memberInfo['IP'], $data['selectedID'], $_SESSION['tableID'], 'INSERTION');
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function products_before_update(&$data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		table_before_change($_SESSION['tablenam'], $data['selectedID'],$_SESSION['tableID']);
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function products_after_update($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		table_after_change($_SESSION ['dbase'], $_SESSION['tablenam'], $memberInfo['username'], $memberInfo['IP'], $data['selectedID'], $_SESSION['tableID'], 'UPDATE');
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function products_before_delete($selectedID, &$skipChecks, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		table_before_change($_SESSION['tablenam'], $selectedID,$_SESSION['tableID']);
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function products_after_delete($selectedID, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		table_after_change($_SESSION ['dbase'], $_SESSION['tablenam'], $memberInfo['username'], $memberInfo['IP'], $selectedID, $_SESSION['tableID'], 'DELETION');
+		/* End of Audit Log for AppGini code */
+
 
 	}
 

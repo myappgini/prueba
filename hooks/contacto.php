@@ -3,7 +3,16 @@
 
 	function contacto_init(&$options, $memberInfo, &$args) {
 
+
+
 		$options->ColCaption = ['Name', 'User', 'Rango', 'Prox. Fecha Pago', ];
+
+
+		
+					$_SESSION ['tablenam'] = $options->TableName; $_SESSION ['tableID'] = $options->PrimaryKey; $tableID = $_SESSION ['tableID'];
+
+
+		
 
 		return TRUE;
 	}
@@ -78,26 +87,46 @@
 	}
 
 	function contacto_after_insert($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		table_after_change($_SESSION ['dbase'], $_SESSION['tablenam'], $memberInfo['username'], $memberInfo['IP'], $data['selectedID'], $_SESSION['tableID'], 'INSERTION');
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function contacto_before_update(&$data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		table_before_change($_SESSION['tablenam'], $data['selectedID'],$_SESSION['tableID']);
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function contacto_after_update($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		table_after_change($_SESSION ['dbase'], $_SESSION['tablenam'], $memberInfo['username'], $memberInfo['IP'], $data['selectedID'], $_SESSION['tableID'], 'UPDATE');
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function contacto_before_delete($selectedID, &$skipChecks, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		table_before_change($_SESSION['tablenam'], $selectedID,$_SESSION['tableID']);
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function contacto_after_delete($selectedID, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		table_after_change($_SESSION ['dbase'], $_SESSION['tablenam'], $memberInfo['username'], $memberInfo['IP'], $selectedID, $_SESSION['tableID'], 'DELETION');
+		/* End of Audit Log for AppGini code */
+
 
 	}
 

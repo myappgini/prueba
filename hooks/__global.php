@@ -1,3 +1,7 @@
+
+<?php /* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */ ?>
+		<?php include('audit/scripts.php');?>
+<?php /* End of Audit Log for AppGini code */ ?>
 <?php
 	// For help on using hooks, please refer to https://bigprof.com/appgini/help/working-with-generated-web-database-application/hooks
 
