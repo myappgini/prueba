@@ -1,127 +1,51 @@
-/* TodoList()
- * =========
- * Converts a list into a todoList.
- *
- * @Usage: $('.my-list').todoList(options)
- *         or add [data-widget="todo-list"] to the ul element
- *         Pass any option as data-option="value"
- */
-+function ($) {
-  'use strict';
+const settings = {
+  method: "post",
+  url: "hooks/todo/functions_ajax.php",
+  dataType: "html",
+};
 
-  var DataKey = 'lte.todolist';
+$j(function () {
+  const todo = $j.get("hooks/todo/templates/dropdown_menu.html");
+  todo.done(function (res) {
+    $j('.nav.navbar-nav.navbar-right').prepend(res);
+  })
+});
 
-  var Default = {
-    onCheck  : function (item) {
-      return item;
-    },
-    onUnCheck: function (item) {
-      return item;
-    }
-  };
+$j('.nav.navbar-nav.navbar-right').on('click', '.todo-dropdown-content', function () {
+  const {
+    method,
+    url,
+    dataType
+  } = settings;
 
-  var Selector = {
-    data: '[data-widget="todo-list"]'
-  };
-
-  var ClassName = {
-    done: 'done'
-  };
-
-  // TodoList Class Definition
-  // =========================
-  var TodoList = function (element, options) {
-    this.element = element;
-    this.options = options;
-
-    this._setUpListeners();
-  };
-
-  TodoList.prototype.toggle = function (item) {
-    item.parents(Selector.li).first().toggleClass(ClassName.done);
-    if (!item.prop('checked')) {
-      this.unCheck(item);
-      return;
-    }
-
-    this.check(item);
-  };
-
-  TodoList.prototype.check = function (item) {
-    this.options.onCheck.call(item);
-  };
-
-  TodoList.prototype.unCheck = function (item) {
-    this.options.onUnCheck.call(item);
-  };
-
-  // Private
-
-  TodoList.prototype._setUpListeners = function () {
-    var that = this;
-    $(this.element).on('change ifChanged', 'input:checkbox', function () {
-      that.toggle($(this));
-    });
-  };
-
-  // Plugin Definition
-  // =================
-  function Plugin(option) {
-    return this.each(function () {
-      var $this = $(this);
-      var data  = $this.data(DataKey);
-
-      if (!data) {
-        var options = $.extend({}, Default, $this.data(), typeof option == 'object' && option);
-        $this.data(DataKey, (data = new TodoList($this, options)));
-      }
-
-      if (typeof data == 'string') {
-        if (typeof data[option] == 'undefined') {
-          throw new Error('No method named ' + option);
-        }
-        data[option]();
-      }
-    });
-  }
-
-  var old = $.fn.todoList;
-
-  $.fn.todoList             = Plugin;
-  $.fn.todoList.Constructor = TodoList;
-
-  // No Conflict Mode
-  // ================
-  $.fn.todoList.noConflict = function () {
-    $.fn.todoList = old;
-    return this;
-  };
-
-  // TodoList Data API
-  // =================
-  $(window).on('load', function () {
-    $(Selector.data).each(function () {
-      Plugin.call($(this));
-    });
-  });
-
-}(jQuery);
-
-
-  /* The todo list plugin */
-  $j('.todo-list').todoList({
-    onCheck  : function () {
-      window.console.log($(this), 'The element has been checked');
-    },
-    onUnCheck: function () {
-      window.console.log($(this), 'The element has been unchecked');
+  const todo = $j.ajax({
+    method,
+    url,
+    dataType,
+    data: {
+      cmd: 'get-todo'
     }
   });
 
-    // jQuery UI sortable for the todo list
+  todo.done(function (res) {
+    $j('div.todo-content').html(res);
     $j('.todo-list').sortable({
-      placeholder         : 'sort-highlight',
-      handle              : '.handle',
+      placeholder: 'sort-highlight',
+      handle: '.handle',
       forcePlaceholderSize: true,
-      zIndex              : 999999
+      zIndex: 999999
     });
+  })
+  $j(this).parent().toggleClass('open');
+
+})
+$j('body').on('click', '.close-remove', function () {
+  $j('.dropdown.todo-dropdown').removeClass('open');
+});
+$j('body').on('click', '.add-todo-task', function () {
+  const task = $j('.task-to-add').val();
+  console.log("adding task: " + task)
+});
+$j('body').on('click','.todo-task-action',function(){
+
+});
