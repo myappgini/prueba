@@ -29,7 +29,8 @@ $partialsLoader = new FilesystemLoader(
 # We'll use $handlebars throughout this the examples, assuming the will be all set this way
 $handlebars = new Handlebars([
     "loader" => $partialsLoader,
-    "partials_loader" => $partialsLoader
+    "partials_loader" => $partialsLoader,
+    "enableDataVariables" => false
 ]);
 
 $handlebars = registerHelpers($handlebars);

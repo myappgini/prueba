@@ -11,26 +11,14 @@
       </button>
     </div>
   </div>
-  <!-- /.box-header -->
   <div class='box-body'>
-    <!-- See dist/js/pages/dashboard.js to activate the todoList plugin -->
     <ul class='todo-list'>
-      <li>
-        <span class='handle'>
-          <i class='glyphicon glyphicon-th'></i>
-        </span>
-        <input type='checkbox' value='' class="todo-task-check" />
-        <span class='text'>
-          Let theme shine like a star
-        </span>
-        <div class='tools'>
-          <i class='glyphicon glyphicon-pencil todo-task-edit'></i>
-          <i class='glyphicon glyphicon-trash todo-task-delete'></i>
-        </div>
-      </li>
+      {{#each tasks}}
+          {{> task}}
+      {{/each}}
     </ul>
+
   </div>
-  <!-- /.box-body -->
   <div class='box-footer clearfix no-border'>
     <div class='input-group'>
       <input type='text' class='form-control task-to-add' placeholder='Enter task...' />
@@ -40,7 +28,7 @@
           Add task
         </button>
       </span>
-    </div><!-- /input-group -->
+    </div>
   </div>
 </div>
-<!-- /.box -->
+<!-- / TO DO List -->
