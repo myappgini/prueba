@@ -7,6 +7,14 @@ const ajax_todo = function (data) {
   });
 }
 
+const input_edit = function (text) {
+  return $j('<input />').prop({
+    'type': 'text',
+    'value': text.trim(), //set text box value from div current text
+    'class': 'input-edit-task',
+  });
+}
+
 $j(function () {
   ajax_todo({
     cmd: 'option-todo'
@@ -37,6 +45,7 @@ $j('body').on('click', '.close-remove', function () {
   $j('.dropdown.todo-dropdown').removeClass('open');
 });
 
+// * done to-do
 $j('body').on('click', '.todo-task-check', function () {
   const $this = $j(this);
   const $li = $this.closest('li');
@@ -49,11 +58,12 @@ $j('body').on('click', '.todo-task-check', function () {
 
   ajax_todo(data).done(function (res) {
     console.log(res);
-    complete ? $li.addClass('done') : $li.removeClass('done');
+    data.complete ? $li.addClass('done') : $li.removeClass('done');
     get_values();
   })
 });
 
+// * Add to-do
 $j('body').on('click', '.add-todo-task', function () {
   const $this = $j(this);
   const data = {
@@ -67,6 +77,7 @@ $j('body').on('click', '.add-todo-task', function () {
   })
 });
 
+// * Delete to-do
 $j('body').on('click', '.todo-task-delete', function () {
   const $this = $j(this);
   const $li = $this.closest('li');
@@ -82,40 +93,25 @@ $j('body').on('click', '.todo-task-delete', function () {
   $li.remove();
 });
 
-$j('body').on('click', '.task-text', function () {
-  const $li = $j(this).closest('li');
-  btn = $li.find('.todo-task-edit');
-  btn.trigger('click');
-})
+// * Edit to-do
+$j('body').on('click focusout', '.task-text', function () {
 
-$j('body').on('click', '.todo-task-edit', function () {
-
-  const $this = $j(this);
-  const $li = $this.closest('li');
-  const $span = $li.children('span.task-text');
-  let tb = $li.find('input:text');
+  const $span = $j(this);
+  const $li = $span.closest('li');
+  let tb = $li.find('input.input-edit-task');
 
   if (tb.length) {
-    $this.removeClass('glyphicon-ok').addClass('glyphicon-pencil');
-    let text = tb.val();
-    $span.text(text); //remove text box & put its current value as text to the div
+    $span.text(tb.val()); //remove text box & put its current value as text to the div
     const data = {
-      cmd: $this.data('cmd'),
+      cmd: 'edit-task',
       ix: $li.data('ix'),
+      newtext: tb.val(),
     }
-    data.newtext = text;
     ajax_todo(data).done(function (res) {
       console.log(res)
     });
   } else {
-    let text = $span.text();
-    $this.removeClass('glyphicon-pencil').addClass('glyphicon-ok');
-    tb = $j('<input>').prop({
-      'type': 'text',
-      'value': text.trim(), //set text box value from div current text
-      'style': 'color: #333;',
-      'class': 'input-edit-task',
-    });
+    tb = input_edit($span.text()); //construct text box
     $span.empty().append(tb); //add new text box
     tb.focus(); //put text box on focus
   }
@@ -123,16 +119,12 @@ $j('body').on('click', '.todo-task-edit', function () {
 
 $j(document).keyup(function (e) {
   if ($j(".input-edit-task").is(":focus") && (e.keyCode == 13)) {
-    $j('i.todo-task-edit.glyphicon-ok').trigger('click');
+    $j('.task-text').trigger('click');
   }
   if ($j(".form-control.task-to-add").is(":focus") && (e.keyCode == 13)) {
     $j('button.add-todo-task').trigger('click');
   }
 });
-
-$j("body").on('focusout', '.input-edit-task', function () {
-  $j('i.todo-task-edit.glyphicon-ok').trigger('click');
-})
 
 function get_values() {
   ajax_todo({
@@ -146,7 +138,7 @@ function get_values() {
   })
 }
 
-//122---115---133--145---150---151---149
+//122---115---133--145---150---151---149---144---138
 const tasks = {
   "tasks": [{
       "task": {

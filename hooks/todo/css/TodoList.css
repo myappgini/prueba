@@ -27,6 +27,7 @@
   display: inline-block;
   margin-left: 5px;
   font-weight: 600;
+  width: 75%;
 }
 
 .todo-list>li .label {
@@ -101,4 +102,9 @@
   padding: 2px 3px;
   line-height: 0.9;
   border-radius: 3px;
+}
+
+.input-edit-task {
+  color: #333;
+  width: 100%;
 }
