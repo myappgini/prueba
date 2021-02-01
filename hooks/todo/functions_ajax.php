@@ -17,12 +17,19 @@ $data_selector = [
     'mi' => getMemberInfo(Request::val('mi', false)),
     'id' => getLoggedMemberID(),
     'tk' => Request::val('task', false),
+    'nt' => Request::val('newtext',false),
+    'ok' => Request::val('complete',false),
 ];
 
 header('Content-Type: application/json; charset=utf-8');
 
 if ($cmd) {
     switch ($cmd) {
+        case 'option-todo':
+            $html = $handlebars->render('dropdown_menu', []);
+            echo $html;
+            return;
+            break;
         case 'get-todo':
             $tasks = get_data($data_selector);
             $html = $handlebars->render('todo', $tasks);
@@ -33,8 +40,40 @@ if ($cmd) {
             $tasks = get_data($data_selector);
             $tasks['tasks'][$data_selector['ix']]['deleted']=true;
             $tasks['tasks'][$data_selector['ix']]['date_deleted']=date('d.m.y h:m:s');
+            $tasks['deleted_tasks'][$data_selector['ix']]=$tasks['tasks'][$data_selector['ix']];
+            unset($tasks['tasks'][$data_selector['ix']]);
             $res = update_data($data_selector,$tasks);
             echo 'deleted: '. $res;
+            return;
+            break;
+        case 'edit-task':
+            if (!$data_selector['nt']){
+                echo "{error:'something worng in edit task'}";
+                return;
+                break;
+            }
+            $tasks = get_data($data_selector);
+            $tasks['tasks'][$data_selector['ix']]['task']=$data_selector['nt'];
+            $tasks['tasks'][$data_selector['ix']]['edited'][]=$data_selector['nt'];
+            $res = update_data($data_selector,$tasks);
+            echo 'edited: '. $res;
+            return;
+            break;
+        case 'check-task':
+            $tasks = get_data($data_selector);
+            $ok = $data_selector['ok'] === "true" ? true : false;
+            $tasks['tasks'][$data_selector['ix']]['complete']=$ok;
+            $res = update_data($data_selector,$tasks);
+            echo 'edited: '. $res;
+            return;
+            break;
+        case 'get-values':
+            $tasks = get_data($data_selector);
+            $res['length']=$tasks['length'];
+            $res['deleted']=$tasks['deleted'];
+            $res['listed']=$tasks['listed'];
+            $res['completed']=$tasks['completed'];
+            echo json_encode($res);
             return;
             break;
         case 'add-task':
@@ -95,6 +134,13 @@ function update_data(&$data,$set){
         );
         $errors[] = $eo;
     }
+    $del = count($set['deleted_tasks']);
+    $completed = array_value_recursive_count('complete',true, $set['tasks']);
+    $elements=count($set['tasks']);
+    $set['length']=$elements + $del;
+    $set['deleted']=$del;
+    $set['listed']=$elements;
+    $set['completed']=$completed;
     $set = "`{$data['fn']}`='" . json_encode($set) . "'";
     $sql = "UPDATE `{$data['tn']}` SET {$set} WHERE {$where}";
     $res = sql($sql, $eo);
@@ -104,3 +150,11 @@ function update_data(&$data,$set){
 
     return $res;
 }
+function array_value_recursive_count($key,$value, array $arr){
+    $val = array();
+    array_walk_recursive($arr, function($v, $k) use($key, &$val, $value){
+        if($k === $key && $v === $value) array_push($val, $v);
+    });
+    return count($val) >= 1 ? count($val) : 0;
+}
+
