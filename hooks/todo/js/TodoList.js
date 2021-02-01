@@ -17,11 +17,11 @@ $j(function () {
 });
 
 $j('body').on('click', '.todo-dropdown-content', function () {
-  $j('div.todo-content').html('Loading Content...');
+  $j('div.todos-content').html('Loading Content...');
   ajax_todo({
     cmd: 'get-todo'
   }).done(function (res) {
-    $j('div.todo-content').html(res);
+    $j('div.todos-content').html(res);
     $j('.todo-list').sortable({
       placeholder: 'sort-highlight',
       handle: '.handle',
@@ -46,18 +46,18 @@ $j('body').on('click', '.todo-task-check', function () {
     ix: $li.data('ix'),
     complete: $this.is(":checked") ? true : false,
   }
-  
+
   ajax_todo(data).done(function (res) {
     console.log(res);
     complete ? $li.addClass('done') : $li.removeClass('done');
     get_values();
   })
-
 });
 
 $j('body').on('click', '.add-todo-task', function () {
+  const $this = $j(this);
   const data = {
-    cmd: 'add-task',
+    cmd: $this.data('cmd'),
     task: $j('.task-to-add').val()
   }
   ajax_todo(data).done(function (res) {
@@ -92,25 +92,23 @@ $j('body').on('click', '.todo-task-edit', function () {
 
   const $this = $j(this);
   const $li = $this.closest('li');
-  const data = {
-    cmd: $this.data('cmd'),
-    ix: $li.data('ix'),
-  }
-  if (data.cmd != 'edit-task') return;
-
   const $span = $li.children('span.task-text');
-  let text = $span.text();
   let tb = $li.find('input:text');
 
   if (tb.length) {
     $this.removeClass('glyphicon-ok').addClass('glyphicon-pencil');
-    text = tb.val();
+    let text = tb.val();
     $span.text(text); //remove text box & put its current value as text to the div
+    const data = {
+      cmd: $this.data('cmd'),
+      ix: $li.data('ix'),
+    }
     data.newtext = text;
     ajax_todo(data).done(function (res) {
       console.log(res)
     });
   } else {
+    let text = $span.text();
     $this.removeClass('glyphicon-pencil').addClass('glyphicon-ok');
     tb = $j('<input>').prop({
       'type': 'text',
@@ -132,6 +130,10 @@ $j(document).keyup(function (e) {
   }
 });
 
+$j("body").on('focusout', '.input-edit-task', function () {
+  $j('i.todo-task-edit.glyphicon-ok').trigger('click');
+})
+
 function get_values() {
   ajax_todo({
     cmd: 'get-values'
@@ -144,7 +146,7 @@ function get_values() {
   })
 }
 
-//122--115---133--145---150---151
+//122---115---133--145---150---151---149
 const tasks = {
   "tasks": [{
       "task": {
