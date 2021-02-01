@@ -45,7 +45,7 @@ $j('body').on('click', '.close-remove', function () {
   $j('.dropdown.todo-dropdown').removeClass('open');
 });
 
-// * done to-do
+// * Done to-do
 $j('body').on('click', '.todo-task-check', function () {
   const $this = $j(this);
   const $li = $this.closest('li');

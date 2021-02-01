@@ -24,85 +24,71 @@ $data_selector = [
 header('Content-Type: application/json; charset=utf-8');
 
 if ($cmd) {
+    $tasks = get_data($data_selector);
     switch ($cmd) {
         case 'option-todo':
             $html = $handlebars->render('dropdown_menu', []);
             echo $html;
-            return;
             break;
         case 'get-todo':
-            $tasks = get_data($data_selector);
             $html = $handlebars->render('todo', $tasks);
             echo $html;
-            return;
             break;
         case 'delete-task':
-            $tasks = get_data($data_selector);
             $tasks['tasks'][$data_selector['ix']]['deleted']=true;
             $tasks['tasks'][$data_selector['ix']]['date_deleted']=date('d.m.y h:m:s');
             $tasks['deleted_tasks'][$data_selector['ix']]=$tasks['tasks'][$data_selector['ix']];
             unset($tasks['tasks'][$data_selector['ix']]);
             $res = update_data($data_selector,$tasks);
             echo 'deleted: '. $res;
-            return;
             break;
         case 'edit-task':
             if (!$data_selector['nt']){
-                echo "{error:'something worng in edit task'}";
-                return;
+                echo "{error:'something wrong in edit task'}";
                 break;
             }
-            $tasks = get_data($data_selector);
             $tasks['tasks'][$data_selector['ix']]['task']=$data_selector['nt'];
             $tasks['tasks'][$data_selector['ix']]['edited'][]=$data_selector['nt'];
             $res = update_data($data_selector,$tasks);
             echo 'edited: '. $res;
-            return;
             break;
         case 'check-task':
-            $tasks = get_data($data_selector);
             $ok = $data_selector['ok'] === "true" ? true : false;
             $tasks['tasks'][$data_selector['ix']]['complete']=$ok;
             $res = update_data($data_selector,$tasks);
             echo 'edited: '. $res;
-            return;
             break;
         case 'get-values':
-            $tasks = get_data($data_selector);
             $res['length']=$tasks['length'];
             $res['deleted']=$tasks['deleted'];
             $res['listed']=$tasks['listed'];
             $res['completed']=$tasks['completed'];
             echo json_encode($res);
-            return;
             break;
         case 'add-task':
             if (!$data_selector['tk']) {
                 echo "{error:'something worng'}";
-                return;
                 break;
             }
             $task = add_data($data_selector);
             $html = $handlebars->render('task', $task);
             echo $html;
-            return;
             break;
         default:
-            # code...
+            echo "{error:'something worng!!!'}";
             break;
     }
+    return;
 }
 
 function get_data(&$data)
 {
     $res = getDataTable($data, true);
-    $res = json_decode($res['todos'], true);
-    return $res;
+    return json_decode($res['todos'], true);
 }
 function add_data(&$data)
 {
     $tasks = get_data($data);
-
     $task = [
         'task' => $data['tk'],
         'complete' => false,
@@ -112,7 +98,6 @@ function add_data(&$data)
         'deleted' => false,
         'date_deleted' => false,
     ];
-
     $tasks['tasks'][uniqid()] = $task;
 
     $res = update_data($data,$tasks);
@@ -157,4 +142,3 @@ function array_value_recursive_count($key,$value, array $arr){
     });
     return count($val) >= 1 ? count($val) : 0;
 }
-
