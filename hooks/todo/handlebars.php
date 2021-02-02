@@ -1,5 +1,5 @@
 <?php
-// 
+//
 // Author: Alejandro Landini
 // from previewImages.php 7/4/18
 // update 10/9/20
@@ -37,7 +37,6 @@ $handlebars = registerHelpers($handlebars);
 
 function registerHelpers($handlebars)
 {
-
     $handlebars->addHelper(
         "filemtime",
         function ($template, $context, $args, $source) {
@@ -53,7 +52,6 @@ function registerHelpers($handlebars)
     $handlebars->addHelper(
         "when",
         function ($template, $context, $args, $source) {
-
             $m = explode(" ", $args);
             $keyname = $m[0];
             $when = $m[1];
@@ -62,10 +60,15 @@ function registerHelpers($handlebars)
 
             switch ($when) {
                 case 'eq':
-                    if ($data == $compare) return $template->render($context);
+                    if ($data == $compare) {
+                        return $template->render($context);
+                    }
                     break;
                 case '!eq':
-                    if ($data !== $compare) return $template->render($context);
+                    if ($data !== $compare) {
+                        return $template->render($context);
+                    }
+                    // no break
                 default:
                     break;
             }
