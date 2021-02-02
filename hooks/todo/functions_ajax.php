@@ -2,7 +2,7 @@
 if (!function_exists('getMemberInfo')) {
     include '../../lib.php';
 }
-include '../landini_commons/landini_functions.php';
+include 'landini_commons/landini_functions.php';
 include 'handlebars.php';
 
 $cmd = Request::val('cmd', false);
