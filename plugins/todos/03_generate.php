@@ -71,14 +71,14 @@ $MyPlugin->recurse_copy($source, $dest, true);
 //add code to hedear-extras.php ------------------------------------------------------
 $MyPlugin->progress_log->line();
 $code ="<?php include('hooks/todos/scripts.php');?>";
-$file_path = $path . '/hooks/header-extras.php';
+$file_path = $path . '/hooks/footer-extras.php';
 $res = $MyPlugin->add_to_file($file_path, false, $code);
 
 inspect_result($res, $file_path, $MyPlugin);
 
 $MyPlugin->progress_log->line();
 $code ="<?php include('hooks/box/scripts.php');?>";
-$file_path = $path . '/hooks/header-extras.php';
+$file_path = $path . '/hooks/footer-extras.php';
 $res = $MyPlugin->add_to_file($file_path, false, $code);
 
 inspect_result($res, $file_path, $MyPlugin);
