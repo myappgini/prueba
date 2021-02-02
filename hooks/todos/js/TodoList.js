@@ -1,7 +1,7 @@
 const ajax_todo = function (data) {
   return $j.ajax({
     method: "post",
-    url: "hooks/todo/functions_ajax.php",
+    url: "hooks/todos/functions_ajax.php",
     dataType: "html",
     data
   });
