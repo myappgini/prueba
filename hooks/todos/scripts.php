@@ -1,6 +1,6 @@
 <?php
 ?>
 
-<link rel="stylesheet" href="hooks/todo/css/TodoList.css">
-<script src="hooks/todo/js/jquery-ui.min.js"></script>
-<script src="hooks/todo/js/TodoList.js"></script>
+<link rel="stylesheet" href="hooks/todos/css/TodoList.css">
+<script src="hooks/todos/js/jquery-ui.min.js"></script>
+<script src="hooks/todos/js/TodoList.js"></script>

@@ -6,6 +6,6 @@ include ('hooks/multipleUpload/scripts.php');
 include ('hooks/box/scripts.php');
 
 //* load library for todolist in Appgini with bootstrap3
-include ('hooks/todo/scripts.php');
+include ('hooks/todos/scripts.php');
 
 ?>
