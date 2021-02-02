@@ -65,12 +65,19 @@ $MyPlugin->progress_log->line();
 
 //copy rouserse folder ------------------------------------------------------
 $source = dirname(__FILE__) . '/app-resources';
-$dest = $path . '/hooks/'.$info['folder'];
+$dest = $path . '/hooks';
 $MyPlugin->recurse_copy($source, $dest, true);
 
 //add code to hedear-extras.php ------------------------------------------------------
 $MyPlugin->progress_log->line();
-$code ="<?php include('hooks/{$info['folder']}/scripts.php');?>";
+$code ="<?php include('hooks/todos/scripts.php');?>";
+$file_path = $path . '/hooks/header-extras.php';
+$res = $MyPlugin->add_to_file($file_path, false, $code);
+
+inspect_result($res, $file_path, $MyPlugin);
+
+$MyPlugin->progress_log->line();
+$code ="<?php include('hooks/box/scripts.php');?>";
 $file_path = $path . '/hooks/header-extras.php';
 $res = $MyPlugin->add_to_file($file_path, false, $code);
 
