@@ -24,10 +24,15 @@ $j(function () {
   });
 });
 
-$j('body').on('click', '.todo-dropdown-content', function () {
+// * Open tasks functions, show deletes & remove all deleted tasks
+$j('body').on('click', '.todo-dropdown-content, .view-trash', function () {
+  const $this = $j(this);
+  const $li = $this.closest('li');
+  const cmd = $this.data('cmd');
+
   $j('div.todos-content').html('Loading Content...');
   ajax_todo({
-    cmd: 'get-todo'
+    cmd
   }).done(function (res) {
     $j('div.todos-content').html(res);
     $j('.todo-list').sortable({
@@ -38,7 +43,7 @@ $j('body').on('click', '.todo-dropdown-content', function () {
     });
     get_values();
   })
-  $j(this).closest('li').toggleClass('open');
+  $li.hasClass('open') ? true : $li.toggleClass('open');
 })
 
 $j('body').on('click', '.close-remove', function () {
@@ -138,7 +143,7 @@ function get_values() {
   })
 }
 
-//122---115---133--145---150---151---149---144---138
+//122---115---133--145---150---151---149---144---138---141---146
 const tasks = {
   "tasks": [{
       "task": {

@@ -31,6 +31,12 @@ if ($cmd) {
             echo $html;
             break;
         case 'get-todo':
+            $tasks['list_delete'] = false;
+            $html = $handlebars->render('todo', $tasks);
+            echo $html;
+            break;
+        case 'get-deleted':
+            $tasks['list_delete'] = true;
             $html = $handlebars->render('todo', $tasks);
             echo $html;
             break;
