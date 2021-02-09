@@ -85,8 +85,8 @@ $j('body').on('click', '.add-todo-task', function () {
   })
 });
 
-// * Delete/Remove to-do
-$j('body').on('click', '.todo-task-delete', function () {
+// * Delete/Remove/recover to-do
+$j('body').on('click', '.todo-task-delete, .todo-task-recover', function () {
   [$this, $li, cmd, ix] = this_obj(this);
   ajax_todo({
     cmd,

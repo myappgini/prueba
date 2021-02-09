@@ -61,6 +61,17 @@ if ($cmd) {
             $res = update_data($data_selector, $tasks);
             echo 'deleted: '. $res;
             break;
+        case 'recover-task':
+            $uid = uniqid();
+            $tasks['deleted_tasks'][$data_selector['ix']]['deleted']=false;
+            $tasks['deleted_tasks'][$data_selector['ix']]['recovered_deleted']=date('d.m.y h:m:s');
+
+            $tasks['tasks'][$uid]=$tasks['deleted_tasks'][$data_selector['ix']];
+            $tasks['tasks'][$uid]['uid']=$uid;
+            unset($tasks['deleted_tasks'][$data_selector['ix']]);
+            $res = update_data($data_selector, $tasks);
+            echo 'recovered: '. $res;
+            break;
         case 'edit-task':
             if (!$data_selector['nt']) {
                 echo "{error:'something wrong in edit task'}";
