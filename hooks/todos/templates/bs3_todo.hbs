@@ -9,6 +9,11 @@
       <button type='button' class='btn btn-box-tool view-trash' title="{{#if list_delete}}Empty{{else}}View{{/if}} trash" data-cmd="{{#if list_delete}}removed{{else}}get{{/if}}-deleted">
         <i class='glyphicon glyphicon-trash'>{{#unless list_delete}}<span class="badge label-trash">0</span>{{/unless}}</i>
       </button>
+      {{#if list_delete}}
+      <button type='button' class='btn btn-box-tool back-todos' title="Back to-do list" data-cmd="get-todo">
+        <i class='glyphicon glyphicon-chevron-left'></i>
+      </button>
+      {{/if}}
       <button type='button' class='btn btn-box-tool close-remove' title="Close to-do list">
         <i class='glyphicon glyphicon-remove'></i>
       </button>

@@ -1,4 +1,7 @@
 /* Widget: TODO LIST */
+.todos-content>.box {
+  margin-bottom: 1px;
+}
 .todo-list {
   margin: 0;
   padding: 0;

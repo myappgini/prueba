@@ -46,10 +46,17 @@ if ($cmd) {
             $tasks['list_delete'] = false;
             echo $handlebars->render('todo', $tasks);
             break;
+        case 'remove-task':
+            unset($tasks['deleted_tasks'][$data_selector['ix']]);
+            $res = update_data($data_selector, $tasks);
+            echo 'removed: '. $res;
+            break;
         case 'delete-task':
+            $uid = uniqid();
             $tasks['tasks'][$data_selector['ix']]['deleted']=true;
             $tasks['tasks'][$data_selector['ix']]['date_deleted']=date('d.m.y h:m:s');
-            $tasks['deleted_tasks'][uniqid()]=$tasks['tasks'][$data_selector['ix']];
+            $tasks['deleted_tasks'][$uid]=$tasks['tasks'][$data_selector['ix']];
+            $tasks['deleted_tasks'][$uid]['uid']=$uid;
             unset($tasks['tasks'][$data_selector['ix']]);
             $res = update_data($data_selector, $tasks);
             echo 'deleted: '. $res;
