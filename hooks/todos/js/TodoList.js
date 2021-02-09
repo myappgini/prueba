@@ -29,6 +29,7 @@ $j('body').on('click', '.todo-dropdown-content, .view-trash', function () {
   const $this = $j(this);
   const $li = $this.closest('li');
   const cmd = $this.data('cmd');
+  console.log(cmd)
 
   $j('div.todos-content').html('Loading Content...');
   ajax_todo({
