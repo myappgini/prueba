@@ -104,6 +104,10 @@ if ($cmd) {
             $html = $handlebars->render('task', $task);
             echo $html;
             break;
+        case 'send-task':
+            $html = $handlebars->render('send_task',$tasks);
+            echo $html;
+            break;
         default:
             echo "{error:'something wrong!!!'}";
             break;

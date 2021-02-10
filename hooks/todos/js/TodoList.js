@@ -117,6 +117,19 @@ $j(document).keyup(function (e) {
   }
 });
 
+$j('body').on('click','.todo-task-send', function (){
+  [$this, $li, data] = this_obj(this);
+  console.log(data);
+  ajax_todo(data).done(function(res){
+    const  $modal = $j('#modal-todo');
+    $modal.length > 0 && $modal.remove();
+    $j('body').append(res);
+    $j('#modal-todo').modal('show');
+    users_dropdown('todo-list-users')
+    //$j('.select2').select2()
+  })
+})
+
 function get_values() {
   ajax_todo({
     cmd: 'get-values'
@@ -165,4 +178,24 @@ const tasks = {
       }
     }
   ]
+}
+
+function users_dropdown(f) {
+  $j('#s2-users-todo-list-users').select2({
+      width: '100%',
+      formatNoMatches: function(term) { return 'No matches found!'; },
+      minimumResultsForSearch: 5,
+      loadMorePadding: 200,
+      escapeMarkup: function(m) { return m; },
+      ajax: {
+          url: 'hooks/todos/getUsers.php',
+          dataType: 'json',
+          cache: true,
+          data: function(term, page) { return { s: term, p: page }; },
+          results: function(resp, page) { console.log(resp); return resp; }
+      }
+  }).on('change', function(e) {
+      $j('#todo-list-users').val(e.added.id);
+      console.log($j('#todo-list-users').val());
+  });
 }
