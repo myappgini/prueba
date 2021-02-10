@@ -99,7 +99,7 @@ $j('body').on('click', '.todo-task-delete, .todo-task-recover', function () {
 });
 
 // * Edit to-do
-$j('body').on('click focusout', '.task-text', function () {
+$j('body').on('click focusout', '.task-text, .input-edit-task', function () {
   [$this, $li, cmd, ix] = this_obj(this);
   let tb = $li.find('input.input-edit-task');
 
@@ -122,7 +122,7 @@ $j('body').on('click focusout', '.task-text', function () {
 
 $j(document).keyup(function (e) {
   if ($j(".input-edit-task").is(":focus") && (e.keyCode == 13)) {
-    $j('.task-text').trigger('click');
+    $j('.input-edit-task').trigger('focusout');
   }
   if ($j(".form-control.task-to-add").is(":focus") && (e.keyCode == 13)) {
     $j('button.add-todo-task').trigger('click');
