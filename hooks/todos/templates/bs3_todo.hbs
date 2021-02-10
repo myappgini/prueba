@@ -6,7 +6,10 @@
       {{#if list_delete}}Deleted {{/if}}To Do List
     </h3>
     <div class='box-tools pull-right'>
-      <button type='button' class='btn btn-box-tool view-trash' title="{{#if list_delete}}Empty{{else}}View{{/if}} trash" data-cmd="{{#if list_delete}}removed{{else}}get{{/if}}-deleted">
+      <button type='button' 
+        class='btn btn-box-tool view-trash' 
+        title="{{#if list_delete}}Empty{{else}}View{{/if}} trash" 
+        data-cmd="{{#if list_delete}}removed{{else}}get{{/if}}-deleted">
         <i class='glyphicon glyphicon-trash'>{{#unless list_delete}}<span class="badge label-trash">0</span>{{/unless}}</i>
       </button>
       {{#if list_delete}}
@@ -20,7 +23,12 @@
     </div>
     {{#unless list_delete}}
     <div class="progress" style="height: 4px; margin-bottom: 0px;margin-top: 5px;">
-      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+      <div class="progress-bar progress-bar-success" 
+        role="progressbar" 
+        aria-valuenow="0" 
+        aria-valuemin="0" 
+        aria-valuemax="100" 
+        style="width: 0%;">
       </div>
     </div>
     {{/unless}}
