@@ -103,7 +103,9 @@ $j('body').on('click', ".remove-media", function (e) {
 $j(document).on({
     'hidden.bs.modal': function () {
         //refresh images after close modal
-        load_images();
+        if ( typeof load_images === "function" ){
+                load_images();
+            }
     }
 }, '.modal');
 
