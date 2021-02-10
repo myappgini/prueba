@@ -105,7 +105,8 @@ if ($cmd) {
             echo $html;
             break;
         case 'send-task':
-            $html = $handlebars->render('send_task',$tasks);
+            $task = $tasks['tasks'][$data_selector['ix']];
+            $html = $handlebars->render('send_task',$task);
             echo $html;
             break;
         default:

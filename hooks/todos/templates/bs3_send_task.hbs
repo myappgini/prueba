@@ -1,11 +1,26 @@
-{{< modalHeader}}
-        <div class="box-body">
-          <div class="row">
-              <div class="form-group">
-                <label>Send to Users</label>
-                <input id="todo-list-users" hidden="true">
-                <span id="s2-users-todo-list-users" ></span>
-              </div>
+<li data-ix="{{uid}}">
+  {{< modalHeader}}
+    <div class="box-body">
+      <div class="row">
+          <div class="form-group">
+            <label>Task</label>
+            <span class='text {{#if deleted}}delted{{else}}task{{/if}}-text' data-cmd="edit-task">
+              {{task}} 
+            </span>
           </div>
-        </div>
-{{< modalFooter}}
+          <div class="form-group">
+            <label>Send to Users</label>
+            <input id="todo-list-users" hidden="true">
+            <span id="users-list" ></span>
+          </div>
+          <div class="form-group">
+            <input  type='checkbox' 
+                    class="preserve-task" />
+            <label class='text'>
+              Preserve my task
+            </label>
+          </div>
+      </div>
+    </div>
+  {{< modalFooter}}
+</li>
