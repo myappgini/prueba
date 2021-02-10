@@ -12,6 +12,7 @@ const input_edit = function (text) {
     'type': 'text',
     'value': text.trim(), //set text box value from div current text
     'class': 'input-edit-task',
+    'data-cmd':'edit-task',
   });
 }
 
@@ -20,7 +21,10 @@ const this_obj = function (obj) {
   const $li = $this.closest('li');
   const cmd = $this.data('cmd');
   const ix = $li.data('ix')
-  return [$this, $li, cmd, ix];
+  return [$this, $li, {
+    cmd,
+    ix
+  }];
 }
 
 $j(function () {
@@ -34,12 +38,10 @@ $j(function () {
 
 // * Open tasks functions, show deletes & remove all deleted tasks
 $j('body').on('click', '.todo-dropdown-content, .view-trash, .back-todos', function () {
-  [$this, $li, cmd, ix] = this_obj(this);
-  console.log(cmd)
+  [$this, $li, data] = this_obj(this);
+  console.log(data)
   $j('div.todos-content').html('Loading Content...');
-  ajax_todo({
-    cmd
-  }).done(function (res) {
+  ajax_todo(data).done(function (res) {
     $j('div.todos-content').html(res);
     $j('.todo-list').sortable({
       placeholder: 'sort-highlight',
@@ -58,26 +60,19 @@ $j('body').on('click', '.close-remove', function () {
 
 // * Done to-do
 $j('body').on('click', '.todo-task-check', function () {
-  [$this, $li, cmd, ix] = this_obj(this);
-  const data = {
-    cmd,
-    ix,
-    complete: $this.is(":checked") ? true : false,
-  }
-  ajax_todo(data).done(function (res) {
-    console.log(res);
-    data.complete ? $li.addClass('done') : $li.removeClass('done');
-    get_values();
-  })
+  [$this, $li, data] = this_obj(this);
+  data.complete = $this.is(":checked") ? true : false,
+    ajax_todo(data).done(function (res) {
+      console.log(res);
+      data.complete ? $li.addClass('done') : $li.removeClass('done');
+      get_values();
+    })
 });
 
 // * Add to-do
 $j('body').on('click', '.add-todo-task', function () {
-  [$this, $li, cmd, ix] = this_obj(this);
-  const data = {
-    cmd,
-    task: $j('.task-to-add').val()
-  }
+  [$this, $li, data] = this_obj(this);
+  data.task = $j('.task-to-add').val()
   ajax_todo(data).done(function (res) {
     $j('.todo-list').append(res);
     get_values()
@@ -87,11 +82,8 @@ $j('body').on('click', '.add-todo-task', function () {
 
 // * Delete/Remove/recover to-do
 $j('body').on('click', '.todo-task-delete, .todo-task-recover', function () {
-  [$this, $li, cmd, ix] = this_obj(this);
-  ajax_todo({
-    cmd,
-    ix
-  }).done(res => {
+  [$this, $li, data] = this_obj(this);
+  ajax_todo(data).done(res => {
     console.log(res);
     get_values()
   })
@@ -100,19 +92,15 @@ $j('body').on('click', '.todo-task-delete, .todo-task-recover', function () {
 
 // * Edit to-do
 $j('body').on('click focusout', '.task-text, .input-edit-task', function () {
-  [$this, $li, cmd, ix] = this_obj(this);
+  [$this, $li, data] = this_obj(this);
   let tb = $li.find('input.input-edit-task');
-
+  if (data.cmd === undefined) return 
   if (tb.length) {
     $this.text(tb.val()); //remove text box & put its current value as text to the div
-    const data = {
-      cmd: 'edit-task',
-      ix,
-      newtext: tb.val(),
-    }
-    ajax_todo(data).done(function (res) {
-      console.log(res)
-    });
+      data.newtext = tb.val(),
+      ajax_todo(data).done(function (res) {
+        console.log(res)
+      });
   } else {
     tb = input_edit($this.text()); //construct text box
     $this.empty().append(tb); //add new text box
@@ -137,11 +125,11 @@ function get_values() {
     console.log('update');
     $j('.label-tasks').text(`${data.completed}/${data.listed}`);
     $j('.label-trash').text(`${data.deleted}`);
-    $j('.progress-bar').css('width', `${data.completed/data.listed*100}%`).attr('aria-valuenow', data.completed / data.listed); //.text(`${data.completed/data.listed*100}%`);
+    $j('.progress-bar').css('width', `${data.completed/data.listed*100}%`).attr('aria-valuenow', data.completed / data.listed);
   })
 }
 
-//122---115---133--145---150---151---149---144---138---141---144---
+//122---115---133--145---150---151---149---144---138---141---144---132---after add share function
 const tasks = {
   "tasks": [{
       "task": {

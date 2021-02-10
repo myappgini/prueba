@@ -5,7 +5,7 @@
     <input  type='checkbox' 
             class="todo-task-check" 
             data-cmd="check-task" {{#if complete}}checked{{/if}}/>
-    <span class='text {{#if deleted}}delted{{else}}task{{/if}}-text'>
+    <span class='text {{#if deleted}}delted{{else}}task{{/if}}-text' data-cmd="edit-task">
       {{task}} 
     </span>
     <div class='tools'>
