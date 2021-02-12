@@ -18,7 +18,7 @@ const input_edit = function (text) {
 
 const this_obj = function (obj) {
   const $this = $j(obj);
-  const $li = $this.closest('li');
+  const $li = $this.closest('.task-content');
   const cmd = $this.data('cmd');
   const ix = $li.data('ix')
   return [$this, $li, {
@@ -117,13 +117,13 @@ $j(document).keyup(function (e) {
   }
 });
 
-// * open send modal windows
-$j('body').on('click', '.todo-task-send', function () {
+// * open detal modal windows
+$j('body').on('click', '.todo-task-detail', function () {
   [$this, $li, data] = this_obj(this);
   console.log(data);
   ajax_todo(data).done(function (res) {
     const $modal = $j('#modal-todo');
-    $modal.length > 0 && $modal.closest('li').remove();
+    $modal.length > 0 && $modal.remove();
     $j('body').append(res);
     $j('#modal-todo').modal('show');
     users_list();
@@ -179,7 +179,7 @@ function users_list() {
   });
 }
 
-//122---115---133--145---150---151---149---144---138---141---144---132---after add share function
+//122---115---133--145---150---151---149---144---138---141---144---132---after add detail function 182---
 const tasks = {
   "tasks": [{
       "task": {

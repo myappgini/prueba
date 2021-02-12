@@ -1,15 +1,16 @@
 <div
   class="modal fade in"
-  id="modal-todo"
+  id="{{id}}"
   role="dialog"
-  aria-labelledby="modalTitle-todo"
+  aria-labelledby="title-{{id}}"
 >
   <div 
-    class="modal-dialog modal-sm" 
+    class="modal-dialog modal-{{size}}" 
     role="document"
   >
     <div class="modal-content">
       <div class="modal-header">
+        {{#if dismiss}}
         <button
           type="button"
           class="close"
@@ -20,8 +21,9 @@
             &times;
           </span>
         </button>
-        <h4 class="modal-title" id="modalTitle-todo" >
-          Send To Do task
-        </h4>
+        {{/if}}
+        <h5 class="modal-title" id="title-{{id}}" >
+          {{headline}}
+        </h5>
       </div>
-      <div class="modal-body" data-id = "{{uid}}">
+      <div class="modal-body">

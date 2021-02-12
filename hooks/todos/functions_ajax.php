@@ -104,9 +104,44 @@ if ($cmd) {
             $html = $handlebars->render('task', $task);
             echo $html;
             break;
-        case 'send-task':
+            case 'task-detail':
             $task = $tasks['tasks'][$data_selector['ix']];
-            $html = $handlebars->render('send_task',$task);
+            $options['modal_header']=[
+                "headline"=>"To-Do Task Detail",
+                "id"=>"modal-todo",
+                "size"=>"sm",
+                "dismiss"=>true,
+            ];
+            $options['modal_footer']=[
+                "close_btn"=>[
+                    "enable"=>true,
+                    "text"=>"Close",
+                    "color"=>"default",
+                    "size"=>"xs",
+                    "class"=>"",
+                    "attr"=>"data-dismiss='modal'",
+                    "icon"=>[
+                        "enable"=>true,
+                        "icon"=>"glyphicon glyphicon-remove",
+                    ],
+                ],
+            ];
+            $options['send_options']=[
+                "send_btn"=>[
+                    "enable"=>true,
+                    "text"=>"Send",
+                    "color"=>"primary",
+                    "size"=>"xs",
+                    "class"=>"",
+                    "attr"=>"data-cmd='send-taks-user'",
+                    "icon"=>[
+                        "enable"=>true,
+                        "icon"=>"glyphicon glyphicon-remove",
+                    ],
+                ],
+            
+            ];
+            $html = $handlebars->render('detail', $task+=$options);
             echo $html;
             break;
         default:
