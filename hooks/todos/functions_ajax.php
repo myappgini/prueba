@@ -32,19 +32,19 @@ if ($cmd) {
             break;
         case 'get-todo':
             $tasks['list_delete'] = false;
-            $html = $handlebars->render('todo', $tasks);
+            $html = $handlebars->render('todos', $tasks);
             echo $html;
             break;
         case 'get-deleted':
             $tasks['list_delete'] = true;
-            $html = $handlebars->render('todo', $tasks);
+            $html = $handlebars->render('todos', $tasks);
             echo $html;
             break;
         case 'removed-deleted':
             unset($tasks['deleted_tasks']);
             $res = update_data($data_selector, $tasks);
             $tasks['list_delete'] = false;
-            echo $handlebars->render('todo', $tasks);
+            echo $handlebars->render('todos', $tasks);
             break;
         case 'remove-task':
             unset($tasks['deleted_tasks'][$data_selector['ix']]);
@@ -106,41 +106,7 @@ if ($cmd) {
             break;
             case 'task-detail':
             $task = $tasks['tasks'][$data_selector['ix']];
-            $options['modal_header']=[
-                "headline"=>"To-Do Task Detail",
-                "id"=>"modal-todo",
-                "size"=>"sm",
-                "dismiss"=>true,
-            ];
-            $options['modal_footer']=[
-                "close_btn"=>[
-                    "enable"=>true,
-                    "text"=>"Close",
-                    "color"=>"default",
-                    "size"=>"xs",
-                    "class"=>"",
-                    "attr"=>"data-dismiss='modal'",
-                    "icon"=>[
-                        "enable"=>true,
-                        "icon"=>"glyphicon glyphicon-remove",
-                    ],
-                ],
-            ];
-            $options['send_options']=[
-                "send_btn"=>[
-                    "enable"=>true,
-                    "text"=>"Send",
-                    "color"=>"primary",
-                    "size"=>"xs",
-                    "class"=>"",
-                    "attr"=>"data-cmd='send-taks-user'",
-                    "icon"=>[
-                        "enable"=>true,
-                        "icon"=>"glyphicon glyphicon-remove",
-                    ],
-                ],
-            
-            ];
+            $options= detail_options();
             $html = $handlebars->render('detail', $task+=$options);
             echo $html;
             break;
@@ -216,4 +182,52 @@ function array_value_recursive_count($key, $value, array $arr)
         }
     });
     return count($val) >= 1 ? count($val) : 0;
+}
+
+function detail_options()
+{
+    $options['modal_header']=[
+        "headline"=>"To-Do Task Detail",
+        "id"=>"modal-todo",
+        "size"=>"sm",
+        "dismiss"=>true,
+    ];
+    $options['modal_footer']=[
+        "close_btn"=>[
+            "enable"=>true,
+            "text"=>"Close",
+            "color"=>"default",
+            "size"=>"xs",
+            "class"=>"",
+            "attr"=>"data-dismiss='modal'",
+            "icon"=>[
+                "enable"=>true,
+                "icon"=>"glyphicon glyphicon-remove",
+            ],
+        ],
+    ];
+    $options['send_options']=[
+        "send_btn"=>[
+            "enable"=>true,
+            "text"=>"Send",
+            "color"=>"primary",
+            "size"=>"xs",
+            "class"=>"",
+            "attr"=>"data-cmd='send-taks-user'",
+            "icon"=>[
+                "enable"=>true,
+                "icon"=>"glyphicon glyphicon-remove",
+            ],
+        ],
+    
+    ];
+    $options['send_box_options']=[
+        "headline"=>"Send Task to user",
+        "color"=>"success",
+        "solid"=>false,
+        "with-border"=>true,
+        "class"=>"",
+        "attr"=>"",
+    ];
+    return $options;
 }
