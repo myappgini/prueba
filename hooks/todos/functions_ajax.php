@@ -10,7 +10,7 @@ if (!$cmd) {
     die('bad command');
 }
 
-$data_selector = [
+$data = [
     'tn' => 'landini_todo',
     'fn' => 'todos',
     'ix' => Request::val('ix', false),
@@ -19,12 +19,14 @@ $data_selector = [
     'tk' => Request::val('task', false),
     'nt' => Request::val('newtext', false),
     'ok' => Request::val('complete', false),
+    'us' => Request::val('user', false), //user to send task
+    'pr' => Request::val('preserve', false), //preserve task in my list
 ];
 
 header('Content-Type: application/json; charset=utf-8');
 
 if ($cmd) {
-    $tasks = get_data($data_selector);
+    $tasks = get_data($data);
     switch ($cmd) {
         case 'option-todo':
             $html = $handlebars->render('dropdown_menu', []);
@@ -42,73 +44,91 @@ if ($cmd) {
             break;
         case 'removed-deleted':
             unset($tasks['deleted_tasks']);
-            $res = update_data($data_selector, $tasks);
+            $res = update_data($data, $tasks);
             $tasks['list_delete'] = false;
             echo $handlebars->render('todos', $tasks);
             break;
         case 'remove-task':
-            unset($tasks['deleted_tasks'][$data_selector['ix']]);
-            $res = update_data($data_selector, $tasks);
+            unset($tasks['deleted_tasks'][$data['ix']]);
+            $res = update_data($data, $tasks);
             echo 'removed: '. $res;
             break;
         case 'delete-task':
             $uid = uniqid();
-            $tasks['tasks'][$data_selector['ix']]['deleted']=true;
-            $tasks['tasks'][$data_selector['ix']]['date_deleted']=date('d.m.y h:m:s');
-            $tasks['deleted_tasks'][$uid]=$tasks['tasks'][$data_selector['ix']];
+            $tasks['tasks'][$data['ix']]['deleted']=true;
+            $tasks['tasks'][$data['ix']]['date_deleted']=date('d.m.y h:m:s');
+            $tasks['deleted_tasks'][$uid]=$tasks['tasks'][$data['ix']];
             $tasks['deleted_tasks'][$uid]['uid']=$uid;
-            unset($tasks['tasks'][$data_selector['ix']]);
-            $res = update_data($data_selector, $tasks);
+            unset($tasks['tasks'][$data['ix']]);
+            $res = update_data($data, $tasks);
             echo 'deleted: '. $res;
             break;
         case 'recover-task':
             $uid = uniqid();
-            $tasks['deleted_tasks'][$data_selector['ix']]['deleted']=false;
-            $tasks['deleted_tasks'][$data_selector['ix']]['recovered_deleted']=date('d.m.y h:m:s');
+            $tasks['deleted_tasks'][$data['ix']]['deleted']=false;
+            $tasks['deleted_tasks'][$data['ix']]['recovered_deleted']=date('d.m.y h:m:s');
 
-            $tasks['tasks'][$uid]=$tasks['deleted_tasks'][$data_selector['ix']];
+            $tasks['tasks'][$uid]=$tasks['deleted_tasks'][$data['ix']];
             $tasks['tasks'][$uid]['uid']=$uid;
-            unset($tasks['deleted_tasks'][$data_selector['ix']]);
-            $res = update_data($data_selector, $tasks);
+            unset($tasks['deleted_tasks'][$data['ix']]);
+            $res = update_data($data, $tasks);
             echo 'recovered: '. $res;
             break;
         case 'edit-task':
-            if (!$data_selector['nt']) {
+            if (!$data['nt']) {
                 echo "{error:'something wrong in edit task'}";
                 break;
             }
-            $tasks['tasks'][$data_selector['ix']]['task']=$data_selector['nt'];
-            $tasks['tasks'][$data_selector['ix']]['edited'][]=$data_selector['nt'];
-            $res = update_data($data_selector, $tasks);
+            $tasks['tasks'][$data['ix']]['task']=$data['nt'];
+            $tasks['tasks'][$data['ix']]['edited'][]=$data['nt'];
+            $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
         case 'check-task':
-            $ok = $data_selector['ok'] === "true" ? true : false;
-            $tasks['tasks'][$data_selector['ix']]['complete']=$ok;
-            $res = update_data($data_selector, $tasks);
+            $ok = $data['ok'] === "true" ? true : false;
+            $tasks['tasks'][$data['ix']]['complete']=$ok;
+            $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
         case 'get-values':
-            $res['length']= is_null($tasks['length'])?0:$tasks['length'];
-            $res['deleted']=is_null($tasks['deleted'])?0:$tasks['deleted'];
-            $res['listed']=is_null($tasks['listed'])?0:$tasks['listed'];
-            $res['completed']=is_null($tasks['completed'])?0:$tasks['completed'];
+            $res['length'] = is_null($tasks['length']) ? 0 : $tasks['length'];
+            $res['deleted'] = is_null($tasks['deleted']) ? 0 : $tasks['deleted'];
+            $res['listed'] = is_null($tasks['listed']) ? 0 : $tasks['listed'];
+            $res['completed'] = is_null($tasks['completed']) ? 0 : $tasks['completed'];
             echo json_encode($res);
             break;
         case 'add-task':
-            if (!$data_selector['tk']) {
+            if (!$data['tk']) {
                 echo "{error:'something wrong'}";
                 break;
             }
-            $task = add_data($data_selector);
+            $task = add_data($data);
             $html = $handlebars->render('task', $task);
             echo $html;
             break;
-            case 'task-detail':
-            $task = $tasks['tasks'][$data_selector['ix']];
-            $options= detail_options();
+        case 'task-detail':
+            $task = $tasks['tasks'][$data['ix']];
+            $options = detail_options();
             $html = $handlebars->render('detail', $task+=$options);
             echo $html;
+            break;
+        case 'send-task-user':
+            if (!$data['us'] || $data['us'] === $data['id']){
+                echo "{error:'select a correct user'}";
+                break;
+            }
+            $uid = uniqid();
+            $task = $tasks['tasks'][$data['ix']];
+            $task['uid']=$uid;
+            
+            $newdata = $data;
+            $newdata['id']=$data['us'];
+
+            $user_tasks = get_data($newdata);
+            $user_tasks['tasks'][$uid]=$task;
+
+            $res = update_data($newdata, $user_tasks);
+            echo 'sending: '. $res;
             break;
         default:
             echo "{error:'something wrong!!!'}";
@@ -212,8 +232,8 @@ function detail_options()
             "text"=>"Send",
             "color"=>"primary",
             "size"=>"xs",
-            "class"=>"",
-            "attr"=>"data-cmd='send-taks-user'",
+            "class"=>"send-taks-user",
+            "attr"=>"data-cmd='send-task-user'",
             "icon"=>[
                 "enable"=>true,
                 "icon"=>"glyphicon glyphicon-remove",
@@ -228,6 +248,12 @@ function detail_options()
         "with-border"=>true,
         "class"=>"",
         "attr"=>"",
+        "box-tool"=>[
+            "enable"=>false,
+            "collapsable"=>true,
+            "removable"=>true,
+
+        ],
     ];
     return $options;
 }

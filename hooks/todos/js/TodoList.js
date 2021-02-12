@@ -61,7 +61,7 @@ $j('body').on('click', '.close-remove', function () {
 // * Done to-do
 $j('body').on('click', '.todo-task-check', function () {
   [$this, $li, data] = this_obj(this);
-  data.complete = $this.is(":checked") ? true : false,
+  data.complete = $this.is(":checked") ? true : false;
     ajax_todo(data).done(function (res) {
       console.log(res);
       data.complete ? $li.addClass('done') : $li.removeClass('done');
@@ -132,7 +132,13 @@ $j('body').on('click', '.todo-task-detail', function () {
 
 $j('body').on('click','.send-taks-user',function(){
   [$this, $li, data] = this_obj(this);
+  const preserve = $li.find('input.preserve-task');
+  data.preserve = preserve.is(":checked") ? true : false;
+  data.user = $j('#todo-list-users').val();
   console.log(data);
+  ajax_todo(data).done(function(res){
+    console.log(res);
+  })
 });
 
 function get_values() {
@@ -175,7 +181,7 @@ function users_list() {
     }
   }).on('change', function (e) {
     $j('#todo-list-users').val(e.added.id);
-    console.log($j('#todo-list-users').val());
+    //console.log($j('#todo-list-users').val());
   });
 }
 

@@ -17,7 +17,7 @@ use Handlebars\Loader\FilesystemLoader;
 $currDir = dirname(__FILE__);
 
 # Set the partials files
-$partialsDir = __DIR__ . "/templates";
+$partialsDir = [__DIR__ . "/templates",__DIR__ . "/templates/elements"];
 $partialsLoader = new FilesystemLoader(
     $partialsDir,
     [
