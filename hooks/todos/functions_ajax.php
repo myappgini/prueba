@@ -60,8 +60,8 @@ if ($cmd) {
         case 'recover-task':
             $uid = uniqid();
             $tasks['deleted_tasks'][$data['ix']]['deleted']=false;
-            $tasks['deleted_tasks'][$data['ix']]['recovered_deleted']=date('d.m.y h:m:s');
-            $tasks['deleted_tasks'][$data['ix']]['details'][]=["message"=>"Recovered","date"=>date('d.m.y h:m:s')];
+            $tasks['deleted_tasks'][$data['ix']]['recovered_deleted']=date('Y-m-d H:i:s');
+            $tasks['deleted_tasks'][$data['ix']]['details'][]=["message"=>"Recovered","date"=>date('Y-m-d H:i:s')];
 
             $tasks['tasks'][$uid]=$tasks['deleted_tasks'][$data['ix']];
             $tasks['tasks'][$uid]['uid']=$uid;
@@ -79,7 +79,7 @@ if ($cmd) {
                 break;
             }
             $tasks['tasks'][$data['ix']]['task']=$data['nt'];
-            $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Task change to:{$data['nt']}","date"=>date('d.m.y h:m:s')];
+            $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Task change to:{$data['nt']}","date"=>date('Y-m-d H:i:s')];
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
@@ -93,20 +93,20 @@ if ($cmd) {
                 break;
             }
             $tasks['tasks'][$data['ix']]['description']=$data['nt'];
-            $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Description change to:{$data['nt']}","date"=>date('d.m.y h:m:s')];
+            $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Description change to:{$data['nt']}","date"=>date('Y-m-d H:i:s')];
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
         case 'check-task':
             $ok = $data['ok'] === "true" ? true : false;
             $tasks['tasks'][$data['ix']]['complete']=$ok;
-            $tasks['tasks'][$data['ix']]['details'][]=["message"=> $ok ? "Task marked as completed" : "Task marked as uncompleted" ,"date"=>date('d.m.y h:m:s')];
+            $tasks['tasks'][$data['ix']]['details'][]=["message"=> $ok ? "Task marked as completed" : "Task marked as uncompleted" ,"date"=>date('Y-m-d H:i:s')];
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
         case 'set-due':
-            $tasks['tasks'][$data['ix']]['due']=$data['du'];
-            $tasks['tasks'][$data['ix']]['details'][]=["message"=> "Set due to tas: ".$data['du'] ,"date"=>date('d.m.y h:m:s')];
+            $tasks['tasks'][$data['ix']]['due']= $data['du'];
+            $tasks['tasks'][$data['ix']]['details'][]=["message"=> "Set due to tas: ".$data['du'] ,"date"=>date('Y-m-d H:i:s')];
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
@@ -139,7 +139,7 @@ if ($cmd) {
             }
             $uid = uniqid();
             $task = $tasks['tasks'][$data['ix']];
-            $tasks['tasks'][$data['ix']]['details'][]=["send_to"=>$data['us'],"date"=>date('d.m.y h:m:s')];
+            $tasks['tasks'][$data['ix']]['details'][]=["send_to"=>$data['us'],"date"=>date('Y-m-d H:i:s')];
             $res = ' edited: '. update_data($data, $tasks);
 
             if (!$data['pr']) {
@@ -153,8 +153,8 @@ if ($cmd) {
             $user_tasks = get_data($newdata);
             $user_tasks['tasks'][$uid]=$task;
             $user_tasks['tasks'][$uid]['from']=$data['id'];
-            $user_tasks['tasks'][$uid]['from_date']=date('d.m.y h:m:s');
-            $user_tasks['tasks'][$uid]['details'][]=["message"=>"task from {$data['us']}","date"=>date('d.m.y h:m:s')];
+            $user_tasks['tasks'][$uid]['from_date']=date('Y-m-d H:i:s');
+            $user_tasks['tasks'][$uid]['details'][]=["message"=>"task from {$data['us']}","date"=>date('Y-m-d H:i:s')];
 
             $res .= ' sending: '. update_data($newdata, $user_tasks);
             echo $res;
@@ -178,9 +178,9 @@ function add_data(&$data)
     $task = [
         'task' => $data['tk'],
         'complete' => false,
-        'added' => date('d.m.y h:m:s'),
+        'added' => date('Y-m-d H:i:s'),
         'due' => false,
-        'details' => [["message"=>"New task: {$data['tk']}","date"=>date('d.m.y h:m:s')]],
+        'details' => [["message"=>"New task: {$data['tk']}","date"=>date('Y-m-d H:i:s')]],
         'deleted' => false,
         'date_deleted' => false,
         'uid' => $uid,
@@ -237,8 +237,8 @@ function delete_task($data, $tasks)
 {
     $uid = uniqid();
     $tasks['tasks'][$data['ix']]['deleted']=true;
-    $tasks['tasks'][$data['ix']]['date_deleted']=date('d.m.y h:m:s');
-    $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Delete this task","date"=>date('d.m.y h:m:s')];
+    $tasks['tasks'][$data['ix']]['date_deleted']=date('Y-m-d H:i:s');
+    $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Delete this task","date"=>date('Y-m-d H:i:s')];
     $tasks['deleted_tasks'][$uid]=$tasks['tasks'][$data['ix']];
     $tasks['deleted_tasks'][$uid]['uid']=$uid;
     unset($tasks['tasks'][$data['ix']]);

@@ -83,6 +83,12 @@ function registerHelpers($handlebars)
             return $mi['admin'] ? $template->render($context) : false;
         }
     );
+    $handlebars->addHelper(
+        "app_datetime",
+        function ($template, $context, $args, $source) {
+            return app_datetime($context->get($args), 'dt');
+        }
+    );
 
     return $handlebars;
 }

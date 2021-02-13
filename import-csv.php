@@ -19,6 +19,7 @@
 			return $data;
 		},
 		'products' => function($data, $options = []) {
+			if(isset($data['due'])) $data['due'] = guessMySQLDateTime($data['due']);
 
 			return $data;
 		},

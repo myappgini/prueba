@@ -128,12 +128,19 @@ $j('body').on('click', '.todo-task-detail', function () {
     $j('body').append(res);
     $j('#modal-todo').modal('show');
     users_list();
-    $j('#due-task').datetimepicker({
-      maxDate: moment(),
-      allowInputToggle: true,
-      enabledHours: false,
-      locale: moment().local('es'),
+    $j('#due-task').addClass('always_shown').parents('.input-group').datetimepicker({
+      toolbarPlacement: 'top',
+      sideBySide: true,
+      showClear: true,
+      showTodayButton: true,
+      showClose: true,
+      icons: {
+        close: 'glyphicon glyphicon-ok'
+      },
+      format: AppGini.datetimeFormat('dt'),
+      locale: 'es'
     });
+
     moment_date();
   })
 });
@@ -216,8 +223,9 @@ function moment_date() {
     let val = $j(this).text();
 
     console.log('val', val, moment(val));
+    a = moment().format(val,'yyy-mm-dd HH:mm:ss');
+    const mom = moment(a).fromNow();
 
-    const mom = moment().startOf(val).fromNow();
     $j(this).text(mom);
   });
 };

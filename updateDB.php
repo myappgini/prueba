@@ -44,9 +44,14 @@
 				`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 				PRIMARY KEY (`id`),
 				`name` VARCHAR(40) NULL,
-				`uploads` TEXT NULL
+				`uploads` TEXT NULL,
+				`due` DATETIME NULL
 			) CHARSET utf8",
-			$silent
+			$silent, [
+				"ALTER TABLE products ADD `field4` VARCHAR(40)",
+				"ALTER TABLE `products` CHANGE `field4` `due` VARCHAR(40) NULL ",
+				" ALTER TABLE `products` CHANGE `due` `due` DATETIME NULL ",
+			]
 		);
 
 

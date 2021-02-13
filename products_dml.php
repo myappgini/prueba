@@ -14,6 +14,7 @@ function products_insert(&$error_message = '') {
 
 	$data = [
 		'name' => Request::val('name', ''),
+		'due' => mysql_datetime(Request::val('due', '')),
 	];
 
 
@@ -108,6 +109,7 @@ function products_update(&$selected_id, &$error_message = '') {
 
 	$data = [
 		'name' => Request::val('name', ''),
+		'due' => mysql_datetime(Request::val('due', '')),
 	];
 
 	// get existing values
@@ -283,11 +285,14 @@ function products_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 	// set records to read only if user can't insert new records and can't edit current record
 	if(($selected_id && !$AllowUpdate && !$AllowInsert) || (!$selected_id && !$AllowInsert)) {
 		$jsReadOnly .= "\tjQuery('#name').replaceWith('<div class=\"form-control-static\" id=\"name\">' + (jQuery('#name').val() || '') + '</div>');\n";
+		$jsReadOnly .= "\tjQuery('#due').parents('.input-group').replaceWith('<div class=\"form-control-static\" id=\"due\">' + (jQuery('#due').val() || '') + '</div>');\n";
 		$jsReadOnly .= "\tjQuery('.select2-container').hide();\n";
 
 		$noUploads = true;
 	} elseif($AllowInsert) {
 		$jsEditable .= "\tjQuery('form').eq(0).data('already_changed', true);"; // temporarily disable form change handler
+		$locale = isset($Translation['datetimepicker locale']) ? ", locale: '{$Translation['datetimepicker locale']}'" : '';
+		$jsEditable .= "\tjQuery('#due').addClass('always_shown').parents('.input-group').datetimepicker({ toolbarPlacement: 'top', sideBySide: true, showClear: true, showTodayButton: true, showClose: true, icons: { close: 'glyphicon glyphicon-ok' }, format: AppGini.datetimeFormat('dt') {$locale} });";
 			$jsEditable .= "\tjQuery('form').eq(0).data('already_changed', false);"; // re-enable form change handler
 	}
 
@@ -313,6 +318,7 @@ function products_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 	$templateCode = str_replace('<%%UPLOADFILE(id)%%>', '', $templateCode);
 	$templateCode = str_replace('<%%UPLOADFILE(name)%%>', '', $templateCode);
 	$templateCode = str_replace('<%%UPLOADFILE(uploads)%%>', '', $templateCode);
+	$templateCode = str_replace('<%%UPLOADFILE(due)%%>', '', $templateCode);
 
 	// process values
 	if($selected_id) {
@@ -324,6 +330,8 @@ function products_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 		$templateCode = str_replace('<%%URLVALUE(name)%%>', urlencode($urow['name']), $templateCode);
 		$templateCode = str_replace('<%%VALUE(uploads)%%>', safe_html($urow['uploads']), $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(uploads)%%>', urlencode($urow['uploads']), $templateCode);
+		$templateCode = str_replace('<%%VALUE(due)%%>', app_datetime($row['due'], 'dt'), $templateCode);
+		$templateCode = str_replace('<%%URLVALUE(due)%%>', urlencode(app_datetime($urow['due'], 'dt')), $templateCode);
 	} else {
 		$templateCode = str_replace('<%%VALUE(id)%%>', '', $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(id)%%>', urlencode(''), $templateCode);
@@ -331,6 +339,8 @@ function products_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 		$templateCode = str_replace('<%%URLVALUE(name)%%>', urlencode(''), $templateCode);
 		$templateCode = str_replace('<%%VALUE(uploads)%%>', '', $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(uploads)%%>', urlencode(''), $templateCode);
+		$templateCode = str_replace('<%%VALUE(due)%%>', '', $templateCode);
+		$templateCode = str_replace('<%%URLVALUE(due)%%>', urlencode(''), $templateCode);
 	}
 
 	// process translations

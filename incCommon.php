@@ -134,7 +134,7 @@
 		$sql_fields = [
 			'contacto' => "`contacto`.`id` as 'id', `contacto`.`name` as 'name', `contacto`.`user` as 'user', `contacto`.`rango` as 'rango', if(`contacto`.`date`,date_format(`contacto`.`date`,'%d/%m/%Y'),'') as 'date'",
 			'salary' => "`salary`.`id` as 'id', IF(    CHAR_LENGTH(`contacto1`.`name`) || CHAR_LENGTH(`contacto1`.`user`), CONCAT_WS('',   `contacto1`.`name`, ' - ', `contacto1`.`user`), '') as 'contacto', `salary`.`monto` as 'monto', `salary`.`mes` as 'mes', IF(    CHAR_LENGTH(`contacto1`.`name`), CONCAT_WS('',   `contacto1`.`name`), '') as 'nombre', IF(    CHAR_LENGTH(`contacto1`.`rango`), CONCAT_WS('',   `contacto1`.`rango`), '') as 'rango', IF(    CHAR_LENGTH(if(`contacto1`.`date`,date_format(`contacto1`.`date`,'%d/%m/%Y'),'')), CONCAT_WS('',   if(`contacto1`.`date`,date_format(`contacto1`.`date`,'%d/%m/%Y'),'')), '') as 'date'",
-			'products' => "`products`.`id` as 'id', `products`.`name` as 'name', `products`.`uploads` as 'uploads'",
+			'products' => "`products`.`id` as 'id', `products`.`name` as 'name', `products`.`uploads` as 'uploads', if(`products`.`due`,date_format(`products`.`due`,'%d/%m/%Y %h:%i %p'),'') as 'due'",
 		];
 
 		if(isset($sql_fields[$table_name])) return $sql_fields[$table_name];
@@ -224,6 +224,7 @@
 				'id' => '',
 				'name' => '',
 				'uploads' => '',
+				'due' => '',
 			],
 		];
 

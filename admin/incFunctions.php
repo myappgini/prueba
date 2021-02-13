@@ -907,6 +907,7 @@
 					'id' => ['appgini' => "INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT"],
 					'name' => ['appgini' => "VARCHAR(40) NULL"],
 					'uploads' => ['appgini' => "TEXT NULL"],
+					'due' => ['appgini' => "DATETIME NULL"],
 				],
 			];
 		}
