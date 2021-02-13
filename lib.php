@@ -9,7 +9,7 @@ if(!defined('datalist_db_encoding')) define('datalist_db_encoding', 'UTF-8');
 if(!defined('maxSortBy')) define('maxSortBy', 4);
 if(!defined('empty_lookup_value')) define('empty_lookup_value', '{empty_value}');
 
-if(function_exists('date_default_timezone_set')) @date_default_timezone_set('America/New_York');
+if(function_exists('date_default_timezone_set')) @date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 $GLOBALS['filter_operators'] = array(
 	'equal-to' => '<=>',
