@@ -1,4 +1,4 @@
-  <li data-ix = "{{uid}}" class="{{#if complete}} done {{else}} success {{/if}} task-content">
+  <li data-ix = "{{uid}}" class="{{#if complete}}done{{else}}{{#if from}}warning{{else}}success{{/if}}{{/if}} {{#if from}}warning{{/if}} task-content">
     <span class='handle'>
       <i class='glyphicon glyphicon-th'></i>
     </span>
@@ -20,6 +20,18 @@
       {{/if}}
       <i  class='glyphicon glyphicon-trash todo-task-delete' 
           data-cmd="{{#if deleted}}remove{{else}}delete{{/if}}-task" 
-          title="{{#if deleted}}Remove{{else}}Delete{{/if}} task"></i>
+          title="{{#if deleted}}Remove{{else}}Delete{{/if}} task">
+      </i>
+    </div>
+    <div class="todo-tags">
+      {{#if description}}
+        <i class="glyphicon glyphicon-info-sign" title="This task has description" ></i>
+      {{/if}}
+      {{#if from}}
+        <span class="label label-info" title="From {{from}}">{{from}}</span>
+      {{/if}}
+      {{#if due}}
+        <span class="label label-warning" title="Due">{{due}}</span>
+      {{/if}}
     </div>
   </li>

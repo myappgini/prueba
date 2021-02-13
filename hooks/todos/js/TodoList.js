@@ -62,11 +62,11 @@ $j('body').on('click', '.close-remove', function () {
 $j('body').on('click', '.todo-task-check', function () {
   [$this, $li, data] = this_obj(this);
   data.complete = $this.is(":checked") ? true : false;
-    ajax_todo(data).done(function (res) {
-      console.log(res);
-      data.complete ? $li.addClass('done') : $li.removeClass('done');
-      get_values();
-    })
+  ajax_todo(data).done(function (res) {
+    console.log(res);
+    data.complete ? $li.addClass('done') : $li.removeClass('done');
+    get_values();
+  })
 });
 
 // * Add to-do
@@ -95,6 +95,7 @@ $j('body').on('click focusout', '.task-text, .input-edit-task', function () {
   [$this, $li, data] = this_obj(this);
   let tb = $li.find('input.input-edit-task');
   if (data.cmd === undefined) return
+  console.log(data);
   if (tb.length) {
     $this.text(tb.val()); //remove text box & put its current value as text to the div
     data.newtext = tb.val(),
@@ -127,17 +128,43 @@ $j('body').on('click', '.todo-task-detail', function () {
     $j('body').append(res);
     $j('#modal-todo').modal('show');
     users_list();
+    $j('#due-task').datetimepicker({
+      maxDate: moment(),
+      allowInputToggle: true,
+      enabledHours: false,
+      locale: moment().local('es'),
+    });
+    moment_date();
   })
 });
 
-$j('body').on('click','.send-taks-user',function(){
+// * send task to user
+$j('body').on('click', '.send-taks-user', function () {
   [$this, $li, data] = this_obj(this);
   const preserve = $li.find('input.preserve-task');
   data.preserve = preserve.is(":checked") ? true : false;
   data.user = $j('#todo-list-users').val();
   console.log(data);
-  ajax_todo(data).done(function(res){
+  ajax_todo(data).done(function (res) {
     console.log(res);
+    get_values();
+    if (!data.preserve) {
+      $j(`ul.todo-list li[data-ix='${data.ix}']`).remove();
+      const $modal = $j('#modal-todo');
+      $modal.length > 0 && $modal.modal('hide');
+    }
+  })
+});
+
+//* set due
+$j('body').on('click', '.set-due', function () {
+  [$this, $li, data] = this_obj(this);
+  const due = $li.find('input#due-task');
+  data.due = due.val();
+  console.log(data);
+  ajax_todo(data).done(function (res) {
+    console.log(res);
+    get_values();
   })
 });
 
@@ -181,44 +208,166 @@ function users_list() {
     }
   }).on('change', function (e) {
     $j('#todo-list-users').val(e.added.id);
-    //console.log($j('#todo-list-users').val());
   });
 }
 
+function moment_date() {
+  $j('.detail-task-time').each(function () {
+    let val = $j(this).text();
+
+    console.log('val', val, moment(val));
+
+    const mom = moment().startOf(val).fromNow();
+    $j(this).text(mom);
+  });
+};
+
 //122---115---133--145---150---151---149---144---138---141---144---132---after add detail function 182---
 const tasks = {
-  "tasks": [{
-      "task": {
-        "task": "esta es una nueva tarea 1",
-        "complete": false,
-        "added": "fecha y hora",
-        "due": "fecha y hora de vencimiento",
-        "edited": ["oldvalue1", "oldvalue2", "oldvalue3"],
-        "deleted": false,
-        "date_deleted": "feha y hora de borrado"
-      }
+  "tasks": {
+    "602705f9a348a": {
+      "task": "task to complete",
+      "complete": true,
+      "added": "12.02.21 05:02:29",
+      "due": false,
+      "details": [{
+        "new_task": "task to complete",
+        "added_date": "12.02.21 05:02:29"
+      }, {
+        "complete": "marked as completed",
+        "date": "12.02.21 05:02:40"
+      }],
+      "deleted": false,
+      "date_deleted": false,
+      "uid": "602705f9a348a"
     },
-    {
-      "task": {
-        "task": "Esta es otra tarea 2",
-        "complete": false,
-        "added": "fecha y hora",
-        "due": "fecha y hora de vencimiento",
-        "edited": ["oldvalue1", "oldvalue2", "oldvalue3"],
-        "deleted": false,
-        "date_deleted": "feha y hora de borrado"
-      }
+    "602706032792f": {
+      "task": "task to do!",
+      "complete": false,
+      "added": "12.02.21 05:02:39",
+      "due": false,
+      "details": [{
+        "new_task": "task to do",
+        "added_date": "12.02.21 05:02:39"
+      }, {
+        "tile": "task to do!",
+        "date": "12.02.21 06:02:56"
+      }],
+      "deleted": false,
+      "date_deleted": false,
+      "uid": "602706032792f"
     },
-    {
-      "task": {
-        "task": "Esta es otra tarea 4",
-        "complete": false,
-        "added": "fecha y hora",
-        "due": "fecha y hora de vencimiento",
-        "edited": ["oldvalue1", "oldvalue2", "oldvalue3"],
-        "deleted": false,
-        "date_deleted": "feha y hora de borrado"
-      }
+    "60270620e6e7f": {
+      "task": "task to send and preserve",
+      "complete": true,
+      "added": "12.02.21 05:02:08",
+      "due": false,
+      "details": [{
+        "new_task": "task to send and preserve",
+        "added_date": "12.02.21 05:02:08"
+      }, {
+        "send_to": "alejandro",
+        "date": "12.02.21 06:02:40"
+      }, {
+        "send_to": "alejandro",
+        "date": "12.02.21 06:02:48"
+      }, {
+        "complete": "marked as completed",
+        "date": "12.02.21 06:02:32"
+      }],
+      "deleted": false,
+      "date_deleted": false,
+      "uid": "60270620e6e7f"
+    },
+    "6027062b4653d": {
+      "task": "change this title--to new title?",
+      "complete": false,
+      "added": "12.02.21 05:02:19",
+      "due": false,
+      "details": [{
+        "new_task": "change this title",
+        "added_date": "12.02.21 05:02:19"
+      }, {
+        "tile": "change this title--to new title?",
+        "date": "12.02.21 05:02:18"
+      }],
+      "deleted": false,
+      "date_deleted": false,
+      "uid": "6027062b4653d"
+    },
+    "602713a329304": {
+      "task": "tarea from alejandro",
+      "complete": false,
+      "added": "12.02.21 06:02:38",
+      "due": false,
+      "details": [{
+        "new_task": "tarea from alejandro",
+        "added_date": "12.02.21 06:02:38"
+      }, {
+        "task_from": "admin",
+        "date": "12.02.21 06:02:47"
+      }],
+      "deleted": false,
+      "date_deleted": false,
+      "uid": "602713a329304",
+      "from": "alejandro",
+      "from_date": "12.02.21 06:02:47"
     }
-  ]
+  },
+  "length": 8,
+  "deleted": 3,
+  "listed": 5,
+  "completed": 2,
+  "deleted_tasks": {
+    "6027064303cf1": {
+      "task": "task to delete",
+      "complete": false,
+      "added": "12.02.21 05:02:49",
+      "due": false,
+      "details": [{
+        "new_task": "task to delete",
+        "added_date": "12.02.21 05:02:49"
+      }, {
+        "deleted_date": "12.02.21 05:02:43"
+      }],
+      "deleted": true,
+      "date_deleted": "12.02.21 05:02:43",
+      "uid": "6027064303cf1"
+    },
+    "60270648a5086": {
+      "task": "task to send",
+      "complete": false,
+      "added": "12.02.21 05:02:03",
+      "due": false,
+      "details": [{
+        "new_task": "task to send",
+        "added_date": "12.02.21 05:02:03"
+      }, {
+        "deleted_date": "12.02.21 05:02:48"
+      }],
+      "deleted": true,
+      "date_deleted": "12.02.21 05:02:48",
+      "uid": "60270648a5086",
+      "send_to": "alejandro",
+      "send_to_date": "12.02.21 05:02:48"
+    },
+    "60270a1d359a5": {
+      "task": "other task to send",
+      "complete": false,
+      "added": "12.02.21 06:02:03",
+      "due": false,
+      "details": [{
+        "new_task": "other task to send",
+        "added_date": "12.02.21 06:02:03"
+      }, {
+        "send_to": "alejandro",
+        "date": "12.02.21 06:02:09"
+      }, {
+        "deleted_date": "12.02.21 06:02:09"
+      }],
+      "deleted": true,
+      "date_deleted": "12.02.21 06:02:09",
+      "uid": "60270a1d359a5"
+    }
+  }
 }

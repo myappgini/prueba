@@ -20,7 +20,8 @@ $data = [
     'nt' => Request::val('newtext', false),
     'ok' => Request::val('complete', false),
     'us' => Request::val('user', false), //user to send task
-    'pr' => Request::val('preserve', false), //preserve task in my list
+    'pr' => Request::val('preserve', false)=== "true" ? true : false, //preserve task in my list
+    'du' => Request::val('due',false), //due task
 ];
 
 header('Content-Type: application/json; charset=utf-8');
@@ -54,19 +55,13 @@ if ($cmd) {
             echo 'removed: '. $res;
             break;
         case 'delete-task':
-            $uid = uniqid();
-            $tasks['tasks'][$data['ix']]['deleted']=true;
-            $tasks['tasks'][$data['ix']]['date_deleted']=date('d.m.y h:m:s');
-            $tasks['deleted_tasks'][$uid]=$tasks['tasks'][$data['ix']];
-            $tasks['deleted_tasks'][$uid]['uid']=$uid;
-            unset($tasks['tasks'][$data['ix']]);
-            $res = update_data($data, $tasks);
-            echo 'deleted: '. $res;
+            echo 'deleted: '. delete_task($data, $tasks);
             break;
         case 'recover-task':
             $uid = uniqid();
             $tasks['deleted_tasks'][$data['ix']]['deleted']=false;
             $tasks['deleted_tasks'][$data['ix']]['recovered_deleted']=date('d.m.y h:m:s');
+            $tasks['deleted_tasks'][$data['ix']]['details'][]=["message"=>"Recovered","date"=>date('d.m.y h:m:s')];
 
             $tasks['tasks'][$uid]=$tasks['deleted_tasks'][$data['ix']];
             $tasks['tasks'][$uid]['uid']=$uid;
@@ -79,14 +74,39 @@ if ($cmd) {
                 echo "{error:'something wrong in edit task'}";
                 break;
             }
+            if ($tasks['tasks'][$data['ix']]['task']===$data['nt']) {
+                echo "{error:'no task changed'}";
+                break;
+            }
             $tasks['tasks'][$data['ix']]['task']=$data['nt'];
-            $tasks['tasks'][$data['ix']]['edited'][]=$data['nt'];
+            $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Task change to:{$data['nt']}","date"=>date('d.m.y h:m:s')];
+            $res = update_data($data, $tasks);
+            echo 'edited: '. $res;
+            break;
+        case 'edit-description':
+            if (!$data['nt']) {
+                echo "{error:'something wrong in edit description'}";
+                break;
+            }
+            if ($tasks['tasks'][$data['ix']]['description']===$data['nt']) {
+                echo "{error:'no descrition changed'}";
+                break;
+            }
+            $tasks['tasks'][$data['ix']]['description']=$data['nt'];
+            $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Description change to:{$data['nt']}","date"=>date('d.m.y h:m:s')];
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
         case 'check-task':
             $ok = $data['ok'] === "true" ? true : false;
             $tasks['tasks'][$data['ix']]['complete']=$ok;
+            $tasks['tasks'][$data['ix']]['details'][]=["message"=> $ok ? "Task marked as completed" : "Task marked as uncompleted" ,"date"=>date('d.m.y h:m:s')];
+            $res = update_data($data, $tasks);
+            echo 'edited: '. $res;
+            break;
+        case 'set-due':
+            $tasks['tasks'][$data['ix']]['due']=$data['du'];
+            $tasks['tasks'][$data['ix']]['details'][]=["message"=> "Set due to tas: ".$data['du'] ,"date"=>date('d.m.y h:m:s')];
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
@@ -108,27 +128,36 @@ if ($cmd) {
             break;
         case 'task-detail':
             $task = $tasks['tasks'][$data['ix']];
-            $options = detail_options();
-            $html = $handlebars->render('detail', $task+=$options);
+            $task += detail_options();
+            $html = $handlebars->render('detail', $task);
             echo $html;
             break;
         case 'send-task-user':
-            if (!$data['us'] || $data['us'] === $data['id']){
+            if (!$data['us'] || $data['us'] === $data['id']) {
                 echo "{error:'select a correct user'}";
                 break;
             }
             $uid = uniqid();
             $task = $tasks['tasks'][$data['ix']];
-            $task['uid']=$uid;
+            $tasks['tasks'][$data['ix']]['details'][]=["send_to"=>$data['us'],"date"=>date('d.m.y h:m:s')];
+            $res = ' edited: '. update_data($data, $tasks);
+
+            if (!$data['pr']) {
+                $res .= ' deleted: '. delete_task($data, $tasks);
+            }
             
             $newdata = $data;
             $newdata['id']=$data['us'];
+            $task['uid']=$uid;
 
             $user_tasks = get_data($newdata);
             $user_tasks['tasks'][$uid]=$task;
+            $user_tasks['tasks'][$uid]['from']=$data['id'];
+            $user_tasks['tasks'][$uid]['from_date']=date('d.m.y h:m:s');
+            $user_tasks['tasks'][$uid]['details'][]=["message"=>"task from {$data['us']}","date"=>date('d.m.y h:m:s')];
 
-            $res = update_data($newdata, $user_tasks);
-            echo 'sending: '. $res;
+            $res .= ' sending: '. update_data($newdata, $user_tasks);
+            echo $res;
             break;
         default:
             echo "{error:'something wrong!!!'}";
@@ -151,7 +180,7 @@ function add_data(&$data)
         'complete' => false,
         'added' => date('d.m.y h:m:s'),
         'due' => false,
-        'edited' => [$data['tk']],
+        'details' => [["message"=>"New task: {$data['tk']}","date"=>date('d.m.y h:m:s')]],
         'deleted' => false,
         'date_deleted' => false,
         'uid' => $uid,
@@ -204,12 +233,25 @@ function array_value_recursive_count($key, $value, array $arr)
     return count($val) >= 1 ? count($val) : 0;
 }
 
-function detail_options()
+function delete_task($data, $tasks)
+{
+    $uid = uniqid();
+    $tasks['tasks'][$data['ix']]['deleted']=true;
+    $tasks['tasks'][$data['ix']]['date_deleted']=date('d.m.y h:m:s');
+    $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Delete this task","date"=>date('d.m.y h:m:s')];
+    $tasks['deleted_tasks'][$uid]=$tasks['tasks'][$data['ix']];
+    $tasks['deleted_tasks'][$uid]['uid']=$uid;
+    unset($tasks['tasks'][$data['ix']]);
+    $res = update_data($data, $tasks);
+    return $res;
+}
+
+function detail_options()//detail modal windows options
 {
     $options['modal_header']=[
         "headline"=>"To-Do Task Detail",
         "id"=>"modal-todo",
-        "size"=>"sm",
+        "size"=>"",
         "dismiss"=>true,
     ];
     $options['modal_footer']=[
@@ -226,26 +268,12 @@ function detail_options()
             ],
         ],
     ];
-    $options['send_options']=[
-        "send_btn"=>[
-            "enable"=>true,
-            "text"=>"Send",
-            "color"=>"primary",
-            "size"=>"xs",
-            "class"=>"send-taks-user",
-            "attr"=>"data-cmd='send-task-user'",
-            "icon"=>[
-                "enable"=>true,
-                "icon"=>"glyphicon glyphicon-remove",
-            ],
-        ],
-    
-    ];
+    //send task box options
     $options['send_box_options']=[
         "headline"=>"Send Task to user",
         "color"=>"success",
         "solid"=>false,
-        "with-border"=>true,
+        "with-border"=>false,
         "class"=>"",
         "attr"=>"",
         "box-tool"=>[
@@ -254,6 +282,52 @@ function detail_options()
             "removable"=>true,
 
         ],
+    ];
+    //send taks button options
+    $options['send_options']=[
+        "send_btn"=>[
+            "enable"=>true,
+            "text"=>"Send",
+            "color"=>"primary",
+            "size"=>"xs",
+            "class"=>"send-taks-user pull-right",
+            "attr"=>"data-cmd='send-task-user'",
+            "icon"=>[
+                "enable"=>true,
+                "icon"=>"glyphicon glyphicon-send",
+            ],
+        ],
+    
+    ];
+    //details task box options
+    $options['due_box_options']=[
+        "headline"=>"Due Task",
+        "color"=>"warning",
+        "solid"=>false,
+        "with-border"=>false,
+        "class"=>"",
+        "attr"=>"",
+        "box-tool"=>[
+            "enable"=>false,
+            "collapsable"=>true,
+            "removable"=>false,
+        ],
+    ];
+    //set due taks button options
+    $options['due_options']=[
+        "set_due_btn"=>[
+            "enable"=>true,
+            "text"=>"Set due",
+            "color"=>"primary",
+            "size"=>"xs",
+            "class"=>"set-due pull-right",
+            "attr"=>"data-cmd='set-due'",
+            "icon"=>[
+                "enable"=>true,
+                "icon"=>"glyphicon glyphicon-time",
+            ],
+        ],
+    
     ];
     return $options;
 }
