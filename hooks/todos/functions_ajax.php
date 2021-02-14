@@ -21,7 +21,7 @@ $data = [
     'ok' => Request::val('complete', false),
     'us' => Request::val('user', false), //user to send task
     'pr' => Request::val('preserve', false)=== "true" ? true : false, //preserve task in my list
-    'du' => Request::val('due',false), //due task
+    'du' => Request::val('due', false), //due task
 ];
 
 header('Content-Type: application/json; charset=utf-8');
@@ -33,6 +33,9 @@ if ($cmd) {
             $html = $handlebars->render('dropdown_menu', []);
             echo $html;
             break;
+        case 'removed-deleted':
+            unset($tasks['deleted_tasks']);
+            $res = update_data($data, $tasks);
         case 'get-todo':
             $tasks['list_delete'] = false;
             $html = $handlebars->render('todos', $tasks);
@@ -42,12 +45,6 @@ if ($cmd) {
             $tasks['list_delete'] = true;
             $html = $handlebars->render('todos', $tasks);
             echo $html;
-            break;
-        case 'removed-deleted':
-            unset($tasks['deleted_tasks']);
-            $res = update_data($data, $tasks);
-            $tasks['list_delete'] = false;
-            echo $handlebars->render('todos', $tasks);
             break;
         case 'remove-task':
             unset($tasks['deleted_tasks'][$data['ix']]);
@@ -60,8 +57,7 @@ if ($cmd) {
         case 'recover-task':
             $uid = uniqid();
             $tasks['deleted_tasks'][$data['ix']]['deleted']=false;
-            $tasks['deleted_tasks'][$data['ix']]['recovered_deleted']=date('Y-m-d H:i:s');
-            $tasks['deleted_tasks'][$data['ix']]['details'][]=["message"=>"Recovered","date"=>date('Y-m-d H:i:s')];
+            $tasks['deleted_tasks'][$data['ix']]['details'][] = add_message("Recovered task");
 
             $tasks['tasks'][$uid]=$tasks['deleted_tasks'][$data['ix']];
             $tasks['tasks'][$uid]['uid']=$uid;
@@ -79,7 +75,7 @@ if ($cmd) {
                 break;
             }
             $tasks['tasks'][$data['ix']]['task']=$data['nt'];
-            $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Task change to:{$data['nt']}","date"=>date('Y-m-d H:i:s')];
+            $tasks['tasks'][$data['ix']]['details'][]=add_msg("Task change to:{$data['nt']}");
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
@@ -93,20 +89,20 @@ if ($cmd) {
                 break;
             }
             $tasks['tasks'][$data['ix']]['description']=$data['nt'];
-            $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Description change to:{$data['nt']}","date"=>date('Y-m-d H:i:s')];
+            $tasks['tasks'][$data['ix']]['details'][]= add_msg("Description change to:{$data['nt']}");
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
         case 'check-task':
             $ok = $data['ok'] === "true" ? true : false;
             $tasks['tasks'][$data['ix']]['complete']=$ok;
-            $tasks['tasks'][$data['ix']]['details'][]=["message"=> $ok ? "Task marked as completed" : "Task marked as uncompleted" ,"date"=>date('Y-m-d H:i:s')];
+            $tasks['tasks'][$data['ix']]['details'][]=add_msg($ok ? "Task marked as completed" : "Task marked as uncompleted");
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
         case 'set-due':
-            $tasks['tasks'][$data['ix']]['due']= $data['du'];
-            $tasks['tasks'][$data['ix']]['details'][]=["message"=> "Set due to tas: ".$data['du'] ,"date"=>date('Y-m-d H:i:s')];
+            $tasks['tasks'][$data['ix']]['due']= mysql_datetime($data['du']);
+            $tasks['tasks'][$data['ix']]['details'][]=add_msg("Set due to task: ".$data['du']);
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
@@ -128,6 +124,9 @@ if ($cmd) {
             break;
         case 'task-detail':
             $task = $tasks['tasks'][$data['ix']];
+            $details = array_reverse($task['details']);
+            $task['details']=array_reverse($task['details']);
+
             $task += detail_options();
             $html = $handlebars->render('detail', $task);
             echo $html;
@@ -139,10 +138,11 @@ if ($cmd) {
             }
             $uid = uniqid();
             $task = $tasks['tasks'][$data['ix']];
-            $tasks['tasks'][$data['ix']]['details'][]=["send_to"=>$data['us'],"date"=>date('Y-m-d H:i:s')];
+            $tasks['tasks'][$data['ix']]['details'][]=add_msg("Send task to: " . $data['us']);
+            $tasks['tasks'][$data['ix']]['send_to']= $data['us'];
             $res = ' edited: '. update_data($data, $tasks);
 
-            if (!$data['pr']) {
+            if (!$data['pr']) {// if not preserve task
                 $res .= ' deleted: '. delete_task($data, $tasks);
             }
             
@@ -154,7 +154,7 @@ if ($cmd) {
             $user_tasks['tasks'][$uid]=$task;
             $user_tasks['tasks'][$uid]['from']=$data['id'];
             $user_tasks['tasks'][$uid]['from_date']=date('Y-m-d H:i:s');
-            $user_tasks['tasks'][$uid]['details'][]=["message"=>"task from {$data['us']}","date"=>date('Y-m-d H:i:s')];
+            $user_tasks['tasks'][$uid]['details'][]=add_msg("task from {$data['us']}");
 
             $res .= ' sending: '. update_data($newdata, $user_tasks);
             echo $res;
@@ -180,9 +180,8 @@ function add_data(&$data)
         'complete' => false,
         'added' => date('Y-m-d H:i:s'),
         'due' => false,
-        'details' => [["message"=>"New task: {$data['tk']}","date"=>date('Y-m-d H:i:s')]],
+        'details' => [add_msg("New task: {$data['tk']}")],
         'deleted' => false,
-        'date_deleted' => false,
         'uid' => $uid,
     ];
     $tasks['tasks'][$uid] = $task;
@@ -198,8 +197,7 @@ function update_data(&$data, $set)
     $eo = ['silentErrors' => true];
     //check if member exist
     $count = sqlValue("SELECT COUNT( * ) FROM `{$data['tn']}` WHERE {$where};");
-    if ($count < 1) {
-        //add member if not exist
+    if ($count < 1) {//add member if not exist
         $res = sql(
             "INSERT INTO `{$data['tn']}`(`memberID`) VALUES ('{$data['id']}')",
             $eo
@@ -237,8 +235,7 @@ function delete_task($data, $tasks)
 {
     $uid = uniqid();
     $tasks['tasks'][$data['ix']]['deleted']=true;
-    $tasks['tasks'][$data['ix']]['date_deleted']=date('Y-m-d H:i:s');
-    $tasks['tasks'][$data['ix']]['details'][]=["message"=>"Delete this task","date"=>date('Y-m-d H:i:s')];
+    $tasks['tasks'][$data['ix']]['details'][]= add_message("Delete this task");
     $tasks['deleted_tasks'][$uid]=$tasks['tasks'][$data['ix']];
     $tasks['deleted_tasks'][$uid]['uid']=$uid;
     unset($tasks['tasks'][$data['ix']]);
@@ -246,88 +243,95 @@ function delete_task($data, $tasks)
     return $res;
 }
 
+function add_msg($message = false)
+{
+    return $message ? ["message"=>"$message","date"=>date('Y-m-d H:i:s')] : [];
+}
+
 function detail_options()//detail modal windows options
 {
-    $options['modal_header']=[
-        "headline"=>"To-Do Task Detail",
-        "id"=>"modal-todo",
-        "size"=>"",
-        "dismiss"=>true,
-    ];
-    $options['modal_footer']=[
-        "close_btn"=>[
-            "enable"=>true,
-            "text"=>"Close",
-            "color"=>"default",
-            "size"=>"xs",
+    return [
+        'modal_header'=>[
+            "headline"=>"To-Do Task Detail",
+            "id"=>"modal-todo",
+            "size"=>"",
+            "dismiss"=>true,
+            "header_color"=>"bg-gray",
+            "body_color"=>"bg-gray",
+            "body_class"=>"todo-details",
+        ],
+        'modal_footer'=>[
+            "footer_color"=>"bg-gray",
+            "close_btn"=>[
+                "enable"=>true,
+                "text"=>"Close",
+                "color"=>"default",
+                "size"=>"xs",
+                "class"=>"",
+                "attr"=>"data-dismiss='modal'",
+                "icon"=>[
+                    "enable"=>true,
+                    "icon"=>"glyphicon glyphicon-remove",
+                ]
+            ]
+        ],
+        //send task box options
+        'send_box_options'=>[
+            "headline"=>"Send Task to user",
+            "color"=>"success",
+            "solid"=>false,
+            "with-border"=>false,
             "class"=>"",
-            "attr"=>"data-dismiss='modal'",
-            "icon"=>[
+            "attr"=>"",
+            "box-tool"=>[
+                "enable"=>false,
+                "collapsable"=>true,
+                "removable"=>true,
+            ],
+        ],
+        //send taks button options
+        'send_options'=>[
+            "send_btn"=>[
                 "enable"=>true,
-                "icon"=>"glyphicon glyphicon-remove",
+                "text"=>"Send",
+                "color"=>"primary",
+                "size"=>"xs",
+                "class"=>"send-taks-user pull-right",
+                "attr"=>"data-cmd='send-task-user'",
+                "icon"=>[
+                    "enable"=>true,
+                    "icon"=>"glyphicon glyphicon-send",
+                ],
+            ],
+        ],
+        //details task box options
+        'due_box_options'=>[
+            "headline"=>"Due Task",
+            "color"=>"warning",
+            "solid"=>false,
+            "with-border"=>false,
+            "class"=>"",
+            "attr"=>"",
+            "box-tool"=>[
+                "enable"=>false,
+                "collapsable"=>true,
+                "removable"=>false,
+            ],
+        ],
+        //set due taks button options
+        'due_options'=>[
+            "set_due_btn"=>[
+                "enable"=>true,
+                "text"=>"Set due",
+                "color"=>"primary",
+                "size"=>"xs",
+                "class"=>"set-due pull-right",
+                "attr"=>"data-cmd='set-due'",
+                "icon"=>[
+                    "enable"=>true,
+                    "icon"=>"glyphicon glyphicon-time",
+                ],
             ],
         ],
     ];
-    //send task box options
-    $options['send_box_options']=[
-        "headline"=>"Send Task to user",
-        "color"=>"success",
-        "solid"=>false,
-        "with-border"=>false,
-        "class"=>"",
-        "attr"=>"",
-        "box-tool"=>[
-            "enable"=>false,
-            "collapsable"=>true,
-            "removable"=>true,
-
-        ],
-    ];
-    //send taks button options
-    $options['send_options']=[
-        "send_btn"=>[
-            "enable"=>true,
-            "text"=>"Send",
-            "color"=>"primary",
-            "size"=>"xs",
-            "class"=>"send-taks-user pull-right",
-            "attr"=>"data-cmd='send-task-user'",
-            "icon"=>[
-                "enable"=>true,
-                "icon"=>"glyphicon glyphicon-send",
-            ],
-        ],
-    
-    ];
-    //details task box options
-    $options['due_box_options']=[
-        "headline"=>"Due Task",
-        "color"=>"warning",
-        "solid"=>false,
-        "with-border"=>false,
-        "class"=>"",
-        "attr"=>"",
-        "box-tool"=>[
-            "enable"=>false,
-            "collapsable"=>true,
-            "removable"=>false,
-        ],
-    ];
-    //set due taks button options
-    $options['due_options']=[
-        "set_due_btn"=>[
-            "enable"=>true,
-            "text"=>"Set due",
-            "color"=>"primary",
-            "size"=>"xs",
-            "class"=>"set-due pull-right",
-            "attr"=>"data-cmd='set-due'",
-            "icon"=>[
-                "enable"=>true,
-                "icon"=>"glyphicon glyphicon-time",
-            ],
-        ],
-    
-    ];
-    return $options;
 }

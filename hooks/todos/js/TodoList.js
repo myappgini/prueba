@@ -39,7 +39,6 @@ $j(function () {
 // * Open tasks functions, show deletes & remove all deleted tasks
 $j('body').on('click', '.todo-dropdown-content, .view-trash, .back-todos', function () {
   [$this, $li, data] = this_obj(this);
-  console.log(data)
   $j('div.todos-content').html('Loading Content...');
   ajax_todo(data).done(function (res) {
     $j('div.todos-content').html(res);
@@ -49,6 +48,7 @@ $j('body').on('click', '.todo-dropdown-content, .view-trash, .back-todos', funct
       forcePlaceholderSize: true,
       zIndex: 999999
     });
+    moment_date('.due-tag');
     get_values();
   })
   $li.hasClass('open') ? true : $li.toggleClass('open');
@@ -95,7 +95,6 @@ $j('body').on('click focusout', '.task-text, .input-edit-task', function () {
   [$this, $li, data] = this_obj(this);
   let tb = $li.find('input.input-edit-task');
   if (data.cmd === undefined) return
-  console.log(data);
   if (tb.length) {
     $this.text(tb.val()); //remove text box & put its current value as text to the div
     data.newtext = tb.val(),
@@ -121,12 +120,12 @@ $j(document).keyup(function (e) {
 // * open detal modal windows
 $j('body').on('click', '.todo-task-detail', function () {
   [$this, $li, data] = this_obj(this);
-  console.log(data);
   ajax_todo(data).done(function (res) {
     const $modal = $j('#modal-todo');
     $modal.length > 0 && $modal.remove();
     $j('body').append(res);
     $j('#modal-todo').modal('show');
+    resizeModal($j('#modal-todo'));
     users_list();
     $j('#due-task').addClass('always_shown').parents('.input-group').datetimepicker({
       toolbarPlacement: 'top',
@@ -140,8 +139,7 @@ $j('body').on('click', '.todo-task-detail', function () {
       format: AppGini.datetimeFormat('dt'),
       locale: 'es'
     });
-
-    moment_date();
+    moment_date('.detail-task-time');
   })
 });
 
@@ -151,7 +149,6 @@ $j('body').on('click', '.send-taks-user', function () {
   const preserve = $li.find('input.preserve-task');
   data.preserve = preserve.is(":checked") ? true : false;
   data.user = $j('#todo-list-users').val();
-  console.log(data);
   ajax_todo(data).done(function (res) {
     console.log(res);
     get_values();
@@ -168,7 +165,6 @@ $j('body').on('click', '.set-due', function () {
   [$this, $li, data] = this_obj(this);
   const due = $li.find('input#due-task');
   data.due = due.val();
-  console.log(data);
   ajax_todo(data).done(function (res) {
     console.log(res);
     get_values();
@@ -180,7 +176,7 @@ function get_values() {
     cmd: 'get-values'
   }).done(function (res) {
     let data = JSON.parse(res);
-    console.log('update');
+    console.log('update values');
     $j('.label-tasks').text(`${data.completed}/${data.listed}`);
     $j('.label-trash').text(`${data.deleted}`);
     $j('.progress-bar').css('width', `${data.completed/data.listed*100}%`).attr('aria-valuenow', data.completed / data.listed);
@@ -218,19 +214,30 @@ function users_list() {
   });
 }
 
-function moment_date() {
-  $j('.detail-task-time').each(function () {
-    let val = $j(this).text();
-
-    console.log('val', val, moment(val));
-    a = moment().format(val,'yyy-mm-dd HH:mm:ss');
-    const mom = moment(a).fromNow();
-
+function moment_date(selector) {
+  console.log("humanizing")
+  $j(selector).each(function () {
+    const val = $j(this).text();
+    const mom = moment(val).fromNow();
     $j(this).text(mom);
   });
 };
 
-//122---115---133--145---150---151---149---144---138---141---144---132---after add detail function 182---
+/**
+ * resize height modals windows
+ */
+function resizeModal(mod) {
+  mod.on('shown.bs.modal', function () {
+    var wh = $j(window).height(),
+      mb = mod.find('.modal-body').outerHeight(),
+      mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight(),
+      val = wh - mhfoh - 80;
+      mod.find('.modal-body').css({
+        height: val
+      });
+  })
+}
+//122---115---133--145---150---151---149---144---138---141---144---132---after add detail function 182---225 end?
 const tasks = {
   "tasks": {
     "602705f9a348a": {

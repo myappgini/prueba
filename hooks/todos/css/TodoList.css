@@ -212,3 +212,18 @@
   color: #999;
   font-size: 13px;
 }
+
+.bg-gray{
+  background: #ECF0F5;
+}
+
+.modal-body.todo-details {
+  width: 100%;
+  overflow-y: auto;
+}
+
+.dropdown-menu.todos-content>.box>.box-body{
+  min-width: 450px;
+  max-height: 350px;
+  overflow-y: auto;
+}

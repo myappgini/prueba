@@ -28,10 +28,15 @@
         <i class="glyphicon glyphicon-info-sign" title="This task has description" ></i>
       {{/if}}
       {{#if from}}
-        <span class="label label-info" title="From {{from}}">{{from}}</span>
+        <span class="label label-info" title="From {{from}}"><i class="glyphicon glyphicon-arrow-down"></i> {{from}}</span>
       {{/if}}
-      {{#if due}}
-        <span class="label label-warning" title="Due">{{due}}</span>
+      {{#if send_to}}
+        <span class="label label-info" title="Send task to {{send_to}}"><i class="glyphicon glyphicon-arrow-up"></i> {{send_to}}</span>
       {{/if}}
+      {{#unless complete}}
+        {{#if due}}
+          <span class="label label-warning due-tag" title="Due date">{{due}}</span>
+        {{/if}}
+      {{/unless}}
     </div>
   </li>
