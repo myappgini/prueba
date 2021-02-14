@@ -94,8 +94,8 @@
 	}
 
 	function products_after_insert($data, $memberInfo, &$args) {
-		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
-		table_after_change($_SESSION ['dbase'], $_SESSION['tablenam'], $memberInfo['username'], $memberInfo['IP'], $data['selectedID'], $_SESSION['tableID'], 'INSERTION');
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_after_change($_SESSION, $memberInfo, $data, 'INSERTION');
 		/* End of Audit Log for AppGini code */
 
 
@@ -103,8 +103,8 @@
 	}
 
 	function products_before_update(&$data, $memberInfo, &$args) {
-		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
-		table_before_change($_SESSION['tablenam'], $data['selectedID'],$_SESSION['tableID']);
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_before_change($_SESSION, $data['selectedID']);
 		/* End of Audit Log for AppGini code */
 
 
@@ -112,17 +112,16 @@
 	}
 
 	function products_after_update($data, $memberInfo, &$args) {
-		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
-		table_after_change($_SESSION ['dbase'], $_SESSION['tablenam'], $memberInfo['username'], $memberInfo['IP'], $data['selectedID'], $_SESSION['tableID'], 'UPDATE');
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_after_change($_SESSION, $memberInfo, $data, 'UPDATE');
 		/* End of Audit Log for AppGini code */
-
 
 		return TRUE;
 	}
 
 	function products_before_delete($selectedID, &$skipChecks, $memberInfo, &$args) {
-		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
-		table_before_change($_SESSION['tablenam'], $selectedID,$_SESSION['tableID']);
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_before_change($_SESSION, $selectedID);
 		/* End of Audit Log for AppGini code */
 
 
@@ -130,8 +129,8 @@
 	}
 
 	function products_after_delete($selectedID, $memberInfo, &$args) {
-		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
-		table_after_change($_SESSION ['dbase'], $_SESSION['tablenam'], $memberInfo['username'], $memberInfo['IP'], $selectedID, $_SESSION['tableID'], 'DELETION');
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_after_change($_SESSION, $memberInfo, $data, 'DELETION');
 		/* End of Audit Log for AppGini code */
 
 
