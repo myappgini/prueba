@@ -117,7 +117,7 @@ $j(document).keyup(function (e) {
   }
 });
 
-// * open detal modal windows
+// * open detail modal windows
 $j('body').on('click', '.todo-task-detail', function () {
   [$this, $li, data] = this_obj(this);
   ajax_todo(data).done(function (res) {

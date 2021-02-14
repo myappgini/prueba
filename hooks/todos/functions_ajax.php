@@ -36,6 +36,7 @@ if ($cmd) {
         case 'removed-deleted':
             unset($tasks['deleted_tasks']);
             $res = update_data($data, $tasks);
+            // no break
         case 'get-todo':
             $tasks['list_delete'] = false;
             $html = $handlebars->render('todos', $tasks);
