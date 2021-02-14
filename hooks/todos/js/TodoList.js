@@ -237,8 +237,8 @@ function resizeModal(mod) {
       });
   })
 }
-//122---115---133--145---150---151---149---144---138---141---144---132---after add detail function 182---225 end?
-const tasks = {
+//122---115---133--145---150---151---149---144---138---141---144---132---after add detail function 182---225 end?---240
+const tasks = {//example
   "tasks": {
     "602705f9a348a": {
       "task": "task to complete",
