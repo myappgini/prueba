@@ -1,5 +1,5 @@
 <div
-  class="modal fade in"
+  class="modal fade in {{class}}"
   id="{{id}}"
   role="dialog"
   aria-labelledby="title-{{id}}"
@@ -9,7 +9,7 @@
     role="document"
   >
     <div class="modal-content">
-      <div class="modal-header {{header_color}}">
+      <div class="modal-header {{header_class}}">
         {{#if dismiss}}
         <button
           type="button"
@@ -26,4 +26,4 @@
           {{headline}}
         </h5>
       </div>
-      <div class="modal-body {{body_color}} {{body_class}}">
+      <div class="modal-body {{body_class}}">

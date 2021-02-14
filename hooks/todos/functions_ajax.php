@@ -257,12 +257,11 @@ function detail_options()//detail modal windows options
             "id"=>"modal-todo",
             "size"=>"",
             "dismiss"=>true,
-            "header_color"=>"bg-gray",
-            "body_color"=>"bg-gray",
-            "body_class"=>"todo-details",
+            "header_class"=>"bg-gray",
+            "body_class"=>" bg-gray todo-details",
         ],
         'modal_footer'=>[
-            "footer_color"=>"bg-gray",
+            "footer_class"=>"bg-gray",
             "close_btn"=>[
                 "enable"=>true,
                 "text"=>"Close",
