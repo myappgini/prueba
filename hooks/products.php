@@ -129,6 +129,10 @@
 	}
 
 	function products_after_delete($selectedID, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-16 03:18:47 */
+		table_after_change($_SESSION, $memberInfo, $selectedID, 'DELETION');
+		/* End of Audit Log for AppGini code */
+
 		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
 		table_after_change($_SESSION, $memberInfo, $data, 'DELETION');
 		/* End of Audit Log for AppGini code */
