@@ -14,15 +14,16 @@ $data = [
     'ix' => Request::val('ix', false),
     'mi' => getMemberInfo(Request::val('mi', false)),
     'lm' => getLoggedMemberID(),
-    'data' => Request::val('data',false),
+    'data' => Request::val('data', false),
 ];
 
 header('Content-Type: application/json; charset=utf-8');
 
 if ($cmd) {
     switch ($cmd) {
-        case 'option-todo':
-            $html = $handlebars->render('dropdown_menu', []);
+        case 'info-box':
+            $options = json_decode($data['data'], false);
+            $html = $handlebars->render($cmd, $options);
             $res=["html"=>$html];
             break;
         default:
