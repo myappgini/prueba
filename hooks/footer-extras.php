@@ -8,4 +8,7 @@ include ('hooks/box/scripts.php');
 //* load library for todolist in Appgini with bootstrap3
 include ('hooks/todos/scripts.php');
 
+//* load library for widgets in Appgini with bootstrap3
+include ('hooks/widgets/scripts.php');
+
 ?>

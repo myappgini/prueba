@@ -18,7 +18,25 @@ $j(function () {
 
     add_action_button(b);
 
-    //remove_text('button');
+    const data = {
+        "id":"sales",
+        "class":"bg-green", //can you add more classes or change de color
+        "icon_class":"bg-aqua",
+        "icon":"glyphicon glyphicon-cog",
+        "text":"Sales",
+        "description":"75% Increase in 30 Days ",
+        "value_progress":"75",
+        "value":"2500",
+    }
+    $j('fieldset').append('<div class="-widgets- col-sm-12"></div>')
+    widget("info-box",data).then(function(res){
+        $j('.-widgets-').append(res.html);
+    });
+    widget("small-box",data).then(function(res){
+        $j('.-widgets-').append(res.html);
+    });
+    
+    
 
 
 });

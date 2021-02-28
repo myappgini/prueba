@@ -20,16 +20,22 @@ $data = [
 header('Content-Type: application/json; charset=utf-8');
 
 if ($cmd) {
-    switch ($cmd) {
-        case 'info-box':
-            $options = json_decode($data['data'], false);
-            $html = $handlebars->render($cmd, $options);
-            $res=["html"=>$html];
-            break;
-        default:
-            $res= ["error"=>'something wrong!!!'];
-            break;
-    }
+    $options = $data['data'];
+    $html = $handlebars->render($cmd, $options);
+    $res=["html"=>$html];
+    // switch ($cmd) {
+    //     case 'info-box':
+    //         $res=['render'=>$cmd];
+    //         break;
+    //     default:
+    //         $res= ["error"=>'something wrong!!!'];
+    //         break;
+    // }
     echo json_encode($res);
-    return;
 }
+
+include ('def_hbs.php');
+
+
+
+return;

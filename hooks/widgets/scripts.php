@@ -10,6 +10,9 @@ $guest = $admin_config['anonymousMember'];
 if ($guest == $mi['username']) {
     die();
 }
-?>
 
-<link rel="stylesheet" href="hooks/todos/css/widgets.css">
+$libname="widgets";
+
+?>
+<link rel="stylesheet" href="hooks/<?php echo $libname; ?>/css/<?php echo $libname; ?>.css">
+<script src="hooks/<?php echo $libname; ?>/js/<?php echo $libname; ?>.js"></script>
