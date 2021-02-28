@@ -330,6 +330,33 @@ function products_validateData() {
 
 	return !errors;
 }
+function db_field_permission_validateData() {
+	$j('.has-error').removeClass('has-error');
+	var errors = false;
+
+	// check all required fields have values
+	if(!AppGini.Validation.fieldRequired('text', 'ID_field_permissions', 'ID field permission')) return false;
+
+	return !errors;
+}
+function tmp_tables_fields_validateData() {
+	$j('.has-error').removeClass('has-error');
+	var errors = false;
+
+	// check all required fields have values
+	if(!AppGini.Validation.fieldRequired('text', 'table_filed', 'Table filed')) return false;
+
+	return !errors;
+}
+function view_mebership_groups_validateData() {
+	$j('.has-error').removeClass('has-error');
+	var errors = false;
+
+	// check all required fields have values
+	if(!AppGini.Validation.fieldRequired('text', 'groupID', 'GroupID')) return false;
+
+	return !errors;
+}
 
 function post(url, params, update, disable, loading, success_callback) {
 	$j.ajax({

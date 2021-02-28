@@ -12,6 +12,12 @@
 			],
 			'products' => [
 			],
+			'db_field_permission' => [
+			],
+			'tmp_tables_fields' => [
+			],
+			'view_mebership_groups' => [
+			],
 		];
 
 	/*************************************/

@@ -1,0 +1,46 @@
+<!-- Edit this file to change the layout of the detail view print preview page -->
+
+
+<div class="panel-heading"><h3 class="panel-title">
+	<strong><%%DETAIL_VIEW_TITLE%%></strong>
+	<div class="hidden-print pull-right">
+		<div class="btn-group">
+			<button type="button" id="print" onclick="window.print();" title="<%%TRANSLATION(Print)%%>" class="btn btn-primary"><i class="glyphicon glyphicon-print"></i> <%%TRANSLATION(Print)%%></button>
+			<button type="submit" id="back" title="<%%TRANSLATION(Cancel Printing)%%>" class="btn btn-default"><i class="glyphicon glyphicon-remove-circle"></i> <%%TRANSLATION(Cancel Printing)%%></button>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</h3></div>
+
+<div class="panel-body">
+	<fieldset class="form-horizontal">
+		<!-- Field: ID field permission -->
+		<div class="form-group db_field_permission-ID_field_permissions" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">ID field permission</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><%%VALUE(ID_field_permissions)%%></div>
+			</div>
+		</div>
+		<!-- Field: GroupID -->
+		<div class="form-group db_field_permission-groupID" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">GroupID</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><span id="groupID<%%RND1%%>"><%%COMBOTEXT(groupID)%%></span></div>
+			</div>
+		</div>
+		<!-- Field: Table field -->
+		<div class="form-group db_field_permission-table_field" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">Table field</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><span id="table_field<%%RND1%%>"><%%COMBOTEXT(table_field)%%></span></div>
+			</div>
+		</div>
+		<!-- Field: Fieldstate -->
+		<div class="form-group db_field_permission-fieldstate" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">Fieldstate</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><%%VALUE(fieldstate)%%></div>
+			</div>
+		</div>
+	</fieldset>
+</div>

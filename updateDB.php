@@ -50,6 +50,88 @@
 			$silent
 		);
 
+		setupTable(
+			'db_field_permission', " 
+			CREATE TABLE IF NOT EXISTS `db_field_permission` ( 
+				`ID_field_permissions` VARCHAR(40) NOT NULL,
+				PRIMARY KEY (`ID_field_permissions`),
+				`groupID` VARCHAR(40) NULL,
+				`table_field` VARCHAR(40) NULL,
+				`fieldstate` VARCHAR(40) NULL
+			) CHARSET utf8",
+			$silent, [
+				"ALTER TABLE `table4` RENAME `db_field_permission`",
+				"UPDATE `membership_userrecords` SET `tableName`='db_field_permission' WHERE `tableName`='table4'",
+				"UPDATE `membership_userpermissions` SET `tableName`='db_field_permission' WHERE `tableName`='table4'",
+				"UPDATE `membership_grouppermissions` SET `tableName`='db_field_permission' WHERE `tableName`='table4'",
+				"ALTER TABLE db_field_permission ADD `field1` VARCHAR(40)",
+				"ALTER TABLE `db_field_permission` CHANGE `field1` `ID_field_permission` VARCHAR(40) NULL ",
+				"ALTER TABLE `db_field_permission` CHANGE `ID_field_permission` `ID_field_permissions` VARCHAR(40) NULL ",
+				"ALTER TABLE db_field_permission ADD `field2` VARCHAR(40)",
+				"ALTER TABLE `db_field_permission` CHANGE `field2` `groupID` VARCHAR(40) NULL ",
+				"ALTER TABLE db_field_permission ADD `field3` VARCHAR(40)",
+				"ALTER TABLE `db_field_permission` CHANGE `field3` `table_field` VARCHAR(40) NULL ",
+				"ALTER TABLE db_field_permission ADD `field4` VARCHAR(40)",
+				"ALTER TABLE `db_field_permission` CHANGE `field4` `fieldstate` VARCHAR(40) NULL ",
+				"ALTER TABLE `db_field_permission` CHANGE `ID_field_permissions` `ID_field_permissions` VARCHAR(40) NOT NULL ",
+				"ALTER TABLE `db_field_permission` ADD PRIMARY KEY (`ID_field_permissions`)",
+			]
+		);
+		setupIndexes('db_field_permission', ['groupID','table_field',]);
+
+		setupTable(
+			'tmp_tables_fields', " 
+			CREATE TABLE IF NOT EXISTS `tmp_tables_fields` ( 
+				`table_filed` VARCHAR(40) NOT NULL,
+				PRIMARY KEY (`table_filed`)
+			) CHARSET utf8",
+			$silent, [
+				"ALTER TABLE `table5` RENAME `tmp_tables_fields`",
+				"UPDATE `membership_userrecords` SET `tableName`='tmp_tables_fields' WHERE `tableName`='table5'",
+				"UPDATE `membership_userpermissions` SET `tableName`='tmp_tables_fields' WHERE `tableName`='table5'",
+				"UPDATE `membership_grouppermissions` SET `tableName`='tmp_tables_fields' WHERE `tableName`='table5'",
+				"ALTER TABLE tmp_tables_fields ADD `field1` VARCHAR(40)",
+				"ALTER TABLE `tmp_tables_fields` CHANGE `field1` `table_filed` VARCHAR(40) NULL ",
+				"ALTER TABLE `tmp_tables_fields` CHANGE `table_filed` `table_filed` VARCHAR(40) NOT NULL ",
+				"ALTER TABLE `tmp_tables_fields` ADD PRIMARY KEY (`table_filed`)",
+			]
+		);
+
+		setupTable(
+			'view_mebership_groups', " 
+			CREATE TABLE IF NOT EXISTS `view_mebership_groups` ( 
+				`groupID` VARCHAR(40) NOT NULL,
+				PRIMARY KEY (`groupID`),
+				`name` VARCHAR(40) NULL,
+				`description` TEXT NULL,
+				`allowSignup` VARCHAR(40) NULL,
+				`needsApproval` VARCHAR(40) NULL
+			) CHARSET utf8",
+			$silent, [
+				"ALTER TABLE `table6` RENAME `view_mebership_groups`",
+				"UPDATE `membership_userrecords` SET `tableName`='view_mebership_groups' WHERE `tableName`='table6'",
+				"UPDATE `membership_userpermissions` SET `tableName`='view_mebership_groups' WHERE `tableName`='table6'",
+				"UPDATE `membership_grouppermissions` SET `tableName`='view_mebership_groups' WHERE `tableName`='table6'",
+				"ALTER TABLE view_mebership_groups ADD `field1` VARCHAR(40)",
+				"ALTER TABLE `view_mebership_groups` CHANGE `field1` `groupID` VARCHAR(40) NULL ",
+				"ALTER TABLE view_mebership_groups ADD `field2` VARCHAR(40)",
+				"ALTER TABLE `view_mebership_groups` CHANGE `field2` `name` VARCHAR(40) NULL ",
+				"ALTER TABLE view_mebership_groups ADD `field3` VARCHAR(40)",
+				"ALTER TABLE `view_mebership_groups` CHANGE `field3` `description` VARCHAR(40) NULL ",
+				"ALTER TABLE `view_mebership_groups` CHANGE `comments` `comments` TEXT NULL ",
+				"ALTER TABLE view_mebership_groups ADD `field4` VARCHAR(40)",
+				"ALTER TABLE `view_mebership_groups` CHANGE `field4` `allowSingUp` VARCHAR(40) NULL ",
+				"ALTER TABLE `view_mebership_groups` CHANGE `allowSingUp` `allowSignup` VARCHAR(40) NULL ",
+				"ALTER TABLE view_mebership_groups ADD `field5` VARCHAR(40)",
+				"ALTER TABLE `view_mebership_groups` CHANGE `field5` `needsApprlbals` VARCHAR(40) NULL ",
+				"ALTER TABLE `view_mebership_groups` CHANGE `needsApprlbals` `needsApprobals` VARCHAR(40) NULL ",
+				"ALTER TABLE `view_mebership_groups` CHANGE `needsApprobals` `needsApprovals` VARCHAR(40) NULL ",
+				"ALTER TABLE `view_mebership_groups` CHANGE `needsApprovals` `needsApproval` VARCHAR(40) NULL ",
+				"ALTER TABLE `view_mebership_groups` CHANGE `groupID` `groupID` VARCHAR(40) NOT NULL ",
+				"ALTER TABLE `view_mebership_groups` ADD PRIMARY KEY (`groupID`)",
+			]
+		);
+
 
 
 		// save MD5

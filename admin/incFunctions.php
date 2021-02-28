@@ -121,6 +121,27 @@
 					'group' => $tg[0],
 					'homepageShowCount' => 0
 				),
+				'db_field_permission' => array(
+					'Caption' => 'Db field permissions',
+					'Description' => '',
+					'tableIcon' => 'table.gif',
+					'group' => $tg[0],
+					'homepageShowCount' => 0
+				),
+				'tmp_tables_fields' => array(
+					'Caption' => 'Tmp',
+					'Description' => '',
+					'tableIcon' => 'table.gif',
+					'group' => $tg[0],
+					'homepageShowCount' => 0
+				),
+				'view_mebership_groups' => array(
+					'Caption' => 'View mebership group',
+					'Description' => '',
+					'tableIcon' => 'table.gif',
+					'group' => $tg[0],
+					'homepageShowCount' => 0
+				),
 		);
 
 		if($skip_authentication || getLoggedAdmin()) return $all_tables;
@@ -139,6 +160,9 @@
 				'contacto' => 'Contacto',
 				'salary' => 'Salary',
 				'products' => 'Products',
+				'db_field_permission' => 'Db field permissions',
+				'tmp_tables_fields' => 'Tmp',
+				'view_mebership_groups' => 'View mebership group',
 			);
 
 			return $arrTables;
@@ -908,6 +932,22 @@
 					'name' => ['appgini' => "VARCHAR(40) NULL"],
 					'uploads' => ['appgini' => "TEXT NULL"],
 					'due' => ['appgini' => "DATETIME NULL"],
+				],
+				'db_field_permission' => [
+					'ID_field_permissions' => ['appgini' => "VARCHAR(40) NOT NULL PRIMARY KEY"],
+					'groupID' => ['appgini' => "VARCHAR(40) NULL"],
+					'table_field' => ['appgini' => "VARCHAR(40) NULL"],
+					'fieldstate' => ['appgini' => "VARCHAR(40) NULL"],
+				],
+				'tmp_tables_fields' => [
+					'table_filed' => ['appgini' => "VARCHAR(40) NOT NULL PRIMARY KEY"],
+				],
+				'view_mebership_groups' => [
+					'groupID' => ['appgini' => "VARCHAR(40) NOT NULL PRIMARY KEY"],
+					'name' => ['appgini' => "VARCHAR(40) NULL"],
+					'description' => ['appgini' => "TEXT NULL"],
+					'allowSignup' => ['appgini' => "VARCHAR(40) NULL"],
+					'needsApproval' => ['appgini' => "VARCHAR(40) NULL"],
 				],
 			];
 		}
@@ -1929,6 +1969,10 @@
 			'salary' => [
 				'contacto' => ['contacto'],
 			],
+			'db_field_permission' => [
+				'view_mebership_groups' => ['groupID'],
+				'tmp_tables_fields' => ['table_field'],
+			],
 		];
 
 		return isset($parents[$table]) ? $parents[$table] : [];
@@ -1959,6 +2003,12 @@
 			'salary' => array(
 			),
 			'products' => array(
+			),
+			'db_field_permission' => array(
+			),
+			'tmp_tables_fields' => array(
+			),
+			'view_mebership_groups' => array(
 			),
 		);
 	}
@@ -2106,6 +2156,14 @@
 				'date' => 'SELECT `contacto`.`id`, if(`contacto`.`date`,date_format(`contacto`.`date`,\'%d/%m/%Y\'),\'\') FROM `contacto` ORDER BY 2',
 			],
 			'products' => [
+			],
+			'db_field_permission' => [
+				'groupID' => 'SELECT `view_mebership_groups`.`groupID`, `view_mebership_groups`.`groupID` FROM `view_mebership_groups` ORDER BY 2',
+				'table_field' => 'SELECT `tmp_tables_fields`.`table_filed`, `tmp_tables_fields`.`table_filed` FROM `tmp_tables_fields` ORDER BY 2',
+			],
+			'tmp_tables_fields' => [
+			],
+			'view_mebership_groups' => [
 			],
 		];
 

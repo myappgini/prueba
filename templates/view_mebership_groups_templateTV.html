@@ -1,0 +1,12 @@
+<!-- Edit this file to change the layout of each record in the table view -->
+<!-- To disable clicking of a field, remove the <%%SELECT%%> and <%%ENDSELECT%%> formatters around it-->
+
+<!-- If you wish to hide the table view header that contains the column titles, -->
+<!-- add the following to the view_mebership_groups_init() hook (in hooks/view_mebership_groups.php file) -->
+<!--     $options->ShowTableHeader = 0;     -->
+
+		<td id="view_mebership_groups-groupID-<%%VALUE(groupID)%%>" class="view_mebership_groups-groupID"><%%SELECT%%><%%VALUE(groupID)%%><%%ENDSELECT%%></td>
+		<td id="view_mebership_groups-name-<%%VALUE(groupID)%%>" class="view_mebership_groups-name"><%%SELECT%%><%%VALUE(name)%%><%%ENDSELECT%%></td>
+		<td id="view_mebership_groups-description-<%%VALUE(groupID)%%>" class="view_mebership_groups-description"><%%SELECT%%><%%VALUE(description)%%><%%ENDSELECT%%></td>
+		<td id="view_mebership_groups-allowSignup-<%%VALUE(groupID)%%>" class="view_mebership_groups-allowSignup"><%%SELECT%%><%%VALUE(allowSignup)%%><%%ENDSELECT%%></td>
+		<td id="view_mebership_groups-needsApproval-<%%VALUE(groupID)%%>" class="view_mebership_groups-needsApproval"><%%SELECT%%><%%VALUE(needsApproval)%%><%%ENDSELECT%%></td>

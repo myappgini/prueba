@@ -23,6 +23,20 @@
 
 			return $data;
 		},
+		'db_field_permission' => function($data, $options = []) {
+			if(isset($data['groupID'])) $data['groupID'] = pkGivenLookupText($data['groupID'], 'db_field_permission', 'groupID');
+			if(isset($data['table_field'])) $data['table_field'] = pkGivenLookupText($data['table_field'], 'db_field_permission', 'table_field');
+
+			return $data;
+		},
+		'tmp_tables_fields' => function($data, $options = []) {
+
+			return $data;
+		},
+		'view_mebership_groups' => function($data, $options = []) {
+
+			return $data;
+		},
 	];
 
 	// accept a record as an assoc array, return a boolean indicating whether to import or skip record
@@ -30,6 +44,9 @@
 		'contacto' => function($data, $options = []) { return true; },
 		'salary' => function($data, $options = []) { return true; },
 		'products' => function($data, $options = []) { return true; },
+		'db_field_permission' => function($data, $options = []) { return true; },
+		'tmp_tables_fields' => function($data, $options = []) { return true; },
+		'view_mebership_groups' => function($data, $options = []) { return true; },
 	];
 
 	/*

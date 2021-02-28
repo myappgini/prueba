@@ -81,6 +81,34 @@
 		),
 		'products' => array(
 		),
+		'db_field_permission' => array(
+			'groupID' => array(
+				'parent_table' => 'view_mebership_groups',
+				'parent_pk_field' => 'groupID',
+				'parent_caption' => '`view_mebership_groups`.`groupID`',
+				'parent_from' => '`view_mebership_groups` ',
+				'filterers' => array(),
+				'custom_query' => '',
+				'inherit_permissions' => false,
+				'list_type' => 0,
+				'not_null' => false
+			),
+			'table_field' => array(
+				'parent_table' => 'tmp_tables_fields',
+				'parent_pk_field' => 'table_filed',
+				'parent_caption' => '`tmp_tables_fields`.`table_filed`',
+				'parent_from' => '`tmp_tables_fields` ',
+				'filterers' => array(),
+				'custom_query' => '',
+				'inherit_permissions' => false,
+				'list_type' => 0,
+				'not_null' => false
+			),
+		),
+		'tmp_tables_fields' => array(
+		),
+		'view_mebership_groups' => array(
+		),
 	);
 
 	// XSS prevention

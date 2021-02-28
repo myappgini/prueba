@@ -48,6 +48,9 @@
 			'contacto' => ['Contacto', '', 'table.gif', 'contacto'],
 			'salary' => ['Salary', '', 'table.gif', 'salary'],
 			'products' => ['Products', '', 'table.gif', 'None'],
+			'db_field_permission' => ['Db field permissions', '', 'table.gif', 'None'],
+			'tmp_tables_fields' => ['Tmp', '', 'table.gif', 'None'],
+			'view_mebership_groups' => ['View mebership group', '', 'table.gif', 'None'],
 		];
 		if($skip_authentication || getLoggedAdmin()) return $arrTables;
 
@@ -135,6 +138,9 @@
 			'contacto' => "`contacto`.`id` as 'id', `contacto`.`name` as 'name', `contacto`.`user` as 'user', `contacto`.`rango` as 'rango', if(`contacto`.`date`,date_format(`contacto`.`date`,'%d/%m/%Y'),'') as 'date'",
 			'salary' => "`salary`.`id` as 'id', IF(    CHAR_LENGTH(`contacto1`.`name`) || CHAR_LENGTH(`contacto1`.`user`), CONCAT_WS('',   `contacto1`.`name`, ' - ', `contacto1`.`user`), '') as 'contacto', `salary`.`monto` as 'monto', `salary`.`mes` as 'mes', IF(    CHAR_LENGTH(`contacto1`.`name`), CONCAT_WS('',   `contacto1`.`name`), '') as 'nombre', IF(    CHAR_LENGTH(`contacto1`.`rango`), CONCAT_WS('',   `contacto1`.`rango`), '') as 'rango', IF(    CHAR_LENGTH(if(`contacto1`.`date`,date_format(`contacto1`.`date`,'%d/%m/%Y'),'')), CONCAT_WS('',   if(`contacto1`.`date`,date_format(`contacto1`.`date`,'%d/%m/%Y'),'')), '') as 'date'",
 			'products' => "`products`.`id` as 'id', `products`.`name` as 'name', `products`.`uploads` as 'uploads', if(`products`.`due`,date_format(`products`.`due`,'%d/%m/%Y %h:%i %p'),'') as 'due'",
+			'db_field_permission' => "`db_field_permission`.`ID_field_permissions` as 'ID_field_permissions', IF(    CHAR_LENGTH(`view_mebership_groups1`.`groupID`), CONCAT_WS('',   `view_mebership_groups1`.`groupID`), '') as 'groupID', IF(    CHAR_LENGTH(`tmp_tables_fields1`.`table_filed`), CONCAT_WS('',   `tmp_tables_fields1`.`table_filed`), '') as 'table_field', `db_field_permission`.`fieldstate` as 'fieldstate'",
+			'tmp_tables_fields' => "`tmp_tables_fields`.`table_filed` as 'table_filed'",
+			'view_mebership_groups' => "`view_mebership_groups`.`groupID` as 'groupID', `view_mebership_groups`.`name` as 'name', `view_mebership_groups`.`description` as 'description', `view_mebership_groups`.`allowSignup` as 'allowSignup', `view_mebership_groups`.`needsApproval` as 'needsApproval'",
 		];
 
 		if(isset($sql_fields[$table_name])) return $sql_fields[$table_name];
@@ -149,12 +155,18 @@
 			'contacto' => "`contacto` ",
 			'salary' => "`salary` LEFT JOIN `contacto` as contacto1 ON `contacto1`.`id`=`salary`.`contacto` ",
 			'products' => "`products` ",
+			'db_field_permission' => "`db_field_permission` LEFT JOIN `view_mebership_groups` as view_mebership_groups1 ON `view_mebership_groups1`.`groupID`=`db_field_permission`.`groupID` LEFT JOIN `tmp_tables_fields` as tmp_tables_fields1 ON `tmp_tables_fields1`.`table_filed`=`db_field_permission`.`table_field` ",
+			'tmp_tables_fields' => "`tmp_tables_fields` ",
+			'view_mebership_groups' => "`view_mebership_groups` ",
 		];
 
 		$pkey = [
 			'contacto' => 'id',
 			'salary' => 'id',
 			'products' => 'id',
+			'db_field_permission' => 'ID_field_permissions',
+			'tmp_tables_fields' => 'table_filed',
+			'view_mebership_groups' => 'groupID',
 		];
 
 		if(!isset($sql_from[$table_name])) return false;
@@ -225,6 +237,22 @@
 				'name' => '',
 				'uploads' => '',
 				'due' => '',
+			],
+			'db_field_permission' => [
+				'ID_field_permissions' => '',
+				'groupID' => '',
+				'table_field' => '',
+				'fieldstate' => '',
+			],
+			'tmp_tables_fields' => [
+				'table_filed' => '',
+			],
+			'view_mebership_groups' => [
+				'groupID' => '',
+				'name' => '',
+				'description' => '',
+				'allowSignup' => '',
+				'needsApproval' => '',
 			],
 		];
 

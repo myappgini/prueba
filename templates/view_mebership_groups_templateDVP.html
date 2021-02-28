@@ -1,0 +1,82 @@
+<!-- Edit this file to change the layout of the detail view print preview page -->
+
+
+<div class="panel-heading"><h3 class="panel-title">
+	<strong><%%DETAIL_VIEW_TITLE%%></strong>
+	<div class="hidden-print pull-right">
+		<div class="btn-group">
+			<button type="button" id="print" onclick="window.print();" title="<%%TRANSLATION(Print)%%>" class="btn btn-primary"><i class="glyphicon glyphicon-print"></i> <%%TRANSLATION(Print)%%></button>
+			<button type="submit" id="back" title="<%%TRANSLATION(Cancel Printing)%%>" class="btn btn-default"><i class="glyphicon glyphicon-remove-circle"></i> <%%TRANSLATION(Cancel Printing)%%></button>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</h3></div>
+
+<div class="panel-body">
+	<fieldset class="form-horizontal">
+		<!-- Field: GroupID -->
+		<div class="form-group view_mebership_groups-groupID" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">GroupID</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><%%VALUE(groupID)%%></div>
+			</div>
+		</div>
+		<!-- Field: Name -->
+		<div class="form-group view_mebership_groups-name" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">Name</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><%%VALUE(name)%%></div>
+			</div>
+		</div>
+		<!-- Field: Description -->
+		<div class="form-group view_mebership_groups-description" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">Description</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><%%VALUE(description)%%></div>
+			</div>
+		</div>
+		<!-- Field: AllowSingUp -->
+		<div class="form-group view_mebership_groups-allowSignup" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">AllowSingUp</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><%%VALUE(allowSignup)%%></div>
+			</div>
+		</div>
+		<!-- Field: NeedsApprlbals -->
+		<div class="form-group view_mebership_groups-needsApproval" style="border-bottom: dotted 1px #DDD;">
+			<label class="col-xs-3 control-label">NeedsApprlbals</label>
+			<div class="col-xs-9">
+				<div class="form-control-static"><%%VALUE(needsApproval)%%></div>
+			</div>
+		</div>
+	</fieldset>
+</div>
+<!-- child records -->
+<div class="panel-body">
+	<div id="view_mebership_groups-children"></div>
+</div>
+
+<script>
+	$j(function() {
+		/* prevent loading child records in multiple DVP */
+		if($j('[id=view_mebership_groups-children]').length > 1) return;
+
+		post(
+			'parent-children.php', {
+				ParentTable: 'view_mebership_groups',
+				SelectedID: '<%%VALUE(groupID)%%>',
+				Operation: 'show-children-printable'
+			},
+			'view_mebership_groups-children',
+			'disable-element',
+			'loading-element',
+			apply_persisting_children
+		);
+
+		$j('form').on('click', '#children-tabs button[data-target]', function() {
+			$j(this).toggleClass('active');
+			persist_expanded_child($j(this).attr('id'));
+		});
+	})
+</script>
+
