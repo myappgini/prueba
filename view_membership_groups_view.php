@@ -4,11 +4,11 @@
 
 	$currDir = dirname(__FILE__);
 	include_once("{$currDir}/lib.php");
-	@include_once("{$currDir}/hooks/view_mebership_groups.php");
-	include_once("{$currDir}/view_mebership_groups_dml.php");
+	@include_once("{$currDir}/hooks/view_membership_groups.php");
+	include_once("{$currDir}/view_membership_groups_dml.php");
 
 	// mm: can the current member access this page?
-	$perm = getTablePermissions('view_mebership_groups');
+	$perm = getTablePermissions('view_membership_groups');
 	if(!$perm['access']) {
 		echo error_message($Translation['tableAccessDenied'], false);
 		echo '<script>setTimeout(function() { window.location = "index.php?signOut=1"; }, 2000);</script>';
@@ -16,15 +16,15 @@
 	}
 
 	$x = new DataList;
-	$x->TableName = 'view_mebership_groups';
+	$x->TableName = 'view_membership_groups';
 
 	// Fields that can be displayed in the table view
 	$x->QueryFieldsTV = [
-		"`view_mebership_groups`.`groupID`" => "groupID",
-		"`view_mebership_groups`.`name`" => "name",
-		"`view_mebership_groups`.`description`" => "description",
-		"`view_mebership_groups`.`allowSignup`" => "allowSignup",
-		"`view_mebership_groups`.`needsApproval`" => "needsApproval",
+		"`view_membership_groups`.`groupID`" => "groupID",
+		"`view_membership_groups`.`name`" => "name",
+		"`view_membership_groups`.`description`" => "description",
+		"`view_membership_groups`.`allowSignup`" => "allowSignup",
+		"`view_membership_groups`.`needsApproval`" => "needsApproval",
 	];
 	// mapping incoming sort by requests to actual query fields
 	$x->SortFields = [
@@ -37,34 +37,34 @@
 
 	// Fields that can be displayed in the csv file
 	$x->QueryFieldsCSV = [
-		"`view_mebership_groups`.`groupID`" => "groupID",
-		"`view_mebership_groups`.`name`" => "name",
-		"`view_mebership_groups`.`description`" => "description",
-		"`view_mebership_groups`.`allowSignup`" => "allowSignup",
-		"`view_mebership_groups`.`needsApproval`" => "needsApproval",
+		"`view_membership_groups`.`groupID`" => "groupID",
+		"`view_membership_groups`.`name`" => "name",
+		"`view_membership_groups`.`description`" => "description",
+		"`view_membership_groups`.`allowSignup`" => "allowSignup",
+		"`view_membership_groups`.`needsApproval`" => "needsApproval",
 	];
 	// Fields that can be filtered
 	$x->QueryFieldsFilters = [
-		"`view_mebership_groups`.`groupID`" => "GroupID",
-		"`view_mebership_groups`.`name`" => "Name",
-		"`view_mebership_groups`.`description`" => "Description",
-		"`view_mebership_groups`.`allowSignup`" => "AllowSingUp",
-		"`view_mebership_groups`.`needsApproval`" => "NeedsApprlbals",
+		"`view_membership_groups`.`groupID`" => "GroupID",
+		"`view_membership_groups`.`name`" => "Name",
+		"`view_membership_groups`.`description`" => "Description",
+		"`view_membership_groups`.`allowSignup`" => "AllowSingUp",
+		"`view_membership_groups`.`needsApproval`" => "NeedsApprlbals",
 	];
 
 	// Fields that can be quick searched
 	$x->QueryFieldsQS = [
-		"`view_mebership_groups`.`groupID`" => "groupID",
-		"`view_mebership_groups`.`name`" => "name",
-		"`view_mebership_groups`.`description`" => "description",
-		"`view_mebership_groups`.`allowSignup`" => "allowSignup",
-		"`view_mebership_groups`.`needsApproval`" => "needsApproval",
+		"`view_membership_groups`.`groupID`" => "groupID",
+		"`view_membership_groups`.`name`" => "name",
+		"`view_membership_groups`.`description`" => "description",
+		"`view_membership_groups`.`allowSignup`" => "allowSignup",
+		"`view_membership_groups`.`needsApproval`" => "needsApproval",
 	];
 
 	// Lookup fields that can be used as filterers
 	$x->filterers = [];
 
-	$x->QueryFrom = "`view_mebership_groups` ";
+	$x->QueryFrom = "`view_membership_groups` ";
 	$x->QueryWhere = '';
 	$x->QueryOrder = '';
 
@@ -86,11 +86,11 @@
 	$x->RecordsPerPage = 10;
 	$x->QuickSearch = 1;
 	$x->QuickSearchText = $Translation['quick search'];
-	$x->ScriptFileName = 'view_mebership_groups_view.php';
-	$x->RedirectAfterInsert = 'view_mebership_groups_view.php?SelectedID=#ID#';
+	$x->ScriptFileName = 'view_membership_groups_view.php';
+	$x->RedirectAfterInsert = 'view_membership_groups_view.php?SelectedID=#ID#';
 	$x->TableTitle = 'View mebership group';
 	$x->TableIcon = 'table.gif';
-	$x->PrimaryKey = '`view_mebership_groups`.`groupID`';
+	$x->PrimaryKey = '`view_membership_groups`.`groupID`';
 
 	$x->ColWidth = [150, 150, 150, 150, 150, ];
 	$x->ColCaption = ['GroupID', 'Name', 'Description', 'AllowSingUp', 'NeedsApprlbals', ];
@@ -98,10 +98,10 @@
 	$x->ColNumber  = [1, 2, 3, 4, 5, ];
 
 	// template paths below are based on the app main directory
-	$x->Template = 'templates/view_mebership_groups_templateTV.html';
-	$x->SelectedTemplate = 'templates/view_mebership_groups_templateTVS.html';
-	$x->TemplateDV = 'templates/view_mebership_groups_templateDV.html';
-	$x->TemplateDVP = 'templates/view_mebership_groups_templateDVP.html';
+	$x->Template = 'templates/view_membership_groups_templateTV.html';
+	$x->SelectedTemplate = 'templates/view_membership_groups_templateTVS.html';
+	$x->TemplateDV = 'templates/view_membership_groups_templateDV.html';
+	$x->TemplateDVP = 'templates/view_membership_groups_templateDVP.html';
 
 	$x->ShowTableHeader = 1;
 	$x->TVClasses = "";
@@ -115,32 +115,32 @@
 	if(!in_array($DisplayRecords, ['user', 'group'])) { $DisplayRecords = 'all'; }
 	if($perm['view'] == 1 || ($perm['view'] > 1 && $DisplayRecords == 'user' && !$_REQUEST['NoFilter_x'])) { // view owner only
 		$x->QueryFrom .= ', `membership_userrecords`';
-		$x->QueryWhere = "WHERE `view_mebership_groups`.`groupID`=`membership_userrecords`.`pkValue` AND `membership_userrecords`.`tableName`='view_mebership_groups' AND LCASE(`membership_userrecords`.`memberID`)='" . getLoggedMemberID() . "'";
+		$x->QueryWhere = "WHERE `view_membership_groups`.`groupID`=`membership_userrecords`.`pkValue` AND `membership_userrecords`.`tableName`='view_membership_groups' AND LCASE(`membership_userrecords`.`memberID`)='" . getLoggedMemberID() . "'";
 	} elseif($perm['view'] == 2 || ($perm['view'] > 2 && $DisplayRecords == 'group' && !$_REQUEST['NoFilter_x'])) { // view group only
 		$x->QueryFrom .= ', `membership_userrecords`';
-		$x->QueryWhere = "WHERE `view_mebership_groups`.`groupID`=`membership_userrecords`.`pkValue` AND `membership_userrecords`.`tableName`='view_mebership_groups' AND `membership_userrecords`.`groupID`='" . getLoggedGroupID() . "'";
+		$x->QueryWhere = "WHERE `view_membership_groups`.`groupID`=`membership_userrecords`.`pkValue` AND `membership_userrecords`.`tableName`='view_membership_groups' AND `membership_userrecords`.`groupID`='" . getLoggedGroupID() . "'";
 	} elseif($perm['view'] == 3) { // view all
 		// no further action
 	} elseif($perm['view'] == 0) { // view none
 		$x->QueryFields = ['Not enough permissions' => 'NEP'];
-		$x->QueryFrom = '`view_mebership_groups`';
+		$x->QueryFrom = '`view_membership_groups`';
 		$x->QueryWhere = '';
 		$x->DefaultSortField = '';
 	}
-	// hook: view_mebership_groups_init
+	// hook: view_membership_groups_init
 	$render = true;
-	if(function_exists('view_mebership_groups_init')) {
+	if(function_exists('view_membership_groups_init')) {
 		$args = [];
-		$render = view_mebership_groups_init($x, getMemberInfo(), $args);
+		$render = view_membership_groups_init($x, getMemberInfo(), $args);
 	}
 
 	if($render) $x->Render();
 
-	// hook: view_mebership_groups_header
+	// hook: view_membership_groups_header
 	$headerCode = '';
-	if(function_exists('view_mebership_groups_header')) {
+	if(function_exists('view_membership_groups_header')) {
 		$args = [];
-		$headerCode = view_mebership_groups_header($x->ContentType, getMemberInfo(), $args);
+		$headerCode = view_membership_groups_header($x->ContentType, getMemberInfo(), $args);
 	}
 
 	if(!$headerCode) {
@@ -153,11 +153,11 @@
 
 	echo $x->HTML;
 
-	// hook: view_mebership_groups_footer
+	// hook: view_membership_groups_footer
 	$footerCode = '';
-	if(function_exists('view_mebership_groups_footer')) {
+	if(function_exists('view_membership_groups_footer')) {
 		$args = [];
-		$footerCode = view_mebership_groups_footer($x->ContentType, getMemberInfo(), $args);
+		$footerCode = view_membership_groups_footer($x->ContentType, getMemberInfo(), $args);
 	}
 
 	if(!$footerCode) {

@@ -15,35 +15,35 @@
 <div class="panel-body">
 	<fieldset class="form-horizontal">
 		<!-- Field: GroupID -->
-		<div class="form-group view_mebership_groups-groupID" style="border-bottom: dotted 1px #DDD;">
+		<div class="form-group view_membership_groups-groupID" style="border-bottom: dotted 1px #DDD;">
 			<label class="col-xs-3 control-label">GroupID</label>
 			<div class="col-xs-9">
 				<div class="form-control-static"><%%VALUE(groupID)%%></div>
 			</div>
 		</div>
 		<!-- Field: Name -->
-		<div class="form-group view_mebership_groups-name" style="border-bottom: dotted 1px #DDD;">
+		<div class="form-group view_membership_groups-name" style="border-bottom: dotted 1px #DDD;">
 			<label class="col-xs-3 control-label">Name</label>
 			<div class="col-xs-9">
 				<div class="form-control-static"><%%VALUE(name)%%></div>
 			</div>
 		</div>
 		<!-- Field: Description -->
-		<div class="form-group view_mebership_groups-description" style="border-bottom: dotted 1px #DDD;">
+		<div class="form-group view_membership_groups-description" style="border-bottom: dotted 1px #DDD;">
 			<label class="col-xs-3 control-label">Description</label>
 			<div class="col-xs-9">
 				<div class="form-control-static"><%%VALUE(description)%%></div>
 			</div>
 		</div>
 		<!-- Field: AllowSingUp -->
-		<div class="form-group view_mebership_groups-allowSignup" style="border-bottom: dotted 1px #DDD;">
+		<div class="form-group view_membership_groups-allowSignup" style="border-bottom: dotted 1px #DDD;">
 			<label class="col-xs-3 control-label">AllowSingUp</label>
 			<div class="col-xs-9">
 				<div class="form-control-static"><%%VALUE(allowSignup)%%></div>
 			</div>
 		</div>
 		<!-- Field: NeedsApprlbals -->
-		<div class="form-group view_mebership_groups-needsApproval" style="border-bottom: dotted 1px #DDD;">
+		<div class="form-group view_membership_groups-needsApproval" style="border-bottom: dotted 1px #DDD;">
 			<label class="col-xs-3 control-label">NeedsApprlbals</label>
 			<div class="col-xs-9">
 				<div class="form-control-static"><%%VALUE(needsApproval)%%></div>
@@ -53,21 +53,21 @@
 </div>
 <!-- child records -->
 <div class="panel-body">
-	<div id="view_mebership_groups-children"></div>
+	<div id="view_membership_groups-children"></div>
 </div>
 
 <script>
 	$j(function() {
 		/* prevent loading child records in multiple DVP */
-		if($j('[id=view_mebership_groups-children]').length > 1) return;
+		if($j('[id=view_membership_groups-children]').length > 1) return;
 
 		post(
 			'parent-children.php', {
-				ParentTable: 'view_mebership_groups',
+				ParentTable: 'view_membership_groups',
 				SelectedID: '<%%VALUE(groupID)%%>',
 				Operation: 'show-children-printable'
 			},
-			'view_mebership_groups-children',
+			'view_membership_groups-children',
 			'disable-element',
 			'loading-element',
 			apply_persisting_children

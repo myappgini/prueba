@@ -101,23 +101,23 @@ tmp_tables_fields_delete1Tip=["",spacer+"This option allows each member of the g
 tmp_tables_fields_delete2Tip=["",spacer+"This option allows each member of the group to delete any record owned by any member of the group in the 'Tmp' table."];
 tmp_tables_fields_delete3Tip=["",spacer+"This option allows each member of the group to delete any records in the 'Tmp' table."];
 
-// view_mebership_groups table
-view_mebership_groups_addTip=["",spacer+"This option allows all members of the group to add records to the 'View mebership group' table. A member who adds a record to the table becomes the 'owner' of that record."];
+// view_membership_groups table
+view_membership_groups_addTip=["",spacer+"This option allows all members of the group to add records to the 'View mebership group' table. A member who adds a record to the table becomes the 'owner' of that record."];
 
-view_mebership_groups_view0Tip=["",spacer+"This option prohibits all members of the group from viewing any record in the 'View mebership group' table."];
-view_mebership_groups_view1Tip=["",spacer+"This option allows each member of the group to view only his own records in the 'View mebership group' table."];
-view_mebership_groups_view2Tip=["",spacer+"This option allows each member of the group to view any record owned by any member of the group in the 'View mebership group' table."];
-view_mebership_groups_view3Tip=["",spacer+"This option allows each member of the group to view all records in the 'View mebership group' table."];
+view_membership_groups_view0Tip=["",spacer+"This option prohibits all members of the group from viewing any record in the 'View mebership group' table."];
+view_membership_groups_view1Tip=["",spacer+"This option allows each member of the group to view only his own records in the 'View mebership group' table."];
+view_membership_groups_view2Tip=["",spacer+"This option allows each member of the group to view any record owned by any member of the group in the 'View mebership group' table."];
+view_membership_groups_view3Tip=["",spacer+"This option allows each member of the group to view all records in the 'View mebership group' table."];
 
-view_mebership_groups_edit0Tip=["",spacer+"This option prohibits all members of the group from modifying any record in the 'View mebership group' table."];
-view_mebership_groups_edit1Tip=["",spacer+"This option allows each member of the group to edit only his own records in the 'View mebership group' table."];
-view_mebership_groups_edit2Tip=["",spacer+"This option allows each member of the group to edit any record owned by any member of the group in the 'View mebership group' table."];
-view_mebership_groups_edit3Tip=["",spacer+"This option allows each member of the group to edit any records in the 'View mebership group' table, regardless of their owner."];
+view_membership_groups_edit0Tip=["",spacer+"This option prohibits all members of the group from modifying any record in the 'View mebership group' table."];
+view_membership_groups_edit1Tip=["",spacer+"This option allows each member of the group to edit only his own records in the 'View mebership group' table."];
+view_membership_groups_edit2Tip=["",spacer+"This option allows each member of the group to edit any record owned by any member of the group in the 'View mebership group' table."];
+view_membership_groups_edit3Tip=["",spacer+"This option allows each member of the group to edit any records in the 'View mebership group' table, regardless of their owner."];
 
-view_mebership_groups_delete0Tip=["",spacer+"This option prohibits all members of the group from deleting any record in the 'View mebership group' table."];
-view_mebership_groups_delete1Tip=["",spacer+"This option allows each member of the group to delete only his own records in the 'View mebership group' table."];
-view_mebership_groups_delete2Tip=["",spacer+"This option allows each member of the group to delete any record owned by any member of the group in the 'View mebership group' table."];
-view_mebership_groups_delete3Tip=["",spacer+"This option allows each member of the group to delete any records in the 'View mebership group' table."];
+view_membership_groups_delete0Tip=["",spacer+"This option prohibits all members of the group from deleting any record in the 'View mebership group' table."];
+view_membership_groups_delete1Tip=["",spacer+"This option allows each member of the group to delete only his own records in the 'View mebership group' table."];
+view_membership_groups_delete2Tip=["",spacer+"This option allows each member of the group to delete any record owned by any member of the group in the 'View mebership group' table."];
+view_membership_groups_delete3Tip=["",spacer+"This option allows each member of the group to delete any records in the 'View mebership group' table."];
 
 /*
 	Style syntax:

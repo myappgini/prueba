@@ -2,6 +2,10 @@
 	// For help on using hooks, please refer to https://bigprof.com/appgini/help/working-with-generated-web-database-application/hooks
 
 	function products_init(&$options, $memberInfo, &$args) {
+
+		//Field Permissions Code
+		include("hooks/permissions/field_permission_table_init.php");
+
 		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
 		$_SESSION ['tablenam'] = $options->TableName; $_SESSION ['tableID'] = $options->PrimaryKey; $tableID = $_SESSION ['tableID'];
 		/* End of Audit Log for AppGini code */
@@ -46,30 +50,27 @@
 
 	function products_footer($contentType, $memberInfo, &$args) {
 		$footer='';
+		//Field Permissions Code
+		include("hooks/permissions/field_permission_base.php");
+
 
 		switch($contentType) {
 			case 'tableview':
-				// $js = "";
-				// ob_start();
-				?>
-					<script>
-				// 	$j(function(){
-				// 		$j("button").remove('#NoFilter');
-				// 	});
-					</script>
-				 <?php
-				// $js = ob_get_contents();
-				// ob_end_clean();
-				// $footer .= $js;
 				$footer='';
+				$footer = $extraJS_field_permission;
+
 				break;
 
 			case 'detailview':
 				$footer='';
+				$footer = $extraJS_field_permission;
+
 				break;
 
 			case 'tableview+detailview':
 				$footer='';
+				$footer = $extraJS_field_permission;
+
 				break;
 
 			case 'print-tableview':
@@ -107,8 +108,12 @@
 		table_before_change($_SESSION, $data['selectedID']);
 		/* End of Audit Log for AppGini code */
 
+		//Field-Permissions (Backend)
+		if ($myReturnValue === TRUE) {
+			$myReturnValue = check_BE_field_permissions($data, $memberInfo, $_SESSION['field_permission_tablenam'], $_SESSION['field_permission_tableID']);
+		}
 
-		return TRUE;
+		return  $myReturnValue;;
 	}
 
 	function products_after_update($data, $memberInfo, &$args) {

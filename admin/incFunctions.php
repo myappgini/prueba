@@ -135,7 +135,7 @@
 					'group' => $tg[0],
 					'homepageShowCount' => 0
 				),
-				'view_mebership_groups' => array(
+				'view_membership_groups' => array(
 					'Caption' => 'View mebership group',
 					'Description' => '',
 					'tableIcon' => 'table.gif',
@@ -162,7 +162,7 @@
 				'products' => 'Products',
 				'db_field_permission' => 'Db field permissions',
 				'tmp_tables_fields' => 'Tmp',
-				'view_mebership_groups' => 'View mebership group',
+				'view_membership_groups' => 'View mebership group',
 			);
 
 			return $arrTables;
@@ -936,18 +936,18 @@
 				'db_field_permission' => [
 					'ID_field_permissions' => ['appgini' => "VARCHAR(40) NOT NULL PRIMARY KEY"],
 					'groupID' => ['appgini' => "VARCHAR(40) NULL"],
-					'table_field' => ['appgini' => "VARCHAR(40) NULL"],
-					'fieldstate' => ['appgini' => "VARCHAR(40) NULL"],
+					'table_field' => ['appgini' => "VARCHAR(200) NULL"],
+					'fieldstate' => ['appgini' => "VARCHAR(50) NOT NULL"],
 				],
 				'tmp_tables_fields' => [
-					'table_filed' => ['appgini' => "VARCHAR(40) NOT NULL PRIMARY KEY"],
+					'table_filed' => ['appgini' => "VARCHAR(200) NOT NULL PRIMARY KEY"],
 				],
-				'view_mebership_groups' => [
+				'view_membership_groups' => [
 					'groupID' => ['appgini' => "VARCHAR(40) NOT NULL PRIMARY KEY"],
-					'name' => ['appgini' => "VARCHAR(40) NULL"],
+					'name' => ['appgini' => "VARCHAR(50) NULL"],
 					'description' => ['appgini' => "TEXT NULL"],
-					'allowSignup' => ['appgini' => "VARCHAR(40) NULL"],
-					'needsApproval' => ['appgini' => "VARCHAR(40) NULL"],
+					'allowSignup' => ['appgini' => "VARCHAR(50) NULL"],
+					'needsApproval' => ['appgini' => "VARCHAR(50) NULL"],
 				],
 			];
 		}
@@ -1970,7 +1970,7 @@
 				'contacto' => ['contacto'],
 			],
 			'db_field_permission' => [
-				'view_mebership_groups' => ['groupID'],
+				'view_membership_groups' => ['groupID'],
 				'tmp_tables_fields' => ['table_field'],
 			],
 		];
@@ -2008,7 +2008,7 @@
 			),
 			'tmp_tables_fields' => array(
 			),
-			'view_mebership_groups' => array(
+			'view_membership_groups' => array(
 			),
 		);
 	}
@@ -2158,12 +2158,12 @@
 			'products' => [
 			],
 			'db_field_permission' => [
-				'groupID' => 'SELECT `view_mebership_groups`.`groupID`, `view_mebership_groups`.`groupID` FROM `view_mebership_groups` ORDER BY 2',
+				'groupID' => 'SELECT `view_membership_groups`.`groupID`, `view_membership_groups`.`name` FROM `view_membership_groups` ORDER BY 2',
 				'table_field' => 'SELECT `tmp_tables_fields`.`table_filed`, `tmp_tables_fields`.`table_filed` FROM `tmp_tables_fields` ORDER BY 2',
 			],
 			'tmp_tables_fields' => [
 			],
-			'view_mebership_groups' => [
+			'view_membership_groups' => [
 			],
 		];
 

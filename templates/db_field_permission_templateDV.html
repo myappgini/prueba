@@ -32,7 +32,7 @@
 					<hr class="hidden-md hidden-lg">
 					<label class="control-label col-lg-3" for="groupID" data-parent_link="view_parent_modal">GroupID</label>
 					<div class="col-lg-9">
-						<div class="form-control-static" style="white-space: nowrap; overflow-x: hidden;"><%%COMBO(groupID)%%><%%PLINK(groupID)%%><%%ADDNEW(view_mebership_groups)%%></div>
+						<div class="form-control-static" style="white-space: nowrap; overflow-x: hidden;"><%%COMBO(groupID)%%><%%PLINK(groupID)%%><%%ADDNEW(view_membership_groups)%%></div>
 					</div>
 				</div>
 
@@ -48,9 +48,9 @@
 				<!-- Field: Fieldstate -->
 				<div class="form-group db_field_permission-fieldstate">
 					<hr class="hidden-md hidden-lg">
-					<label class="control-label col-lg-3" for="fieldstate">Fieldstate</label>
+					<label class="control-label col-lg-3">Fieldstate<span class="text-danger"><%%TRANSLATION(*)%%></span></label>
 					<div class="col-lg-9">
-						<input maxlength="40" type="text" class="form-control" name="fieldstate" id="fieldstate" value="<%%VALUE(fieldstate)%%>">
+						<%%COMBO(fieldstate)%%>
 					</div>
 				</div>
 

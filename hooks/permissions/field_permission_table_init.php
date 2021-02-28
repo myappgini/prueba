@@ -38,7 +38,7 @@
 
 	//Table and field will come from FIELD_PERMISSIONS table later
 	$table_name = $_SESSION['field_permission_tablenam'];
-
+	include ("field_permission_functions.php");
 	$fields_is_hidden = check_field_permission($_SESSION['field_permission_tablenam'], getLoggedMemberID(), "hidden");
 	//write_log("hidden field list: " . $fields_is_hidden);
 

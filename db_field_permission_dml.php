@@ -24,6 +24,11 @@ function db_field_permission_insert(&$error_message = '') {
 		echo '<a href="" onclick="history.go(-1); return false;">' . $Translation['< back'] . '</a></div>';
 		exit;
 	}
+	if($data['fieldstate'] === '') {
+		echo StyleSheet() . "\n\n<div class=\"alert alert-danger\">{$Translation['error:']} 'Fieldstate': {$Translation['field not null']}<br><br>";
+		echo '<a href="" onclick="history.go(-1); return false;">' . $Translation['< back'] . '</a></div>';
+		exit;
+	}
 
 	// hook: db_field_permission_before_insert
 	if(function_exists('db_field_permission_before_insert')) {
@@ -126,6 +131,11 @@ function db_field_permission_update(&$selected_id, &$error_message = '') {
 		echo '<a href="" onclick="history.go(-1); return false;">' . $Translation['< back'] . '</a></div>';
 		exit;
 	}
+	if($data['fieldstate'] === '') {
+		echo StyleSheet() . "\n\n<div class=\"alert alert-danger\">{$Translation['error:']} 'Fieldstate': {$Translation['field not null']}<br><br>";
+		echo '<a href="" onclick="history.go(-1); return false;">' . $Translation['< back'] . '</a></div>';
+		exit;
+	}
 	// get existing values
 	$old_data = getRecord('db_field_permission', $selected_id);
 	if(is_array($old_data)) {
@@ -213,6 +223,22 @@ function db_field_permission_form($selected_id = '', $AllowUpdate = 1, $AllowIns
 	$combo_groupID = new DataCombo;
 	// combobox: table_field
 	$combo_table_field = new DataCombo;
+	// combobox: fieldstate
+	$combo_fieldstate = new Combo;
+	$combo_fieldstate->ListType = 2;
+	$combo_fieldstate->MultipleSeparator = ', ';
+	$combo_fieldstate->ListBoxHeight = 10;
+	$combo_fieldstate->RadiosPerLine = 1;
+	if(is_file(dirname(__FILE__).'/hooks/db_field_permission.fieldstate.csv')) {
+		$fieldstate_data = addslashes(implode('', @file(dirname(__FILE__).'/hooks/db_field_permission.fieldstate.csv')));
+		$combo_fieldstate->ListItem = explode('||', entitiesToUTF8(convertLegacyOptions($fieldstate_data)));
+		$combo_fieldstate->ListData = $combo_fieldstate->ListItem;
+	} else {
+		$combo_fieldstate->ListItem = explode('||', entitiesToUTF8(convertLegacyOptions("locked;;hidden")));
+		$combo_fieldstate->ListData = $combo_fieldstate->ListItem;
+	}
+	$combo_fieldstate->SelectName = 'fieldstate';
+	$combo_fieldstate->AllowNull = false;
 
 	if($selected_id) {
 		// mm: check member permissions
@@ -237,17 +263,20 @@ function db_field_permission_form($selected_id = '', $AllowUpdate = 1, $AllowIns
 		}
 		$combo_groupID->SelectedData = $row['groupID'];
 		$combo_table_field->SelectedData = $row['table_field'];
+		$combo_fieldstate->SelectedData = $row['fieldstate'];
 		$urow = $row; /* unsanitized data */
 		$hc = new CI_Input(datalist_db_encoding);
 		$row = $hc->xss_clean($row); /* sanitize data */
 	} else {
 		$combo_groupID->SelectedData = $filterer_groupID;
 		$combo_table_field->SelectedData = $filterer_table_field;
+		$combo_fieldstate->SelectedText = ( $_REQUEST['FilterField'][1] == '4' && $_REQUEST['FilterOperator'][1] == '<=>' ? $_REQUEST['FilterValue'][1] : '');
 	}
 	$combo_groupID->HTML = '<span id="groupID-container' . $rnd1 . '"></span><input type="hidden" name="groupID" id="groupID' . $rnd1 . '" value="' . html_attr($combo_groupID->SelectedData) . '">';
 	$combo_groupID->MatchText = '<span id="groupID-container-readonly' . $rnd1 . '"></span><input type="hidden" name="groupID" id="groupID' . $rnd1 . '" value="' . html_attr($combo_groupID->SelectedData) . '">';
 	$combo_table_field->HTML = '<span id="table_field-container' . $rnd1 . '"></span><input type="hidden" name="table_field" id="table_field' . $rnd1 . '" value="' . html_attr($combo_table_field->SelectedData) . '">';
 	$combo_table_field->MatchText = '<span id="table_field-container-readonly' . $rnd1 . '"></span><input type="hidden" name="table_field" id="table_field' . $rnd1 . '" value="' . html_attr($combo_table_field->SelectedData) . '">';
+	$combo_fieldstate->Render();
 
 	ob_start();
 	?>
@@ -280,7 +309,7 @@ function db_field_permission_form($selected_id = '', $AllowUpdate = 1, $AllowIns
 							});
 							$j('[name="groupID"]').val(resp.results[0].id);
 							$j('[id=groupID-container-readonly__RAND__]').html('<span id="groupID-match-text">' + resp.results[0].text + '</span>');
-							if(resp.results[0].id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=view_mebership_groups_view_parent]').hide(); } else { $j('.btn[id=view_mebership_groups_view_parent]').show(); }
+							if(resp.results[0].id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=view_membership_groups_view_parent]').hide(); } else { $j('.btn[id=view_membership_groups_view_parent]').show(); }
 
 
 							if(typeof(groupID_update_autofills__RAND__) == 'function') groupID_update_autofills__RAND__();
@@ -303,7 +332,7 @@ function db_field_permission_form($selected_id = '', $AllowUpdate = 1, $AllowIns
 				AppGini.current_groupID__RAND__.value = e.added.id;
 				AppGini.current_groupID__RAND__.text = e.added.text;
 				$j('[name="groupID"]').val(e.added.id);
-				if(e.added.id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=view_mebership_groups_view_parent]').hide(); } else { $j('.btn[id=view_mebership_groups_view_parent]').show(); }
+				if(e.added.id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=view_membership_groups_view_parent]').hide(); } else { $j('.btn[id=view_membership_groups_view_parent]').show(); }
 
 
 				if(typeof(groupID_update_autofills__RAND__) == 'function') groupID_update_autofills__RAND__();
@@ -317,7 +346,7 @@ function db_field_permission_form($selected_id = '', $AllowUpdate = 1, $AllowIns
 					success: function(resp) {
 						$j('[name="groupID"]').val(resp.results[0].id);
 						$j('[id=groupID-container-readonly__RAND__]').html('<span id="groupID-match-text">' + resp.results[0].text + '</span>');
-						if(resp.results[0].id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=view_mebership_groups_view_parent]').hide(); } else { $j('.btn[id=view_mebership_groups_view_parent]').show(); }
+						if(resp.results[0].id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=view_membership_groups_view_parent]').hide(); } else { $j('.btn[id=view_membership_groups_view_parent]').show(); }
 
 						if(typeof(groupID_update_autofills__RAND__) == 'function') groupID_update_autofills__RAND__();
 					}
@@ -332,7 +361,7 @@ function db_field_permission_form($selected_id = '', $AllowUpdate = 1, $AllowIns
 				data: { id: AppGini.current_groupID__RAND__.value, t: 'db_field_permission', f: 'groupID' },
 				success: function(resp) {
 					$j('[id=groupID-container__RAND__], [id=groupID-container-readonly__RAND__]').html('<span id="groupID-match-text">' + resp.results[0].text + '</span>');
-					if(resp.results[0].id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=view_mebership_groups_view_parent]').hide(); } else { $j('.btn[id=view_mebership_groups_view_parent]').show(); }
+					if(resp.results[0].id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=view_membership_groups_view_parent]').hide(); } else { $j('.btn[id=view_membership_groups_view_parent]').show(); }
 
 					if(typeof(groupID_update_autofills__RAND__) == 'function') groupID_update_autofills__RAND__();
 				}
@@ -480,7 +509,7 @@ function db_field_permission_form($selected_id = '', $AllowUpdate = 1, $AllowIns
 		$jsReadOnly .= "\tjQuery('#groupID_caption').prop('disabled', true).css({ color: '#555', backgroundColor: 'white' });\n";
 		$jsReadOnly .= "\tjQuery('#table_field').prop('disabled', true).css({ color: '#555', backgroundColor: '#fff' });\n";
 		$jsReadOnly .= "\tjQuery('#table_field_caption').prop('disabled', true).css({ color: '#555', backgroundColor: 'white' });\n";
-		$jsReadOnly .= "\tjQuery('#fieldstate').replaceWith('<div class=\"form-control-static\" id=\"fieldstate\">' + (jQuery('#fieldstate').val() || '') + '</div>');\n";
+		$jsReadOnly .= "\tjQuery('input[name=fieldstate]').parent().html('<div class=\"form-control-static\">' + jQuery('input[name=fieldstate]:checked').next().text() + '</div>')\n";
 		$jsReadOnly .= "\tjQuery('.select2-container').hide();\n";
 
 		$noUploads = true;
@@ -496,9 +525,11 @@ function db_field_permission_form($selected_id = '', $AllowUpdate = 1, $AllowIns
 	$templateCode = str_replace('<%%COMBO(table_field)%%>', $combo_table_field->HTML, $templateCode);
 	$templateCode = str_replace('<%%COMBOTEXT(table_field)%%>', $combo_table_field->MatchText, $templateCode);
 	$templateCode = str_replace('<%%URLCOMBOTEXT(table_field)%%>', urlencode($combo_table_field->MatchText), $templateCode);
+	$templateCode = str_replace('<%%COMBO(fieldstate)%%>', $combo_fieldstate->HTML, $templateCode);
+	$templateCode = str_replace('<%%COMBOTEXT(fieldstate)%%>', $combo_fieldstate->SelectedData, $templateCode);
 
 	/* lookup fields array: 'lookup field name' => array('parent table name', 'lookup field caption') */
-	$lookup_fields = array('groupID' => array('view_mebership_groups', 'GroupID'), 'table_field' => array('tmp_tables_fields', 'Table field'), );
+	$lookup_fields = array('groupID' => array('view_membership_groups', 'GroupID'), 'table_field' => array('tmp_tables_fields', 'Table field'), );
 	foreach($lookup_fields as $luf => $ptfc) {
 		$pt_perm = getTablePermissions($ptfc[0]);
 

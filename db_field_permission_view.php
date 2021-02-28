@@ -21,14 +21,14 @@
 	// Fields that can be displayed in the table view
 	$x->QueryFieldsTV = [
 		"`db_field_permission`.`ID_field_permissions`" => "ID_field_permissions",
-		"IF(    CHAR_LENGTH(`view_mebership_groups1`.`groupID`), CONCAT_WS('',   `view_mebership_groups1`.`groupID`), '') /* GroupID */" => "groupID",
+		"IF(    CHAR_LENGTH(`view_membership_groups1`.`name`), CONCAT_WS('',   `view_membership_groups1`.`name`), '') /* GroupID */" => "groupID",
 		"IF(    CHAR_LENGTH(`tmp_tables_fields1`.`table_filed`), CONCAT_WS('',   `tmp_tables_fields1`.`table_filed`), '') /* Table field */" => "table_field",
 		"`db_field_permission`.`fieldstate`" => "fieldstate",
 	];
 	// mapping incoming sort by requests to actual query fields
 	$x->SortFields = [
 		1 => 1,
-		2 => '`view_mebership_groups1`.`groupID`',
+		2 => '`view_membership_groups1`.`name`',
 		3 => '`tmp_tables_fields1`.`table_filed`',
 		4 => 4,
 	];
@@ -36,14 +36,14 @@
 	// Fields that can be displayed in the csv file
 	$x->QueryFieldsCSV = [
 		"`db_field_permission`.`ID_field_permissions`" => "ID_field_permissions",
-		"IF(    CHAR_LENGTH(`view_mebership_groups1`.`groupID`), CONCAT_WS('',   `view_mebership_groups1`.`groupID`), '') /* GroupID */" => "groupID",
+		"IF(    CHAR_LENGTH(`view_membership_groups1`.`name`), CONCAT_WS('',   `view_membership_groups1`.`name`), '') /* GroupID */" => "groupID",
 		"IF(    CHAR_LENGTH(`tmp_tables_fields1`.`table_filed`), CONCAT_WS('',   `tmp_tables_fields1`.`table_filed`), '') /* Table field */" => "table_field",
 		"`db_field_permission`.`fieldstate`" => "fieldstate",
 	];
 	// Fields that can be filtered
 	$x->QueryFieldsFilters = [
 		"`db_field_permission`.`ID_field_permissions`" => "ID field permission",
-		"IF(    CHAR_LENGTH(`view_mebership_groups1`.`groupID`), CONCAT_WS('',   `view_mebership_groups1`.`groupID`), '') /* GroupID */" => "GroupID",
+		"IF(    CHAR_LENGTH(`view_membership_groups1`.`name`), CONCAT_WS('',   `view_membership_groups1`.`name`), '') /* GroupID */" => "GroupID",
 		"IF(    CHAR_LENGTH(`tmp_tables_fields1`.`table_filed`), CONCAT_WS('',   `tmp_tables_fields1`.`table_filed`), '') /* Table field */" => "Table field",
 		"`db_field_permission`.`fieldstate`" => "Fieldstate",
 	];
@@ -51,7 +51,7 @@
 	// Fields that can be quick searched
 	$x->QueryFieldsQS = [
 		"`db_field_permission`.`ID_field_permissions`" => "ID_field_permissions",
-		"IF(    CHAR_LENGTH(`view_mebership_groups1`.`groupID`), CONCAT_WS('',   `view_mebership_groups1`.`groupID`), '') /* GroupID */" => "groupID",
+		"IF(    CHAR_LENGTH(`view_membership_groups1`.`name`), CONCAT_WS('',   `view_membership_groups1`.`name`), '') /* GroupID */" => "groupID",
 		"IF(    CHAR_LENGTH(`tmp_tables_fields1`.`table_filed`), CONCAT_WS('',   `tmp_tables_fields1`.`table_filed`), '') /* Table field */" => "table_field",
 		"`db_field_permission`.`fieldstate`" => "fieldstate",
 	];
@@ -59,7 +59,7 @@
 	// Lookup fields that can be used as filterers
 	$x->filterers = ['groupID' => 'GroupID', 'table_field' => 'Table field', ];
 
-	$x->QueryFrom = "`db_field_permission` LEFT JOIN `view_mebership_groups` as view_mebership_groups1 ON `view_mebership_groups1`.`groupID`=`db_field_permission`.`groupID` LEFT JOIN `tmp_tables_fields` as tmp_tables_fields1 ON `tmp_tables_fields1`.`table_filed`=`db_field_permission`.`table_field` ";
+	$x->QueryFrom = "`db_field_permission` LEFT JOIN `view_membership_groups` as view_membership_groups1 ON `view_membership_groups1`.`groupID`=`db_field_permission`.`groupID` LEFT JOIN `tmp_tables_fields` as tmp_tables_fields1 ON `tmp_tables_fields1`.`table_filed`=`db_field_permission`.`table_field` ";
 	$x->QueryWhere = '';
 	$x->QueryOrder = '';
 

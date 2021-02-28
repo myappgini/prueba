@@ -16,7 +16,7 @@
 			],
 			'tmp_tables_fields' => [
 			],
-			'view_mebership_groups' => [
+			'view_membership_groups' => [
 			],
 		];
 

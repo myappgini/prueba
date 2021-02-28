@@ -4,7 +4,7 @@
 ?>
 <script>
 	$j(function() {
-		var tn = 'view_mebership_groups';
+		var tn = 'view_membership_groups';
 
 		/* data for selected record, or defaults if none is selected */
 		var data = {

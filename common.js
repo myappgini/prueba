@@ -336,6 +336,7 @@ function db_field_permission_validateData() {
 
 	// check all required fields have values
 	if(!AppGini.Validation.fieldRequired('text', 'ID_field_permissions', 'ID field permission')) return false;
+	if(!AppGini.Validation.fieldRequired('radio', 'fieldstate', 'Fieldstate')) return false;
 
 	return !errors;
 }
@@ -348,7 +349,7 @@ function tmp_tables_fields_validateData() {
 
 	return !errors;
 }
-function view_mebership_groups_validateData() {
+function view_membership_groups_validateData() {
 	$j('.has-error').removeClass('has-error');
 	var errors = false;
 

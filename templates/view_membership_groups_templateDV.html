@@ -1,10 +1,10 @@
-<!-- To change the layout of the detail view form, we recommend using JS code in hooks/view_mebership_groups-dv.js rather than editing this file -->
+<!-- To change the layout of the detail view form, we recommend using JS code in hooks/view_membership_groups-dv.js rather than editing this file -->
 
 <div id="detail-view"></div>
 <div class="panel-heading"><h3 class="panel-title"><strong><%%DETAIL_VIEW_TITLE%%></strong></h3></div>
 
-<div id="view_mebership_groups_dv_container-loading" class="text-center text-info text-bold vspacer-lg"><i class="glyphicon glyphicon-refresh loop-rotate"></i> <%%TRANSLATION(Loading ...)%%></div>
-<div class="panel-body hidden" id="view_mebership_groups_dv_container">
+<div id="view_membership_groups_dv_container-loading" class="text-center text-info text-bold vspacer-lg"><i class="glyphicon glyphicon-refresh loop-rotate"></i> <%%TRANSLATION(Loading ...)%%></div>
+<div class="panel-body hidden" id="view_membership_groups_dv_container">
 	<!-- child links -->
 	<div class="row vspacer-md">
 		<div class="col-xs-12 children-links">
@@ -18,11 +18,11 @@
 
 	<div class="row">
 		<!-- form inputs -->
-		<div class="col-md-8 col-lg-10" id="view_mebership_groups_dv_form">
+		<div class="col-md-8 col-lg-10" id="view_membership_groups_dv_form">
 			<fieldset class="form-horizontal">
 
 				<!-- Field: GroupID -->
-				<div class="form-group view_mebership_groups-groupID">
+				<div class="form-group view_membership_groups-groupID">
 					<hr class="hidden-md hidden-lg">
 					<label class="control-label col-lg-3" for="groupID">GroupID</label>
 					<div class="col-lg-9">
@@ -31,16 +31,16 @@
 				</div>
 
 				<!-- Field: Name -->
-				<div class="form-group view_mebership_groups-name">
+				<div class="form-group view_membership_groups-name">
 					<hr class="hidden-md hidden-lg">
 					<label class="control-label col-lg-3" for="name">Name</label>
 					<div class="col-lg-9">
-						<input maxlength="40" type="text" class="form-control" name="name" id="name" value="<%%VALUE(name)%%>">
+						<input maxlength="50" type="text" class="form-control" name="name" id="name" value="<%%VALUE(name)%%>">
 					</div>
 				</div>
 
 				<!-- Field: Description -->
-				<div class="form-group view_mebership_groups-description">
+				<div class="form-group view_membership_groups-description">
 					<hr class="hidden-md hidden-lg">
 					<label class="control-label col-lg-3" for="description">Description</label>
 					<div class="col-lg-9 has-nicedit">
@@ -49,20 +49,20 @@
 				</div>
 
 				<!-- Field: AllowSingUp -->
-				<div class="form-group view_mebership_groups-allowSignup">
+				<div class="form-group view_membership_groups-allowSignup">
 					<hr class="hidden-md hidden-lg">
 					<label class="control-label col-lg-3" for="allowSignup">AllowSingUp</label>
 					<div class="col-lg-9">
-						<input maxlength="40" type="text" class="form-control" name="allowSignup" id="allowSignup" value="<%%VALUE(allowSignup)%%>">
+						<input maxlength="50" type="text" class="form-control" name="allowSignup" id="allowSignup" value="<%%VALUE(allowSignup)%%>">
 					</div>
 				</div>
 
 				<!-- Field: NeedsApprlbals -->
-				<div class="form-group view_mebership_groups-needsApproval">
+				<div class="form-group view_membership_groups-needsApproval">
 					<hr class="hidden-md hidden-lg">
 					<label class="control-label col-lg-3" for="needsApproval">NeedsApprlbals</label>
 					<div class="col-lg-9">
-						<input maxlength="40" type="text" class="form-control" name="needsApproval" id="needsApproval" value="<%%VALUE(needsApproval)%%>">
+						<input maxlength="50" type="text" class="form-control" name="needsApproval" id="needsApproval" value="<%%VALUE(needsApproval)%%>">
 					</div>
 				</div>
 
@@ -71,7 +71,7 @@
 
 		<!-- DV action buttons -->
 		<hr class="hidden-md hidden-lg">
-		<div class="col-md-4 col-lg-2" id="view_mebership_groups_dv_action_buttons">
+		<div class="col-md-4 col-lg-2" id="view_membership_groups_dv_action_buttons">
 			<div class="btn-toolbar">
 				<div class="btn-group-vertical btn-group-lg" style="width: 100%;">
 					<%%UPDATE_BUTTON%%>
@@ -93,7 +93,7 @@
 	<hr>
 	<div class="row">
 		<div class="col-lg-10 col-lg-offset-1">
-			<div id="view_mebership_groups-children" class="children-tabs">
+			<div id="view_membership_groups-children" class="children-tabs">
 				<div class="text-center"><i class="glyphicon glyphicon-refresh loop-rotate"></i> <%%TRANSLATION(Loading ...)%%></div>
 			</div>
 		</div>
@@ -124,9 +124,9 @@
 
 
 			setTimeout(function() {
-				$j('#view_mebership_groups_dv_container-loading').addClass('hidden');
-				$j('#view_mebership_groups_dv_container').removeClass('hidden');
-				AppGini.focusFormElement('view_mebership_groups', 'groupID');
+				$j('#view_membership_groups_dv_container-loading').addClass('hidden');
+				$j('#view_membership_groups_dv_container').removeClass('hidden');
+				AppGini.focusFormElement('view_membership_groups', 'groupID');
 			}, 1100);
 
 			$j('form').eq(0).change(function() {
@@ -165,11 +165,11 @@
 			} else {
 				post(
 					'parent-children.php', {
-						ParentTable: 'view_mebership_groups',
+						ParentTable: 'view_membership_groups',
 						SelectedID: '<%%VALUE(groupID)%%>',
 						Operation: 'show-children'
 					},
-					'view_mebership_groups-children'
+					'view_membership_groups-children'
 				);
 			}
 
@@ -192,7 +192,7 @@
 							localStorage.clear(pt + '_last_added_id');
 							AppGini.lookupText({
 								id: new_id,
-								table: 'view_mebership_groups',
+								table: 'view_membership_groups',
 								field: field_id,
 								callback: function(data) {
 									$j('#' + field_id + '-container').select2('data', data, true);
@@ -252,10 +252,10 @@
 			if(!add_new_mode) {
 				$j('body').append('<div id="admin-tools-appendix"></div>');
 				$j('#admin-tools-appendix').load(
-					'ajax_admin_tools.php?table=view_mebership_groups&id=<%%URLVALUE(groupID)%%>',
+					'ajax_admin_tools.php?table=view_membership_groups&id=<%%URLVALUE(groupID)%%>',
 					function(resp) {
 						if(!resp.length) return;
-						$j.ajax('ajax_admin_tools.php?action=get_admin_tools_js&table=view_mebership_groups&id=<%%URLVALUE(groupID)%%>');
+						$j.ajax('ajax_admin_tools.php?action=get_admin_tools_js&table=view_membership_groups&id=<%%URLVALUE(groupID)%%>');
 					}
 				);
 			}

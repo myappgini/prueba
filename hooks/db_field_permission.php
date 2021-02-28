@@ -1,7 +1,13 @@
 <?php
+//Field Permissions Code
+if (!function_exists('fill_tmp_tables_fields')) {
+include("hooks/permissions/field_permission_tmp.php");
+}
+
 	// For help on using hooks, please refer to https://bigprof.com/appgini/help/working-with-generated-web-database-application/hooks
 
 	function db_field_permission_init(&$options, $memberInfo, &$args) {
+		fill_tmp_tables_fields();
 
 		return TRUE;
 	}

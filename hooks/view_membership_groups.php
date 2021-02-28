@@ -1,12 +1,12 @@
 <?php
 	// For help on using hooks, please refer to https://bigprof.com/appgini/help/working-with-generated-web-database-application/hooks
 
-	function view_mebership_groups_init(&$options, $memberInfo, &$args) {
+	function view_membership_groups_init(&$options, $memberInfo, &$args) {
 
 		return TRUE;
 	}
 
-	function view_mebership_groups_header($contentType, $memberInfo, &$args) {
+	function view_membership_groups_header($contentType, $memberInfo, &$args) {
 		$header='';
 
 		switch($contentType) {
@@ -38,7 +38,7 @@
 		return $header;
 	}
 
-	function view_mebership_groups_footer($contentType, $memberInfo, &$args) {
+	function view_membership_groups_footer($contentType, $memberInfo, &$args) {
 		$footer='';
 
 		switch($contentType) {
@@ -70,44 +70,44 @@
 		return $footer;
 	}
 
-	function view_mebership_groups_before_insert(&$data, $memberInfo, &$args) {
+	function view_membership_groups_before_insert(&$data, $memberInfo, &$args) {
 
 		return TRUE;
 	}
 
-	function view_mebership_groups_after_insert($data, $memberInfo, &$args) {
+	function view_membership_groups_after_insert($data, $memberInfo, &$args) {
 
 		return TRUE;
 	}
 
-	function view_mebership_groups_before_update(&$data, $memberInfo, &$args) {
+	function view_membership_groups_before_update(&$data, $memberInfo, &$args) {
 
 		return TRUE;
 	}
 
-	function view_mebership_groups_after_update($data, $memberInfo, &$args) {
+	function view_membership_groups_after_update($data, $memberInfo, &$args) {
 
 		return TRUE;
 	}
 
-	function view_mebership_groups_before_delete($selectedID, &$skipChecks, $memberInfo, &$args) {
+	function view_membership_groups_before_delete($selectedID, &$skipChecks, $memberInfo, &$args) {
 
 		return TRUE;
 	}
 
-	function view_mebership_groups_after_delete($selectedID, $memberInfo, &$args) {
+	function view_membership_groups_after_delete($selectedID, $memberInfo, &$args) {
 
 	}
 
-	function view_mebership_groups_dv($selectedID, $memberInfo, &$html, &$args) {
+	function view_membership_groups_dv($selectedID, $memberInfo, &$html, &$args) {
 
 	}
 
-	function view_mebership_groups_csv($query, $memberInfo, &$args) {
+	function view_membership_groups_csv($query, $memberInfo, &$args) {
 
 		return $query;
 	}
-	function view_mebership_groups_batch_actions(&$args) {
+	function view_membership_groups_batch_actions(&$args) {
 
 		return [];
 	}

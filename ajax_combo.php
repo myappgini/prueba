@@ -83,10 +83,10 @@
 		),
 		'db_field_permission' => array(
 			'groupID' => array(
-				'parent_table' => 'view_mebership_groups',
+				'parent_table' => 'view_membership_groups',
 				'parent_pk_field' => 'groupID',
-				'parent_caption' => '`view_mebership_groups`.`groupID`',
-				'parent_from' => '`view_mebership_groups` ',
+				'parent_caption' => '`view_membership_groups`.`name`',
+				'parent_from' => '`view_membership_groups` ',
 				'filterers' => array(),
 				'custom_query' => '',
 				'inherit_permissions' => false,
@@ -107,7 +107,7 @@
 		),
 		'tmp_tables_fields' => array(
 		),
-		'view_mebership_groups' => array(
+		'view_membership_groups' => array(
 		),
 	);
 

@@ -22,7 +22,7 @@ function fill_tmp_tables_fields(){
 	$result = sqlvalue($sql_d);
 
 	$hooks_dir = dirname(__FILE__);
-	require("$hooks_dir/../config.php");
+	require("$hooks_dir/../../config.php");
 	$db_names = "Tables_in_" . $dbDatabase;
 	$sql_base = "INSERT INTO tmp_tables_fields SET table_field=@new_record@"; //, tablename=@tabnames@, fieldname=@colnames@";
 

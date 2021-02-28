@@ -9,7 +9,7 @@
 
 	header('Content-type: text/javascript; charset=' . datalist_db_encoding);
 
-	$table_perms = getTablePermissions('view_mebership_groups');
+	$table_perms = getTablePermissions('view_membership_groups');
 	if(!$table_perms['access']) die('// Access denied!');
 
 	$mfk = $_GET['mfk'];

@@ -33,7 +33,7 @@
 
 			return $data;
 		},
-		'view_mebership_groups' => function($data, $options = []) {
+		'view_membership_groups' => function($data, $options = []) {
 
 			return $data;
 		},
@@ -46,7 +46,7 @@
 		'products' => function($data, $options = []) { return true; },
 		'db_field_permission' => function($data, $options = []) { return true; },
 		'tmp_tables_fields' => function($data, $options = []) { return true; },
-		'view_mebership_groups' => function($data, $options = []) { return true; },
+		'view_membership_groups' => function($data, $options = []) { return true; },
 	];
 
 	/*
