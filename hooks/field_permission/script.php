@@ -18,7 +18,7 @@ $setting_permissions = [
     "products"=>[
         "name"=> [
             "fn"=>"name",
-            "groups_disabled"=>["dmins","users"],
+            "groups_disabled"=>["Admins","users"],
         ],
         "sss"=>[
             "fn"=>"sss",
