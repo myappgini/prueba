@@ -133,6 +133,12 @@ if ($cmd) {
             $html = $handlebars->render('detail', $task);
             echo $html;
             break;
+        case 'config-todo':
+            $task=[];
+            $task += detail_options();
+            $html = $handlebars->render('settings', $task);
+            echo $html;
+            break;
         case 'send-task-user':
             if (!$data['us'] || $data['us'] === $data['id']) {
                 echo "{error:'select a correct user'}";
@@ -262,6 +268,7 @@ function add_msg($message = false)
 function detail_options()//detail modal windows options
 {
     return [
+        //task detail modal and header options
         'modal_header'=>[
             "headline"=>"To-Do Task Detail",
             "id"=>"modal-todo",
@@ -271,6 +278,30 @@ function detail_options()//detail modal windows options
             "body_class"=>" bg-gray todo-details",
         ],
         'modal_footer'=>[
+            "footer_class"=>"bg-gray",
+            "close_btn"=>[
+                "enable"=>true,
+                "text"=>"Close",
+                "color"=>"default",
+                "size"=>"xs",
+                "class"=>"",
+                "attr"=>"data-dismiss='modal'",
+                "icon"=>[
+                    "enable"=>true,
+                    "icon"=>"glyphicon glyphicon-remove",
+                ]
+            ]
+        ],
+        //task config modal and header options
+        'modal_header_config'=>[
+            "headline"=>"Admin To-Do Config",
+            "id"=>"modal-todo",
+            "size"=>"",
+            "dismiss"=>true,
+            "header_class"=>"bg-gray",
+            "body_class"=>" bg-gray todo-config",
+        ],
+        'modal_footer_config'=>[
             "footer_class"=>"bg-gray",
             "close_btn"=>[
                 "enable"=>true,

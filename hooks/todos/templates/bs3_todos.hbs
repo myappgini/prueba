@@ -6,6 +6,12 @@
       {{#if list_delete}}Deleted {{/if}}To Do List
     </h3>
     <div class='box-tools pull-right'>
+      {{#admin}}
+        <button type='button' class='btn btn-box-tool config-todos' title="Open config to-do list" data-cmd="config-todo">
+          <i class='glyphicon glyphicon-cog'></i>
+        </button>
+
+      {{/admin}}
       <button type='button' 
         class='btn btn-box-tool view-trash' 
         title="{{#if list_delete}}Empty{{else}}View{{/if}} trash" 
