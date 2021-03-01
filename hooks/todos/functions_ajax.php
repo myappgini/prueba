@@ -23,6 +23,7 @@ $data = [
     'pr' => Request::val('preserve', false)=== "true" ? true : false, //preserve task in my list
     'du' => Request::val('due', false), //due task
     'sr' => Request::val('sort_array', false), // array to new sort
+    'pg' => Request::val('progress',false)//progress current task
 ];
 
 header('Content-Type: application/json; charset=utf-8');
@@ -40,6 +41,7 @@ if ($cmd) {
             // no break
         case 'get-todo':
             $tasks['list_delete'] = false;
+            $tasks += detail_options();
             $html = $handlebars->render('todos', $tasks);
             echo $html;
             break;
@@ -108,6 +110,12 @@ if ($cmd) {
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
+        case 'set-progress':
+            $tasks['tasks'][$data['ix']]['progress']= $data['pg'];
+            $tasks['tasks'][$data['ix']]['details'][]=add_msg("Set task progress to: ".$data['pg']);
+            $res = update_data($data, $tasks);
+            echo 'edited: '. $res;
+            break;
         case 'get-values':
             $res['length'] = is_null($tasks['length']) ? 0 : $tasks['length'];
             $res['deleted'] = is_null($tasks['deleted']) ? 0 : $tasks['deleted'];
@@ -130,6 +138,7 @@ if ($cmd) {
             $task['details']=array_reverse($task['details']);
 
             $task += detail_options();
+            $task['progress_options']['progress_bar']['width']=$task['progress'];
             $html = $handlebars->render('detail', $task);
             echo $html;
             break;
@@ -262,117 +271,11 @@ function delete_task($data, $tasks)
 
 function add_msg($message = false)
 {
-    return $message ? ["message"=>"$message","date"=>date('Y-m-d H:i:s')] : [];
+    return $message ? ["message"=>"$message","date"=>date('Y-m-d H:i:s'),"user"=>getLoggedMemberID()] : [];
 }
 
 function detail_options()//detail modal windows options
 {
-    return [
-        //task detail modal and header options
-        'modal_header'=>[
-            "headline"=>"To-Do Task Detail",
-            "id"=>"modal-todo",
-            "size"=>"",
-            "dismiss"=>true,
-            "header_class"=>"bg-gray",
-            "body_class"=>" bg-gray todo-details",
-        ],
-        'modal_footer'=>[
-            "footer_class"=>"bg-gray",
-            "close_btn"=>[
-                "enable"=>true,
-                "text"=>"Close",
-                "color"=>"default",
-                "size"=>"xs",
-                "class"=>"",
-                "attr"=>"data-dismiss='modal'",
-                "icon"=>[
-                    "enable"=>true,
-                    "icon"=>"glyphicon glyphicon-remove",
-                ]
-            ]
-        ],
-        //task config modal and header options
-        'modal_header_config'=>[
-            "headline"=>"Admin To-Do Config",
-            "id"=>"modal-todo",
-            "size"=>"",
-            "dismiss"=>true,
-            "header_class"=>"bg-gray",
-            "body_class"=>" bg-gray todo-config",
-        ],
-        'modal_footer_config'=>[
-            "footer_class"=>"bg-gray",
-            "close_btn"=>[
-                "enable"=>true,
-                "text"=>"Close",
-                "color"=>"default",
-                "size"=>"xs",
-                "class"=>"",
-                "attr"=>"data-dismiss='modal'",
-                "icon"=>[
-                    "enable"=>true,
-                    "icon"=>"glyphicon glyphicon-remove",
-                ]
-            ]
-        ],
-        //send task box options
-        'send_box_options'=>[
-            "headline"=>"Send Task to user",
-            "color"=>"success",
-            "solid"=>false,
-            "with-border"=>false,
-            "class"=>"",
-            "attr"=>"",
-            "box-tool"=>[
-                "enable"=>false,
-                "collapsable"=>true,
-                "removable"=>true,
-            ],
-        ],
-        //send taks button options
-        'send_options'=>[
-            "send_btn"=>[
-                "enable"=>true,
-                "text"=>"Send",
-                "color"=>"primary",
-                "size"=>"xs",
-                "class"=>"send-taks-user pull-right",
-                "attr"=>"data-cmd='send-task-user'",
-                "icon"=>[
-                    "enable"=>true,
-                    "icon"=>"glyphicon glyphicon-send",
-                ],
-            ],
-        ],
-        //details task box options
-        'due_box_options'=>[
-            "headline"=>"Due Task",
-            "color"=>"warning",
-            "solid"=>false,
-            "with-border"=>false,
-            "class"=>"",
-            "attr"=>"",
-            "box-tool"=>[
-                "enable"=>false,
-                "collapsable"=>true,
-                "removable"=>false,
-            ],
-        ],
-        //set due taks button options
-        'due_options'=>[
-            "set_due_btn"=>[
-                "enable"=>true,
-                "text"=>"Set due",
-                "color"=>"primary",
-                "size"=>"xs",
-                "class"=>"set-due pull-right",
-                "attr"=>"data-cmd='set-due'",
-                "icon"=>[
-                    "enable"=>true,
-                    "icon"=>"glyphicon glyphicon-time",
-                ],
-            ],
-        ],
-    ];
+    include ("templates/options/options.php");
+    return $settings;
 }

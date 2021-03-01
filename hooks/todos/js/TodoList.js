@@ -50,6 +50,9 @@ $j('body').on('click', '.todo-dropdown-content, .view-trash, .back-todos', funct
     });
     moment_date('.due-tag');
     get_values();
+    $j('.text.task-text').each(function(){
+      $j(this).html(urlify($j(this).text()));
+    })
   })
   $li.hasClass('open') ? true : $li.toggleClass('open');
 })
@@ -109,7 +112,8 @@ $j('body').on('click focusout', '.task-text, .input-edit-task', function () {
   let tb = $li.find('input.input-edit-task');
   if (data.cmd === undefined) return
   if (tb.length) {
-    $this.text(tb.val()); //remove text box & put its current value as text to the div
+    text = urlify(tb.val());//verificar si hay url
+    $this.html(text); //remove text box & put its current value as text to the div
     data.newtext = tb.val(),
       ajax_todo(data).done(function (res) {
         console.log(res)
@@ -120,6 +124,10 @@ $j('body').on('click focusout', '.task-text, .input-edit-task', function () {
     tb.focus(); //put text box on focus
   }
 });
+
+$j('body').on('click','.auto-link', function (e) {
+  e.stopPropagation();
+})
 
 $j(document).keyup(function (e) {
   if ($j(".input-edit-task").is(":focus") && (e.keyCode == 13)) {
@@ -150,7 +158,7 @@ $j('body').on('click', '.todo-task-detail', function () {
         close: 'glyphicon glyphicon-ok'
       },
       format: AppGini.datetimeFormat('dt'),
-      locale: 'es'
+      locale: 'en'
     });
     moment_date('.detail-task-time');
   })
@@ -176,10 +184,25 @@ $j('body').on('click', '.send-taks-user', function () {
 //* set due
 $j('body').on('click', '.set-due', function () {
   [$this, $li, data] = this_obj(this);
-  const due = $li.find('input#due-task');
-  data.due = due.val();
+  const val = $li.find('input#due-task');
+  data.due = val.val();
   ajax_todo(data).done(function (res) {
     console.log(res);
+    get_values();
+  })
+});
+
+//* set progress
+$j('body').on('click', '.set-progress', function () {
+  [$this, $li, data] = this_obj(this);
+  const val = $li.find('input#progress-task').val();
+  data.progress = val;
+  ajax_todo(data).done(function (res) {
+    console.log(res);
+    $j('.progress-bar.task-bar').css('width', `${val}%`).attr('aria-valuenow', val);
+    task_li = $j('.todo-list').find(`[data-ix='${data.ix}']`);
+    task_bar= task_li.find('.progress');
+    task_bar.css('width', `${val}%`).attr('aria-valuenow', val);
     get_values();
   })
 });
@@ -190,9 +213,10 @@ function get_values() {
   }).done(function (res) {
     let data = JSON.parse(res);
     console.log('update values');
-    $j('.label-tasks').text(`${data.completed}/${data.listed}`);
+    const val = (data.completed/data.listed*100) || 0;
+    $j('.label-tasks').text(`${val.toFixed(1)}%`);
     $j('.label-trash').text(`${data.deleted}`);
-    $j('.progress-bar').css('width', `${data.completed/data.listed*100}%`).attr('aria-valuenow', data.completed / data.listed);
+    $j('.progress-bar.todos-bar').css('width', `${val.toFixed(2)}%`).attr('aria-valuenow', val);
   })
 }
 
@@ -236,9 +260,7 @@ function moment_date(selector) {
   });
 };
 
-/**
- * resize height modals windows
- */
+// * resize height modals windows
 function resizeModal(mod) {
   mod.on('shown.bs.modal', function () {
     var wh = $j(window).height(),
@@ -250,7 +272,16 @@ function resizeModal(mod) {
     });
   })
 }
-//122---115---133--145---150---151---149---144---138---141---144---132---after add detail function 182---225 end?---240
+
+//* check is exist an url in text and convert it in a llink
+function urlify(text) {
+  var urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, function(url) {
+    return '<a class="auto-link"  href="' + url + '">' + url + '</a>';
+  })
+}
+
+//122---115---133--145---150---151---149---144---138---141---144---132---after add detail function 182---225 end?---240---280
 const tasks = { //example
   "tasks": {
     "602705f9a348a": {
