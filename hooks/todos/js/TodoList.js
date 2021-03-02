@@ -67,7 +67,6 @@ $j("body").on("sortstop", ".todo-list", function (event, ui) {
   ajax_todo(data).done(function (res){
     console.log(res);
   })
-  
 });
 
 $j('body').on('click', '.close-remove', function () {
@@ -82,6 +81,7 @@ $j('body').on('click', '.todo-task-check', function () {
     console.log(res);
     data.complete ? $li.addClass('done') : $li.removeClass('done');
     get_values();
+    refreshBar(data.ix);
   })
 });
 
@@ -89,6 +89,7 @@ $j('body').on('click', '.todo-task-check', function () {
 $j('body').on('click', '.add-todo-task', function () {
   [$this, $li, data] = this_obj(this);
   data.task = $j('.task-to-add').val()
+  if (data.task ==="") return;
   ajax_todo(data).done(function (res) {
     $j('.todo-list').append(res);
     get_values()
@@ -125,6 +126,7 @@ $j('body').on('click focusout', '.task-text, .input-edit-task', function () {
   }
 });
 
+//* click on link
 $j('body').on('click','.auto-link', function (e) {
   e.stopPropagation();
 })
@@ -160,7 +162,9 @@ $j('body').on('click', '.todo-task-detail', function () {
       format: AppGini.datetimeFormat('dt'),
       locale: 'en'
     });
-    moment_date('.detail-task-time');
+    $j('.text.task-text, .message-timeline').each(function(){
+      $j(this).html(urlify($j(this).text()));
+    })
   })
 });
 
@@ -200,12 +204,22 @@ $j('body').on('click', '.set-progress', function () {
   ajax_todo(data).done(function (res) {
     console.log(res);
     $j('.progress-bar.task-bar').css('width', `${val}%`).attr('aria-valuenow', val);
-    task_li = $j('.todo-list').find(`[data-ix='${data.ix}']`);
-    task_bar= task_li.find('.progress');
-    task_bar.css('width', `${val}%`).attr('aria-valuenow', val);
+    refreshBar(data.ix);
     get_values();
   })
 });
+
+function refreshBar(ix=false){
+  if (!ix) return;
+  data.ix= ix;
+  data.cmd='get-progress';
+  ajax_todo(data).done(function(res){
+    val = parseInt(res) || 0;
+    task_li = $j('.todo-list').find(`[data-ix='${ix}']`);
+    task_bar= task_li.find('.progress-bar');
+    task_bar.css('width', `${val}%`).attr('aria-valuenow', val);
+  })
+}
 
 function get_values() {
   ajax_todo({
@@ -213,7 +227,7 @@ function get_values() {
   }).done(function (res) {
     let data = JSON.parse(res);
     console.log('update values');
-    const val = (data.completed/data.listed*100) || 0;
+    const val = ((data.progress)/data.listed*100) || 0;
     $j('.label-tasks').text(`${val.toFixed(1)}%`);
     $j('.label-trash').text(`${data.deleted}`);
     $j('.progress-bar.todos-bar').css('width', `${val.toFixed(2)}%`).attr('aria-valuenow', val);

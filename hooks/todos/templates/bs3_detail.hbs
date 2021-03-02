@@ -6,7 +6,9 @@
 
 {{> due_task}}
 
-{{> progress_task}}
+{{#unless complete }}
+    {{> progress_task}}
+{{/unless}}
 
 {{> details_task}}
 

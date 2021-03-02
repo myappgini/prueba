@@ -98,7 +98,15 @@ if ($cmd) {
             echo 'edited: '. $res;
             break;
         case 'check-task':
-            $ok = $data['ok'] === "true" ? true : false;
+            $ok = $data['ok'] === "true" ;
+            if ($ok){
+                if ($tasks['tasks'][$data['ix']]['progress']<100) {
+                    $tasks['tasks'][$data['ix']]['old_progress']=$tasks['tasks'][$data['ix']]['progress'];
+                }
+                $tasks['tasks'][$data['ix']]['progress']=100;
+            }else{
+                $tasks['tasks'][$data['ix']]['progress']=$tasks['tasks'][$data['ix']]['old_progress'];
+            }
             $tasks['tasks'][$data['ix']]['complete']=$ok;
             $tasks['tasks'][$data['ix']]['details'][]=add_msg($ok ? "Task marked as completed" : "Task marked as uncompleted");
             $res = update_data($data, $tasks);
@@ -121,7 +129,11 @@ if ($cmd) {
             $res['deleted'] = is_null($tasks['deleted']) ? 0 : $tasks['deleted'];
             $res['listed'] = is_null($tasks['listed']) ? 0 : $tasks['listed'];
             $res['completed'] = is_null($tasks['completed']) ? 0 : $tasks['completed'];
+            $res['progress'] = is_null($tasks['progress']) ? 0 : $tasks['progress'];
             echo json_encode($res);
+            break;
+        case 'get-progress':
+            echo $tasks['tasks'][$data['ix']]['progress'];
             break;
         case 'add-task':
             if (!$data['tk']) {
@@ -232,11 +244,15 @@ function update_data(&$data, $set)
     }
     $del = count($set['deleted_tasks']);
     $completed = array_value_recursive_count('complete', true, $set['tasks']);
+    $progress_values = array_column($set['tasks'],'progress');
+    $progress_sum = array_sum(array_map('porcentual',$progress_values));
+
     $elements=count($set['tasks']);
     $set['length']=$elements + $del;
     $set['deleted']=$del;
     $set['listed']=$elements;
     $set['completed']=$completed;
+    $set['progress']=$progress_sum;
     $set = "`{$data['fn']}`='" . json_encode($set) . "'";
     $sql = "UPDATE `{$data['tn']}` SET {$set} WHERE {$where}";
     $res = sql($sql, $eo);
@@ -245,6 +261,9 @@ function update_data(&$data, $set)
     $data['errors'] = $errors;
 
     return $res;
+}
+function porcentual($v){
+    return ($v/100);
 }
 function array_value_recursive_count($key, $value, array $arr)
 {
