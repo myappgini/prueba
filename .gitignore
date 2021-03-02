@@ -6,3 +6,4 @@ hooks/multipleUpload.zip
 hooks/multipleUpload/templates/trello.html
 config.php
 setup.md5
+hooks/todos/test.php
