@@ -99,27 +99,8 @@
 	}
 
 	function products_before_update(&$data, $memberInfo, &$args) {
-
-		$notChanges=TRUE;
-		include ('field_permission/script.php');//simple matriz de configuracón
-		if (isset($setting_permissions['products'])){
-			$fields_permission = array_column($setting_permissions['products'],"tn");
-			$fields_table = get_table_fields('products'); //obtienen todos los nombre de campor de la tabla
-			foreach ($fields_table as $fn => $value) {
-				//verifica si unos de los campos está en la matriz de configuracion
-				if (in_array($fn,$fields_permission)){
-					//busca en los grupos bloqueados
-					$groups_diabled = $setting_permissions['products'][$fn]['groups_disabled'] ;
-					$current_group = $memberInfo["group"];
-					if (in_array($current_group,$groups_diabled)){
-						$old_val = sqlValue("SELECT {$fn} FROM products WHERE id = '{$data['selectedID']}' ");
-						//compara el campo actual con el campo encontrado si son distintos termina y cancela UPDATE
-						$notChanges = $old_val === $data[$fn];
-						if (!$notChanges) break;
-					}
-				}
-			}
-		}
+		include ('field_permission/script.php');
+		$notChanges = update_fields_permission('products',$memberInfo);
 		return  $notChanges;
 		//return  TRUE;
 	}
@@ -150,32 +131,9 @@
 
 	function products_dv($selectedID, $memberInfo, &$html, &$args) {
 		include ('field_permission/script.php');
-		if (isset($setting_permissions['products'])){
 
-			$fields_permission = array_column($setting_permissions['products'],"fn");
-			$fields_table = get_table_fields('products');
-			foreach ($fields_table as $fn => $value) {
-				if (in_array($fn,$fields_permission)){
-					$groups_diabled = $setting_permissions['products'][$fn]['groups_disabled'] ;
-					$current_group = $memberInfo["group"];
-					if (in_array($current_group,$groups_diabled)){
-						$bloqued[]="#{$fn}";
-					}
-				}
-			}
-			$bloqued = implode($bloqued,", ");
-			ob_start;
-			?>
-				<script>
-					$j(function () {
-						$j('<?php echo $bloqued; ?>').attr('readonly','true');
-					})
-				</script>
-			<?php
-			$h=ob_get_contents();
-			ob_end_clean(); 
-			$html .= $h;
-		}
+
+			$html .= dv_field_permissions('products',$memberInfo);
 	}
 
 	function products_csv($query, $memberInfo, &$args) {
