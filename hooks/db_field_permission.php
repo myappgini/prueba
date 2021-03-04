@@ -7,6 +7,10 @@ include("hooks/permissions/field_permission_tmp.php");
 	// For help on using hooks, please refer to https://bigprof.com/appgini/help/working-with-generated-web-database-application/hooks
 
 	function db_field_permission_init(&$options, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-03-04 10:40:51 */
+		$_SESSION ['tablenam'] = $options->TableName; $_SESSION ['tableID'] = $options->PrimaryKey;
+		/* End of Audit Log for AppGini code */
+
 		fill_tmp_tables_fields();
 
 		return TRUE;
@@ -82,26 +86,46 @@ include("hooks/permissions/field_permission_tmp.php");
 	}
 
 	function db_field_permission_after_insert($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-03-04 10:40:51 */
+		table_after_change($_SESSION, $memberInfo, $data, 'INSERTION');
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function db_field_permission_before_update(&$data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-03-04 10:40:51 */
+		table_before_change($_SESSION, $data['selectedID']);
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function db_field_permission_after_update($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-03-04 10:40:51 */
+		table_after_change($_SESSION, $memberInfo, $data, 'UPDATE');
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function db_field_permission_before_delete($selectedID, &$skipChecks, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-03-04 10:40:51 */
+		table_before_change($_SESSION, $selectedID);
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function db_field_permission_after_delete($selectedID, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-03-04 10:40:51 */
+		table_after_change($_SESSION, $memberInfo, $selectedID, 'DELETION');
+		/* End of Audit Log for AppGini code */
+
 
 	}
 
