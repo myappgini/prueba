@@ -8,9 +8,9 @@ doc_ready(function () {
 });
 
 function doc_ready(fn) {
-if (document.readyState === "complete" || document.readyState === "interactive") {
-    setTimeout(fn, 2000);
-} else {
-    document.addEventListener("DOMContentLoaded", fn);
-}
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        setTimeout(fn, 2000);
+    } else {
+        document.addEventListener("DOMContentLoaded", fn);
+    }
 }    

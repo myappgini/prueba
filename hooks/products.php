@@ -99,6 +99,10 @@
 	}
 
 	function products_before_update(&$data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-03-04 10:40:51 */
+		table_before_change($_SESSION, $data['selectedID']);
+		/* End of Audit Log for AppGini code */
+
 		include ('field_permission/script.php');
 		$notChanges = update_fields_permission('products',$memberInfo);
 		return  $notChanges;
