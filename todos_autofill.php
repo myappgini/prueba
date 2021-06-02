@@ -9,7 +9,7 @@
 
 	header('Content-type: text/javascript; charset=' . datalist_db_encoding);
 
-	$table_perms = getTablePermissions('db_field_permission');
+	$table_perms = getTablePermissions('todos');
 	if(!$table_perms['access']) die('// Access denied!');
 
 	$mfk = $_GET['mfk'];

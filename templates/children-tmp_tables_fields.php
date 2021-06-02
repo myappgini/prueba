@@ -63,7 +63,7 @@
 							childTable: param.ChildTable,
 							childId: localStorage.getItem(param.ChildTable + '_last_added_id')
 						});
-						localStorage.clear(param.ChildTable + '_last_added_id');
+						localStorage.removeItem(param.ChildTable + '_last_added_id');
 						<?php echo $current_table; ?>GetChildrenRecordsList({ Verb: 'reload' });
 						AppGini.scrollTo('children-tabs');
 					},
@@ -157,7 +157,7 @@
 							<?php } ?>
 						<?php } ?>
 
-						<td class="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][0]}"; ?>" id="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][0]}-" . html_attr($record[$config['child-primary-key-index']]); ?>"><?php echo safe_html($record[0]); ?></td>
+						<td class="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][0]}"; ?> text-left" id="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][0]}-" . html_attr($record[$config['child-primary-key-index']]); ?>"><?php echo safe_html($record[0]); ?></td>
 					</tr>
 					<?php } ?>
 				</tbody>

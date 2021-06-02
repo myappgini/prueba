@@ -1,0 +1,11 @@
+<!-- Edit this file to change the layout of each record in the table view -->
+<!-- To disable clicking of a field, remove the  and  formatters around it-->
+
+<!-- If you wish to hide the table view header that contains the column titles, -->
+<!-- add the following to the db_field_permission_init() hook (in hooks/db_field_permission.php file) -->
+<!--     $options->ShowTableHeader = 0;     -->
+
+		<td id="db_field_permission-ID_field_permissions-<%%VALUE(ID_field_permissions)%%>" class="db_field_permission-ID_field_permissions text-left"><%%VALUE(ID_field_permissions)%%></td>
+		<td id="db_field_permission-groupID-<%%VALUE(ID_field_permissions)%%>" class="db_field_permission-groupID text-left"><%%VALUE(groupID)%%></td>
+		<td id="db_field_permission-table_field-<%%VALUE(ID_field_permissions)%%>" class="db_field_permission-table_field text-left"><%%VALUE(table_field)%%></td>
+		<td id="db_field_permission-fieldstate-<%%VALUE(ID_field_permissions)%%>" class="db_field_permission-fieldstate text-left"><%%VALUE(fieldstate)%%></td>

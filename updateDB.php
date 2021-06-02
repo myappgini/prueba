@@ -59,10 +59,7 @@
 				`table_field` VARCHAR(200) NULL,
 				`fieldstate` VARCHAR(50) NOT NULL
 			) CHARSET utf8",
-			$silent, [
-				" ALTER TABLE `db_field_permission` CHANGE `fieldstate` `fieldstate` VARCHAR(40) NOT NULL ",
-				" ALTER TABLE `db_field_permission` CHANGE `fieldstate` `fieldstate` VARCHAR(50) NOT NULL ",
-			]
+			$silent
 		);
 		setupIndexes('db_field_permission', ['groupID','table_field',]);
 
@@ -72,9 +69,7 @@
 				`table_filed` VARCHAR(200) NOT NULL,
 				PRIMARY KEY (`table_filed`)
 			) CHARSET utf8",
-			$silent, [
-				" ALTER TABLE `tmp_tables_fields` CHANGE `table_filed` `table_filed` VARCHAR(200) NOT NULL ",
-			]
+			$silent
 		);
 
 		setupTable(
@@ -87,15 +82,19 @@
 				`allowSignup` VARCHAR(50) NULL,
 				`needsApproval` VARCHAR(50) NULL
 			) CHARSET utf8",
-			$silent, [
-				"ALTER TABLE `view_mebership_groups` RENAME `view_membership_groups`",
-				"UPDATE `membership_userrecords` SET `tableName`='view_membership_groups' WHERE `tableName`='view_mebership_groups'",
-				"UPDATE `membership_userpermissions` SET `tableName`='view_membership_groups' WHERE `tableName`='view_mebership_groups'",
-				"UPDATE `membership_grouppermissions` SET `tableName`='view_membership_groups' WHERE `tableName`='view_mebership_groups'",
-				" ALTER TABLE `view_membership_groups` CHANGE `name` `name` VARCHAR(50) NULL ",
-				" ALTER TABLE `view_membership_groups` CHANGE `allowSignup` `allowSignup` VARCHAR(50) NULL ",
-				" ALTER TABLE `view_membership_groups` CHANGE `needsApproval` `needsApproval` VARCHAR(50) NULL ",
-			]
+			$silent
+		);
+
+		setupTable(
+			'todos', " 
+			CREATE TABLE IF NOT EXISTS `todos` ( 
+				`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+				PRIMARY KEY (`id`),
+				`tarea` TEXT NULL,
+				`dateInit` DATE NULL,
+				`dateEnd` DATE NULL
+			) CHARSET utf8",
+			$silent
 		);
 
 

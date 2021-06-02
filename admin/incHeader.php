@@ -14,6 +14,7 @@
 		<link id="browser_favicon" rel="shortcut icon" href="<?php echo PREPEND_PATH; ?>resources/table_icons/administrator.png">
 
 		<link rel="stylesheet" href="<?php echo PREPEND_PATH; ?>resources/initializr/css/bootstrap.css">
+		<link rel="stylesheet" href="<?php echo PREPEND_PATH; ?>resources/initializr/css/rtl.css">
 		<link rel="stylesheet" href="<?php echo PREPEND_PATH; ?>dynamic.css">
 
 		<!--[if lt IE 9]>
@@ -159,7 +160,7 @@
 		</style>
 	</head>
 	<body>
-	<div class="admin-area container theme-bootstrap theme-compact">
+	<div class="admin-area container theme-bootstrap theme-rtl theme-compact">
 
 		<!-- top navbar -->
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">

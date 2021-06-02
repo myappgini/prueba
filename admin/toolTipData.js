@@ -119,6 +119,24 @@ view_membership_groups_delete1Tip=["",spacer+"This option allows each member of 
 view_membership_groups_delete2Tip=["",spacer+"This option allows each member of the group to delete any record owned by any member of the group in the 'View mebership group' table."];
 view_membership_groups_delete3Tip=["",spacer+"This option allows each member of the group to delete any records in the 'View mebership group' table."];
 
+// todos table
+todos_addTip=["",spacer+"This option allows all members of the group to add records to the 'Todos' table. A member who adds a record to the table becomes the 'owner' of that record."];
+
+todos_view0Tip=["",spacer+"This option prohibits all members of the group from viewing any record in the 'Todos' table."];
+todos_view1Tip=["",spacer+"This option allows each member of the group to view only his own records in the 'Todos' table."];
+todos_view2Tip=["",spacer+"This option allows each member of the group to view any record owned by any member of the group in the 'Todos' table."];
+todos_view3Tip=["",spacer+"This option allows each member of the group to view all records in the 'Todos' table."];
+
+todos_edit0Tip=["",spacer+"This option prohibits all members of the group from modifying any record in the 'Todos' table."];
+todos_edit1Tip=["",spacer+"This option allows each member of the group to edit only his own records in the 'Todos' table."];
+todos_edit2Tip=["",spacer+"This option allows each member of the group to edit any record owned by any member of the group in the 'Todos' table."];
+todos_edit3Tip=["",spacer+"This option allows each member of the group to edit any records in the 'Todos' table, regardless of their owner."];
+
+todos_delete0Tip=["",spacer+"This option prohibits all members of the group from deleting any record in the 'Todos' table."];
+todos_delete1Tip=["",spacer+"This option allows each member of the group to delete only his own records in the 'Todos' table."];
+todos_delete2Tip=["",spacer+"This option allows each member of the group to delete any record owned by any member of the group in the 'Todos' table."];
+todos_delete3Tip=["",spacer+"This option allows each member of the group to delete any records in the 'Todos' table."];
+
 /*
 	Style syntax:
 	-------------

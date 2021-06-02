@@ -37,6 +37,12 @@
 
 			return $data;
 		},
+		'todos' => function($data, $options = []) {
+			if(isset($data['dateInit'])) $data['dateInit'] = guessMySQLDateTime($data['dateInit']);
+			if(isset($data['dateEnd'])) $data['dateEnd'] = guessMySQLDateTime($data['dateEnd']);
+
+			return $data;
+		},
 	];
 
 	// accept a record as an assoc array, return a boolean indicating whether to import or skip record
@@ -47,6 +53,7 @@
 		'db_field_permission' => function($data, $options = []) { return true; },
 		'tmp_tables_fields' => function($data, $options = []) { return true; },
 		'view_membership_groups' => function($data, $options = []) { return true; },
+		'todos' => function($data, $options = []) { return true; },
 	];
 
 	/*

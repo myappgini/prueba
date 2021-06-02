@@ -1,11 +1,11 @@
-<!-- To change the layout of the detail view form, we recommend using JS code in hooks/salary-dv.js rather than editing this file -->
+<!-- To change the layout of the detail view form, we recommend using JS code in hooks/todos-dv.js rather than editing this file -->
 
 <div id="detail-view"></div>
 <div class="panel-heading"><h3 class="panel-title"><strong><%%DETAIL_VIEW_TITLE%%></strong></h3></div>
 
-<div id="salary_dv_container-loading" class="text-center text-info text-bold vspacer-lg"><i class="glyphicon glyphicon-refresh loop-rotate"></i> <%%TRANSLATION(Loading ...)%%></div>
+<div id="todos_dv_container-loading" class="text-center text-info text-bold vspacer-lg"><i class="glyphicon glyphicon-refresh loop-rotate"></i> <%%TRANSLATION(Loading ...)%%></div>
 
-<div class="panel-body hidden" id="salary_dv_container">
+<div class="panel-body hidden" id="todos_dv_container">
 	<!-- child links -->
 	<div class="row vspacer-md">
 		<div class="col-xs-12 children-links">
@@ -16,11 +16,11 @@
 
 	<div class="row">
 		<!-- form inputs -->
-		<div class="col-md-8 col-lg-10" id="salary_dv_form">
+		<div class="col-md-8 col-lg-10" id="todos_dv_form">
 			<fieldset class="form-horizontal">
 
 				<!-- Field: ID -->
-				<div class="form-group salary-id">
+				<div class="form-group todos-id">
 					<hr class="hidden-md hidden-lg">
 					<label class="control-label col-lg-3" for="id">ID</label>
 					<div class="col-lg-9">
@@ -28,57 +28,30 @@
 					</div>
 				</div>
 
-				<!-- Field: Contacto -->
-				<div class="form-group salary-contacto">
+				<!-- Field: Tareas -->
+				<div class="form-group todos-tarea">
 					<hr class="hidden-md hidden-lg">
-					<label class="control-label col-lg-3" for="contacto" data-parent_link="view_parent_modal">Contacto</label>
+					<label class="control-label col-lg-3" for="tarea">Tareas</label>
 					<div class="col-lg-9">
-						<div class="form-control-static" style="white-space: nowrap; overflow-x: hidden;"><%%COMBO(contacto)%%><%%PLINK(contacto)%%><%%ADDNEW(contacto)%%><span id="contactoLoading"></span></div>
+						<textarea class="form-control" name="tarea" id="tarea" rows=" 5"><%%VALUE(tarea)%%></textarea>
 					</div>
 				</div>
 
-				<!-- Field: Monto -->
-				<div class="form-group salary-monto">
+				<!-- Field: Date Init -->
+				<div class="form-group todos-dateInit">
 					<hr class="hidden-md hidden-lg">
-					<label class="control-label col-lg-3" for="monto">Monto</label>
+					<label class="control-label col-lg-3" for="dateInit-dd">Date Init</label>
 					<div class="col-lg-9">
-						<input maxlength="40" type="text" class="form-control" name="monto" id="monto" value="<%%VALUE(monto)%%>">
+						<%%COMBO(dateInit)%%>
 					</div>
 				</div>
 
-				<!-- Field: Mes -->
-				<div class="form-group salary-mes">
+				<!-- Field: Date End -->
+				<div class="form-group todos-dateEnd">
 					<hr class="hidden-md hidden-lg">
-					<label class="control-label col-lg-3" for="mes">Mes</label>
+					<label class="control-label col-lg-3" for="dateEnd-dd">Date End</label>
 					<div class="col-lg-9">
-						<input maxlength="40" type="text" class="form-control" name="mes" id="mes" value="<%%VALUE(mes)%%>">
-					</div>
-				</div>
-
-				<!-- Field: Nombre -->
-				<div class="form-group salary-nombre">
-					<hr class="hidden-md hidden-lg">
-					<label class="control-label col-lg-3">Nombre</label>
-					<div class="col-lg-9">
-						<div class="form-control-static" id="nombre"></div>
-					</div>
-				</div>
-
-				<!-- Field: Rango -->
-				<div class="form-group salary-rango">
-					<hr class="hidden-md hidden-lg">
-					<label class="control-label col-lg-3">Rango</label>
-					<div class="col-lg-9">
-						<div class="form-control-static" id="rango"></div>
-					</div>
-				</div>
-
-				<!-- Field: Proxima fecha de pago -->
-				<div class="form-group salary-date">
-					<hr class="hidden-md hidden-lg">
-					<label class="control-label col-lg-3">Proxima fecha de pago</label>
-					<div class="col-lg-9">
-						<div class="form-control-static" id="date"></div>
+						<%%COMBO(dateEnd)%%>
 					</div>
 				</div>
 
@@ -87,7 +60,7 @@
 
 		<!-- DV action buttons -->
 		<hr class="hidden-md hidden-lg">
-		<div class="col-md-4 col-lg-2" id="salary_dv_action_buttons">
+		<div class="col-md-4 col-lg-2" id="todos_dv_action_buttons">
 			<div class="btn-toolbar">
 				<div class="btn-group-vertical btn-group-lg" style="width: 100%;">
 					<%%UPDATE_BUTTON%%>
@@ -123,25 +96,9 @@
 			/* enable DV action buttons to float on scrolling down the form */
 			enable_dvab_floating();
 
-			if(!$j('.table_view').length || $j('[name=SelectedID]').val().length) {
-				AppGini.once({
-					condition: function() {
-						return $j('.form-group.salary-contacto')
-									.find('.nicEdit-main, .select2-container, input[type=radio]')
-									.length > 0;
-					},
-					action: function() {
-						$j('#salary_dv_container-loading').addClass('hidden');
-						$j('#salary_dv_container').removeClass('hidden');
-						AppGini.focusFormElement('salary', 'contacto');
-					},
-					timeout:  5000,
-					doActionOnTimeout:  true
-				});
-			} else {
-				$j('#salary_dv_container-loading').addClass('hidden');
-				$j('#salary_dv_container').removeClass('hidden');
-			}
+			$j('#todos_dv_container-loading').addClass('hidden');
+			$j('#todos_dv_container').removeClass('hidden');
+			if(!$j('.table_view').length || $j('[name=SelectedID]').val().length) AppGini.focusFormElement('todos', 'tarea');
 
 			$j('form').eq(0).change(function() {
 				if($j(this).data('already_changed')) return;
@@ -171,7 +128,7 @@
 							localStorage.removeItem(pt + '_last_added_id');
 							AppGini.lookupText({
 								id: new_id,
-								table: 'salary',
+								table: 'todos',
 								field: field_id,
 								callback: function(data) {
 									$j('#' + field_id + '-container').select2('data', data, true);
@@ -231,10 +188,10 @@
 			if(!add_new_mode) {
 				$j('body').append('<div id="admin-tools-appendix"></div>');
 				$j('#admin-tools-appendix').load(
-					'ajax_admin_tools.php?table=salary&id=<%%URLVALUE(id)%%>',
+					'ajax_admin_tools.php?table=todos&id=<%%URLVALUE(id)%%>',
 					function(resp) {
 						if(!resp.length) return;
-						$j.ajax('ajax_admin_tools.php?action=get_admin_tools_js&table=salary&id=<%%URLVALUE(id)%%>');
+						$j.ajax('ajax_admin_tools.php?action=get_admin_tools_js&table=todos&id=<%%URLVALUE(id)%%>');
 					}
 				);
 			}

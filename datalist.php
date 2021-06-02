@@ -461,6 +461,8 @@ class DataList{
 
 		// TV code, only if user has view permission
 		if($this->Permissions['view']) {
+			$QueryHasCustomWhere = (strlen($this->QueryWhere) > 0);
+
 			// apply lookup filterers to the query
 			foreach($this->filterers as $filterer => $caption) {
 				if($_REQUEST['filterer_' . $filterer] != '') {
@@ -537,7 +539,7 @@ class DataList{
 								$tn = substr($tn, 0, -1);
 								$tries++;
 							}
-							if($row = @db_fetch_array($res)) {
+							if($res !== false && $row = @db_fetch_array($res)) {
 								$isDateTime = in_array($row['Type'], array('date', 'time', 'datetime'));
 								$isDate = in_array($row['Type'], ['date', 'datetime']);
 							}
@@ -568,7 +570,7 @@ class DataList{
 				}
 			}
 
-			if($WhereNeedsClosing)
+			if($WhereNeedsClosing && !$QueryHasCustomWhere)
 				$this->QueryWhere .= ")";
 
 			// set query sort
@@ -1185,7 +1187,12 @@ class DataList{
 				);
 
 				if($dvCode) {
-					$this->HTML .= "\n\t<div data-table=\"{$this->TableName}\" class=\"col-xs-12 table-{$this->TableName} detail_view {$this->DVClasses}\">{$tv_dv_separator}<div class=\"panel panel-default\">{$dvCode}</div></div>";
+					$this->HTML .= sprintf(
+						'<div data-table="%s" class="col-xs-12 table-%s detail_view %s">%s<div class="%s">%s</div></div>',
+						$this->TableName, $this->TableName, $this->DVClasses, $tv_dv_separator,
+						$dvCode == $this->translation['tableAccessDenied'] ? 'alert alert-danger' : 'panel panel-default',
+						$dvCode
+					);
 					$this->ContentType = 'detailview';
 					$dvShown = true;
 				}
@@ -1208,7 +1215,7 @@ class DataList{
 
 				// handle the case were user has no view access and has just inserted a record
 				// by redirecting to tablename_view.php (which should redirect them to insert form)
-				if(!$this->Permissions['view'] && !$dvCode && $SelectedID && isset($_REQUEST['record-added-ok'])) {
+				if(!$this->Permissions['view'] && (!$dvCode || $dvCode == $this->translation['tableAccessDenied']) && $SelectedID && isset($_REQUEST['record-added-ok'])) {
 					ob_start();
 					?><script>
 						setTimeout(function() {
@@ -1436,8 +1443,8 @@ class DataList{
 				$j('.table_view th').each(function() {
 					var th = $j(this);
 
-					/* ignore the record selector column */
-					if(th.find('#select_all_records').length > 0) return;
+					/* ignore the record selector and sum columns */
+					if(th.find('#select_all_records').length > 0 || th.hasClass('sum')) return;
 
 					var col_class = th.attr('class');
 					var label = $j.trim(th.text());
@@ -1558,6 +1565,7 @@ class DataList{
 		//$eo = ['silentErrors' => true];
 		$result = sql($tvQuery, $eo);
 		$tvRecords = [];
+		if(!$result) return $tvRecords;
 		while($row = db_fetch_array($result)) $tvRecords[] = $row;
 
 		return $tvRecords;
@@ -1591,10 +1599,12 @@ class DataList{
 		// output CSV data
 		while($row = db_fetch_row($result)) {
 			$prep = array_map(function($field) {
-				return str_replace(
-					["\r\n", "\r", "\n", '"'], 
-					[' ', ' ', ' ', '""'], 
-					strip_tags($field)
+				return strip_tags(
+					preg_replace(
+						['/<br\s*\/?>/i', '/^([=+\-@]+)/', '/[\r\n]+/', '/"/'], 
+						[' ',             '\'$1',          ' ',         '""'],
+						trim($field)
+					)
 				);
 			}, $row);
 
