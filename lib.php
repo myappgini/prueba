@@ -5,7 +5,7 @@
 
 error_reporting(E_ERROR /*| E_WARNING*/ | E_PARSE);
 
-if(!defined('datalist_db_encoding')) define('datalist_db_encoding', 'UTF-8');
+if(!defined('datalist_db_encoding')) define('datalist_db_encoding', 'Windows-1256');
 if(!defined('maxSortBy')) define('maxSortBy', 4);
 if(!defined('empty_lookup_value')) define('empty_lookup_value', '{empty_value}');
 

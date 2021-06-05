@@ -100,7 +100,7 @@
 				<tbody>
 					<?php if(is_array($records)) foreach($records as $pkValue => $record) { ?>
 					<tr data-id="<?php echo html_attr($pkValue); ?>">
-						<td class="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][0]}"; ?> text-left" id="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][0]}-" . html_attr($record[$config['child-primary-key-index']]); ?>"><?php echo safe_html($record[0]); ?></td>
+						<td class="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][0]}"; ?>" id="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][0]}-" . html_attr($record[$config['child-primary-key-index']]); ?>"><?php echo safe_html($record[0]); ?></td>
 					</tr>
 					<?php } ?>
 				</tbody>

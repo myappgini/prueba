@@ -4,7 +4,7 @@
 	// incCommon.php is included only in the admin area, so if this flag is defined, this indicates we're in admin area
 	define('ADMIN_AREA', true);
 
-	if(!defined('datalist_db_encoding')) define('datalist_db_encoding', 'UTF-8');
+	if(!defined('datalist_db_encoding')) define('datalist_db_encoding', 'Windows-1256');
 	ob_start();
 	$currDir = dirname(__FILE__);
 	include_once("{$currDir}/../settings-manager.php");

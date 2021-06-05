@@ -18,7 +18,7 @@
 				`user` VARCHAR(40) NULL,
 				`rango` VARCHAR(40) NULL,
 				`date` DATE NULL
-			) CHARSET utf8",
+			) CHARSET cp1256",
 			$silent
 		);
 
@@ -33,7 +33,7 @@
 				`nombre` INT UNSIGNED NULL,
 				`rango` INT UNSIGNED NULL,
 				`date` INT UNSIGNED NULL DEFAULT '1'
-			) CHARSET utf8",
+			) CHARSET cp1256",
 			$silent
 		);
 		setupIndexes('salary', ['contacto',]);
@@ -46,7 +46,7 @@
 				`name` VARCHAR(40) NULL,
 				`uploads` TEXT NULL,
 				`due` DATETIME NULL
-			) CHARSET utf8",
+			) CHARSET cp1256",
 			$silent
 		);
 
@@ -58,7 +58,7 @@
 				`groupID` VARCHAR(40) NULL,
 				`table_field` VARCHAR(200) NULL,
 				`fieldstate` VARCHAR(50) NOT NULL
-			) CHARSET utf8",
+			) CHARSET cp1256",
 			$silent
 		);
 		setupIndexes('db_field_permission', ['groupID','table_field',]);
@@ -68,7 +68,7 @@
 			CREATE TABLE IF NOT EXISTS `tmp_tables_fields` ( 
 				`table_filed` VARCHAR(200) NOT NULL,
 				PRIMARY KEY (`table_filed`)
-			) CHARSET utf8",
+			) CHARSET cp1256",
 			$silent
 		);
 
@@ -81,7 +81,7 @@
 				`description` TEXT NULL,
 				`allowSignup` VARCHAR(50) NULL,
 				`needsApproval` VARCHAR(50) NULL
-			) CHARSET utf8",
+			) CHARSET cp1256",
 			$silent
 		);
 
@@ -93,7 +93,7 @@
 				`tarea` TEXT NULL,
 				`dateInit` DATE NULL,
 				`dateEnd` DATE NULL
-			) CHARSET utf8",
+			) CHARSET cp1256",
 			$silent
 		);
 

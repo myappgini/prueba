@@ -137,9 +137,6 @@ jQuery(function() {
 	/* remove empty email links */
 	$j('a[href="mailto:"]').remove();
 
-	/* for RTL languages, flip *-right and *-left classes */
-	$j('.navbar-left, .navbar-right, .pull-left, .pull-right').addClass('flip');
-
 	/* Disable action buttons when form is submitted to avoid user re-submission on slow connections */
 	$j('form').eq(0).submit(function() {
 		setTimeout(function() {
