@@ -48,6 +48,10 @@
 			'contacto' => ['Contacto', '', 'table.gif', 'contacto'],
 			'salary' => ['Salary', '', 'table.gif', 'salary'],
 			'products' => ['Products', '', 'table.gif', 'None'],
+			'db_field_permission' => ['Db field permissions', '', 'table.gif', 'None'],
+			'tmp_tables_fields' => ['Tmp', '', 'table.gif', 'None'],
+			'view_membership_groups' => ['View mebership group', '', 'table.gif', 'None'],
+			'todos' => ['Todos', '', 'table.gif', 'None'],
 		];
 		if($skip_authentication || getLoggedAdmin()) return $arrTables;
 
@@ -134,7 +138,11 @@
 		$sql_fields = [
 			'contacto' => "`contacto`.`id` as 'id', `contacto`.`name` as 'name', `contacto`.`user` as 'user', `contacto`.`rango` as 'rango', if(`contacto`.`date`,date_format(`contacto`.`date`,'%d/%m/%Y'),'') as 'date'",
 			'salary' => "`salary`.`id` as 'id', IF(    CHAR_LENGTH(`contacto1`.`name`) || CHAR_LENGTH(`contacto1`.`user`), CONCAT_WS('',   `contacto1`.`name`, ' - ', `contacto1`.`user`), '') as 'contacto', `salary`.`monto` as 'monto', `salary`.`mes` as 'mes', IF(    CHAR_LENGTH(`contacto1`.`name`), CONCAT_WS('',   `contacto1`.`name`), '') as 'nombre', IF(    CHAR_LENGTH(`contacto1`.`rango`), CONCAT_WS('',   `contacto1`.`rango`), '') as 'rango', IF(    CHAR_LENGTH(if(`contacto1`.`date`,date_format(`contacto1`.`date`,'%d/%m/%Y'),'')), CONCAT_WS('',   if(`contacto1`.`date`,date_format(`contacto1`.`date`,'%d/%m/%Y'),'')), '') as 'date'",
-			'products' => "`products`.`id` as 'id', `products`.`name` as 'name', `products`.`uploads` as 'uploads'",
+			'products' => "`products`.`id` as 'id', `products`.`name` as 'name', `products`.`uploads` as 'uploads', if(`products`.`due`,date_format(`products`.`due`,'%d/%m/%Y %h:%i %p'),'') as 'due'",
+			'db_field_permission' => "`db_field_permission`.`ID_field_permissions` as 'ID_field_permissions', IF(    CHAR_LENGTH(`view_membership_groups1`.`name`), CONCAT_WS('',   `view_membership_groups1`.`name`), '') as 'groupID', IF(    CHAR_LENGTH(`tmp_tables_fields1`.`table_filed`), CONCAT_WS('',   `tmp_tables_fields1`.`table_filed`), '') as 'table_field', `db_field_permission`.`fieldstate` as 'fieldstate'",
+			'tmp_tables_fields' => "`tmp_tables_fields`.`table_filed` as 'table_filed'",
+			'view_membership_groups' => "`view_membership_groups`.`groupID` as 'groupID', `view_membership_groups`.`name` as 'name', `view_membership_groups`.`description` as 'description', `view_membership_groups`.`allowSignup` as 'allowSignup', `view_membership_groups`.`needsApproval` as 'needsApproval'",
+			'todos' => "`todos`.`id` as 'id', `todos`.`tarea` as 'tarea', if(`todos`.`dateInit`,date_format(`todos`.`dateInit`,'%d/%m/%Y'),'') as 'dateInit', if(`todos`.`dateEnd`,date_format(`todos`.`dateEnd`,'%d/%m/%Y'),'') as 'dateEnd'",
 		];
 
 		if(isset($sql_fields[$table_name])) return $sql_fields[$table_name];
@@ -149,12 +157,20 @@
 			'contacto' => "`contacto` ",
 			'salary' => "`salary` LEFT JOIN `contacto` as contacto1 ON `contacto1`.`id`=`salary`.`contacto` ",
 			'products' => "`products` ",
+			'db_field_permission' => "`db_field_permission` LEFT JOIN `view_membership_groups` as view_membership_groups1 ON `view_membership_groups1`.`groupID`=`db_field_permission`.`groupID` LEFT JOIN `tmp_tables_fields` as tmp_tables_fields1 ON `tmp_tables_fields1`.`table_filed`=`db_field_permission`.`table_field` ",
+			'tmp_tables_fields' => "`tmp_tables_fields` ",
+			'view_membership_groups' => "`view_membership_groups` ",
+			'todos' => "`todos` ",
 		];
 
 		$pkey = [
 			'contacto' => 'id',
 			'salary' => 'id',
 			'products' => 'id',
+			'db_field_permission' => 'ID_field_permissions',
+			'tmp_tables_fields' => 'table_filed',
+			'view_membership_groups' => 'groupID',
+			'todos' => 'id',
 		];
 
 		if(!isset($sql_from[$table_name])) return false;
@@ -224,6 +240,29 @@
 				'id' => '',
 				'name' => '',
 				'uploads' => '',
+				'due' => '',
+			],
+			'db_field_permission' => [
+				'ID_field_permissions' => '',
+				'groupID' => '',
+				'table_field' => '',
+				'fieldstate' => '',
+			],
+			'tmp_tables_fields' => [
+				'table_filed' => '',
+			],
+			'view_membership_groups' => [
+				'groupID' => '',
+				'name' => '',
+				'description' => '',
+				'allowSignup' => '',
+				'needsApproval' => '',
+			],
+			'todos' => [
+				'id' => '',
+				'tarea' => '',
+				'dateInit' => '1',
+				'dateEnd' => '1',
 			],
 		];
 

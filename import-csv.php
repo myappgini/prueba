@@ -19,6 +19,27 @@
 			return $data;
 		},
 		'products' => function($data, $options = []) {
+			if(isset($data['due'])) $data['due'] = guessMySQLDateTime($data['due']);
+
+			return $data;
+		},
+		'db_field_permission' => function($data, $options = []) {
+			if(isset($data['groupID'])) $data['groupID'] = pkGivenLookupText($data['groupID'], 'db_field_permission', 'groupID');
+			if(isset($data['table_field'])) $data['table_field'] = pkGivenLookupText($data['table_field'], 'db_field_permission', 'table_field');
+
+			return $data;
+		},
+		'tmp_tables_fields' => function($data, $options = []) {
+
+			return $data;
+		},
+		'view_membership_groups' => function($data, $options = []) {
+
+			return $data;
+		},
+		'todos' => function($data, $options = []) {
+			if(isset($data['dateInit'])) $data['dateInit'] = guessMySQLDateTime($data['dateInit']);
+			if(isset($data['dateEnd'])) $data['dateEnd'] = guessMySQLDateTime($data['dateEnd']);
 
 			return $data;
 		},
@@ -29,6 +50,10 @@
 		'contacto' => function($data, $options = []) { return true; },
 		'salary' => function($data, $options = []) { return true; },
 		'products' => function($data, $options = []) { return true; },
+		'db_field_permission' => function($data, $options = []) { return true; },
+		'tmp_tables_fields' => function($data, $options = []) { return true; },
+		'view_membership_groups' => function($data, $options = []) { return true; },
+		'todos' => function($data, $options = []) { return true; },
 	];
 
 	/*

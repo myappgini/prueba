@@ -1,0 +1,230 @@
+/* Widget: TODO LIST */
+.todos-content>.box {
+  margin-bottom: 1px;
+}
+.todo-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.todo-list>li {
+  border-radius: 2px;
+  padding: 10px;
+  background: #f4f4f4;
+  margin-bottom: 2px;
+  border-left: 3px solid #e6e7e8;
+  color: #444;
+}
+
+.todo-list>li:last-of-type {
+  margin-bottom: 0;
+}
+
+.todo-list>li>input[type='checkbox'] {
+  margin: 0 10px 0 5px;
+}
+
+.todo-list>li .text {
+  display: inline-block;
+  margin-left: 5px;
+  font-weight: 600;
+  width: 65%;
+}
+
+.todo-list>li .label {
+  margin-left: 10px;
+  font-size: 9px;
+}
+
+.todo-list>li .tools {
+  display: none;
+  float: right;
+  color: #dd4b39;
+}
+
+.todo-list>li .tools>.fa,
+.todo-list>li .tools>.glyphicon,
+.todo-list>li .tools>.ion {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.todo-list>li:hover .tools {
+  display: inline-block;
+}
+
+.todo-list>li.done {
+  color: #999;
+}
+
+.todo-list>li.done .text {
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
+.todo-list>li.done .label {
+  background: #d2d6de !important;
+}
+
+.todo-list .danger {
+  border-left-color: #dd4b39;
+}
+
+.todo-list .warning {
+  border-left-color: #f39c12;
+}
+
+.todo-list .info {
+  border-left-color: #00c0ef;
+}
+
+.todo-list .success {
+  border-left-color: #00a65a;
+}
+
+.todo-list .primary {
+  border-left-color: #3c8dbc;
+}
+
+.todo-list .handle {
+  display: inline-block;
+  cursor: move;
+  margin: 0 5px;
+}
+
+.label-tasks {
+  position: absolute;
+  top: -9px;
+  text-align: center;
+  font-size: 9px;
+  padding: 2px 3px;
+  line-height: 0.9;
+  border-radius: 3px;
+}
+
+.input-edit-task {
+  color: #333;
+  width: 100%;
+}
+
+/*
+ * Component: Timeline
+ * -------------------
+ */
+ .timeline {
+  position: relative;
+  margin: 0 0 30px 0;
+  padding: 0;
+  list-style: none;
+}
+.timeline:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #ddd;
+  left: 31px;
+  margin: 0;
+  border-radius: 2px;
+}
+.timeline > li {
+  position: relative;
+  margin-right: 10px;
+  margin-bottom: 15px;
+}
+.timeline > li:before,
+.timeline > li:after {
+  content: " ";
+  display: table;
+}
+.timeline > li:after {
+  clear: both;
+}
+.timeline > li > .timeline-item {
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  margin-top: 0;
+  background: #fff;
+  color: #444;
+  margin-left: 60px;
+  margin-right: 15px;
+  padding: 0;
+  position: relative;
+}
+.timeline > li > .timeline-item > .time {
+  color: #999;
+  float: right;
+  padding: 10px;
+  font-size: 12px;
+}
+.timeline > li > .timeline-item > .timeline-header {
+  margin: 0;
+  color: #555;
+  border-bottom: 1px solid #f4f4f4;
+  padding: 10px;
+  font-size: 12px;
+  line-height: 1.1;
+}
+.timeline > li > .timeline-item > .timeline-header > a {
+  font-weight: 600;
+}
+.timeline > li > .timeline-item > .timeline-body,
+.timeline > li > .timeline-item > .timeline-footer {
+  padding: 10px;
+}
+.timeline > li > .fa,
+.timeline > li > .glyphicon,
+.timeline > li > .ion {
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+  line-height: 30px;
+  position: absolute;
+  /* color: #666;
+  background: #d2d6de; */
+  border-radius: 50%;
+  text-align: center;
+  left: 18px;
+  top: 0;
+}
+.timeline > .time-label > span {
+  font-weight: 600;
+  padding: 5px;
+  display: inline-block;
+  background-color: #fff;
+  border-radius: 4px;
+}
+.timeline-inverse > li > .timeline-item {
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.timeline-inverse > li > .timeline-item > .timeline-header {
+  border-bottom-color: #ddd;
+}
+.description-task,
+.description-timeline {
+  color: #999;
+  font-size: 13px;
+}
+
+.bg-gray{
+  background: #ECF0F5;
+}
+
+.modal-body.todo-details {
+  width: 100%;
+  overflow-y: auto;
+}
+
+.dropdown-menu.todos-content>.box>.box-body{
+  min-width: 450px;
+  max-height: 350px;
+  overflow-y: auto;
+}

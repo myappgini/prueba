@@ -2,9 +2,15 @@
 	// For help on using hooks, please refer to https://bigprof.com/appgini/help/working-with-generated-web-database-application/hooks
 
 	function contacto_init(&$options, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-16 03:49:59 */
+		$_SESSION ['tablenam'] = $options->TableName; $_SESSION ['tableID'] = $options->PrimaryKey;
+		/* End of Audit Log for AppGini code */
+
+
 
 		$options->ColCaption = ['Name', 'User', 'Rango', 'Prox. Fecha Pago', ];
 
+		
 		return TRUE;
 	}
 
@@ -78,26 +84,50 @@
 	}
 
 	function contacto_after_insert($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-16 03:45:54 */
+		table_after_change($_SESSION, $memberInfo, $data, 'INSERTION');
+		/* End of Audit Log for AppGini code */
+
+
 
 		return TRUE;
 	}
 
 	function contacto_before_update(&$data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-16 04:33:59 */
+		table_before_change($_SESSION, $data['selectedID']);
+		/* End of Audit Log for AppGini code */
+
+
+
 
 		return TRUE;
 	}
 
 	function contacto_after_update($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-16 03:45:54 */
+		table_after_change($_SESSION, $memberInfo, $data, 'UPDATE');
+		/* End of Audit Log for AppGini code */
+
+
 
 		return TRUE;
 	}
 
 	function contacto_before_delete($selectedID, &$skipChecks, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-16 04:44:11 */
+		table_before_change($_SESSION, $selectedID);
+		/* End of Audit Log for AppGini code */
 
 		return TRUE;
 	}
 
 	function contacto_after_delete($selectedID, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-16 03:45:54 */
+		table_after_change($_SESSION, $memberInfo, $selectedID, 'DELETION');
+		/* End of Audit Log for AppGini code */
+
+
 
 	}
 

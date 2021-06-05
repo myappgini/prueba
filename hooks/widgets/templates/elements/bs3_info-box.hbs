@@ -1,0 +1,25 @@
+<div class="info-box {{class}}" id="{{id}}">
+  <span class="info-box-icon {{icon_class}}">
+    <i class="{{icon}}"></i>
+  </span>
+  <div class="info-box-content">
+    <span class="info-box-text">
+      {{text}}
+    </span>
+    {{#if value}}
+      <span class="info-box-number">
+        {{value}}
+      </span>
+    {{/if}}
+    {{#if value_progress}}
+      <div class="progress">
+        <div class="progress-bar" style="width: {{value_progress}}%"></div>
+      </div>
+    {{/if}}
+    {{#if description}}
+      <span class="progress-description">
+        {{description}}
+      </span>
+    {{/if}}
+  </div>
+</div>

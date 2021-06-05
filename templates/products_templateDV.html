@@ -4,6 +4,7 @@
 <div class="panel-heading"><h3 class="panel-title"><strong><%%DETAIL_VIEW_TITLE%%></strong></h3></div>
 
 <div id="products_dv_container-loading" class="text-center text-info text-bold vspacer-lg"><i class="glyphicon glyphicon-refresh loop-rotate"></i> <%%TRANSLATION(Loading ...)%%></div>
+
 <div class="panel-body hidden" id="products_dv_container">
 	<!-- child links -->
 	<div class="row vspacer-md">
@@ -33,6 +34,15 @@
 					<label class="control-label col-lg-3" for="name">Name</label>
 					<div class="col-lg-9">
 						<input maxlength="40" type="text" class="form-control" name="name" id="name" value="<%%VALUE(name)%%>">
+					</div>
+				</div>
+
+				<!-- Field: Due -->
+				<div class="form-group products-due">
+					<hr class="hidden-md hidden-lg">
+					<label class="control-label col-lg-3" for="due">Due</label>
+					<div class="col-lg-9">
+						<div class="input-group date datetimepicker"><input type="text" class="form-control" name="due" id="due" value="<%%VALUE(due)%%>"><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div>
 					</div>
 				</div>
 
@@ -73,15 +83,13 @@
 				setTimeout(AppGini.closeParentModal, 2000);
 			}
 
+
 			/* enable DV action buttons to float on scrolling down the form */
 			enable_dvab_floating();
 
-
-			setTimeout(function() {
-				$j('#products_dv_container-loading').addClass('hidden');
-				$j('#products_dv_container').removeClass('hidden');
-				AppGini.focusFormElement('products', 'name');
-			}, 1100);
+			$j('#products_dv_container-loading').addClass('hidden');
+			$j('#products_dv_container').removeClass('hidden');
+			if(!$j('.table_view').length || $j('[name=SelectedID]').val().length) AppGini.focusFormElement('products', 'name');
 
 			$j('form').eq(0).change(function() {
 				if($j(this).data('already_changed')) return;
@@ -92,7 +100,7 @@
 			$j('a[href="<%%BASE_UPLOAD_PATH%%>"]').click(function() { return false; });
 
 
-			if(!embedded_mode) {
+			if(true /* !embedded_mode */) {
 				/* add a horizontal spacer to [add new parent] buttons that don't have a spacered element before them */
 				$j('.add_new_parent').prev(':not(.hspacer-md)').next().addClass('hspacer-md');
 
@@ -108,7 +116,7 @@
 							var new_id = localStorage.getItem(pt + '_last_added_id');
 							if(new_id === null) return;
 
-							localStorage.clear(pt + '_last_added_id');
+							localStorage.removeItem(pt + '_last_added_id');
 							AppGini.lookupText({
 								id: new_id,
 								table: 'products',

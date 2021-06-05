@@ -1,6 +1,6 @@
 <?php
 if (!function_exists('getMemberInfo')) {
-    include '../lib.php';
+    include '../../lib.php';
 }
 
 /**
@@ -8,7 +8,7 @@ if (!function_exists('getMemberInfo')) {
  * @param array $settings Array varibles
  * @return array db_fetch from data result
  */
-function getDataTable(&$settings)
+function getDataTable(&$settings, $values = false)
 {
     [
         'tn' => $table_name,
@@ -17,11 +17,13 @@ function getDataTable(&$settings)
         'error' => $error,
     ] = $settings; // destructuring input array
 
-    !$table_name ? $error[] = 'need table name':false;
+    !$table_name ? ($error[] = 'need table name') : false;
     $id ? ($where = ' AND ' . whereConstruct($settings)) : ($where = '');
 
-    $table_from = get_sql_from($table_name); //AppGini internal function
-    $table_fields = get_sql_fields($table_name); //AppGini internal function
+    $id && $values ? ($where = ' WHERE '. whereConstruct($settings)) : false;
+
+    $table_from = !$values ? get_sql_from($table_name) : $table_name; //AppGini internal function
+    $table_fields = !$values ? get_sql_fields($table_name) : ' * '; //AppGini internal function
 
     $sql = "SELECT {$table_fields} FROM {$table_from}" . $where;
 
@@ -41,17 +43,17 @@ function whereConstruct($settings)
     return $key ? "`{$key}`='{$id}'" : $key;
 }
 
-//example use 3
-$settings = [
-    'tn' => 'products',
-    'id' => 2,
-    'fn' => false,
-    'debug' => true,
-    'error' => [],
-];
+// example use 3
+// $settings = [
+//     'tn' => 'products',
+//     'id' => 2,
+//     'fn' => false,
+//     'debug' => true,
+//     'error' => [],
+// ];
 
-$data = getDataTable($settings);
-echo '"$data"';
-var_dump($data);
-echo '"$settings"';
-var_dump($settings);
+// $data = getDataTable($settings);
+// echo '"$data"';
+// var_dump($data);
+// echo '"$settings"';
+// var_dump($settings);

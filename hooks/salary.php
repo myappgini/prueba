@@ -2,6 +2,10 @@
 	// For help on using hooks, please refer to https://bigprof.com/appgini/help/working-with-generated-web-database-application/hooks
 
 	function salary_init(&$options, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		$_SESSION ['tablenam'] = $options->TableName; $_SESSION ['tableID'] = $options->PrimaryKey; $tableID = $_SESSION ['tableID'];
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
@@ -76,26 +80,50 @@
 	}
 
 	function salary_after_insert($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_after_change($_SESSION, $memberInfo, $data, 'INSERTION');
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function salary_before_update(&$data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_before_change($_SESSION, $data['selectedID']);
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function salary_after_update($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_after_change($_SESSION, $memberInfo, $data, 'UPDATE');
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function salary_before_delete($selectedID, &$skipChecks, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_before_change($_SESSION, $selectedID);
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function salary_after_delete($selectedID, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-16 03:18:47 */
+		table_after_change($_SESSION, $memberInfo, $selectedID, 'DELETION');
+		/* End of Audit Log for AppGini code */
+
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_after_change($_SESSION, $memberInfo, $data, 'DELETION');
+		/* End of Audit Log for AppGini code */
+
 
 	}
 

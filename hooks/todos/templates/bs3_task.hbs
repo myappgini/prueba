@@ -1,0 +1,47 @@
+  <li data-ix = "{{uid}}" class="{{#if complete}}done{{else}}{{#if from}}warning{{else}}success{{/if}}{{/if}} {{#if from}}warning{{/if}} task-content">
+    <span class='handle'>
+      <i class='glyphicon glyphicon-th'></i>
+    </span>
+    <input  type='checkbox' 
+            class="todo-task-check" 
+            data-cmd="check-task" {{#if complete}}checked{{/if}}/>
+    <span class='text {{#if deleted}}delted{{else}}task{{/if}}-text' data-cmd="edit-task">
+      {{task}} 
+    </span>
+    <div class='tools'>
+      {{#if deleted}}
+        <i  class='glyphicon glyphicon-repeat todo-task-recover' 
+            data-cmd="recover-task" 
+            title="Recover task"></i>
+      {{else}}
+        <i  class='glyphicon glyphicon-edit todo-task-detail' 
+            data-cmd="task-detail" 
+            title="Open task detail"></i>
+      {{/if}}
+      <i  class='glyphicon glyphicon-trash todo-task-delete' 
+          data-cmd="{{#if deleted}}remove{{else}}delete{{/if}}-task" 
+          title="{{#if deleted}}Remove{{else}}Delete{{/if}} task">
+      </i>
+    </div>
+    <div class="todo-tags row">
+      <div class="col-sm-6 left-side">
+        {{> description}}
+        {{> from}}
+        {{> send_to}}
+        {{> complete}}
+      </div>
+      <div class="col-sm-6 right-side col- ">
+      {{#if progress}}
+        <div class="progress" style="height: 2px; margin-bottom: 0px;margin-top: 5px; {{#if complete}} opacity: .2;{{/if}}">
+          <div class="progress-bar" 
+            role="progressbar" 
+            aria-valuenow="0" 
+            aria-valuemin="0" 
+            aria-valuemax="100" 
+            style="width: {{progress}}%;">
+          </div>
+        </div>
+      {{/if}}
+      </div>
+    </div>
+  </li>

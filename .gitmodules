@@ -4,3 +4,6 @@
 [submodule "plugins/audit"]
 	path = plugins/audit
 	url = https://github.com/myappgini/sbm_audit_log.git
+[submodule "plugins/todos"]
+	path = plugins/todos
+	url = https://github.com/myappgini/sbm_todos.git

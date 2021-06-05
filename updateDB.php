@@ -18,7 +18,7 @@
 				`user` VARCHAR(40) NULL,
 				`rango` VARCHAR(40) NULL,
 				`date` DATE NULL
-			) CHARSET utf8",
+			) CHARSET cp1256",
 			$silent
 		);
 
@@ -33,7 +33,7 @@
 				`nombre` INT UNSIGNED NULL,
 				`rango` INT UNSIGNED NULL,
 				`date` INT UNSIGNED NULL DEFAULT '1'
-			) CHARSET utf8",
+			) CHARSET cp1256",
 			$silent
 		);
 		setupIndexes('salary', ['contacto',]);
@@ -44,8 +44,56 @@
 				`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 				PRIMARY KEY (`id`),
 				`name` VARCHAR(40) NULL,
-				`uploads` TEXT NULL
-			) CHARSET utf8",
+				`uploads` TEXT NULL,
+				`due` DATETIME NULL
+			) CHARSET cp1256",
+			$silent
+		);
+
+		setupTable(
+			'db_field_permission', " 
+			CREATE TABLE IF NOT EXISTS `db_field_permission` ( 
+				`ID_field_permissions` VARCHAR(40) NOT NULL,
+				PRIMARY KEY (`ID_field_permissions`),
+				`groupID` VARCHAR(40) NULL,
+				`table_field` VARCHAR(200) NULL,
+				`fieldstate` VARCHAR(50) NOT NULL
+			) CHARSET cp1256",
+			$silent
+		);
+		setupIndexes('db_field_permission', ['groupID','table_field',]);
+
+		setupTable(
+			'tmp_tables_fields', " 
+			CREATE TABLE IF NOT EXISTS `tmp_tables_fields` ( 
+				`table_filed` VARCHAR(200) NOT NULL,
+				PRIMARY KEY (`table_filed`)
+			) CHARSET cp1256",
+			$silent
+		);
+
+		setupTable(
+			'view_membership_groups', " 
+			CREATE TABLE IF NOT EXISTS `view_membership_groups` ( 
+				`groupID` VARCHAR(40) NOT NULL,
+				PRIMARY KEY (`groupID`),
+				`name` VARCHAR(50) NULL,
+				`description` TEXT NULL,
+				`allowSignup` VARCHAR(50) NULL,
+				`needsApproval` VARCHAR(50) NULL
+			) CHARSET cp1256",
+			$silent
+		);
+
+		setupTable(
+			'todos', " 
+			CREATE TABLE IF NOT EXISTS `todos` ( 
+				`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+				PRIMARY KEY (`id`),
+				`tarea` TEXT NULL,
+				`dateInit` DATE NULL,
+				`dateEnd` DATE NULL
+			) CHARSET cp1256",
 			$silent
 		);
 

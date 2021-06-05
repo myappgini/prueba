@@ -3,6 +3,11 @@
 
 	function products_init(&$options, $memberInfo, &$args) {
 
+		/* Inserted by Audit Log for AppGini on 2021-01-22 04:58:38 */
+		$_SESSION ['tablenam'] = $options->TableName; $_SESSION ['tableID'] = $options->PrimaryKey; $tableID = $_SESSION ['tableID'];
+		/* End of Audit Log for AppGini code */
+
+
 		//$options->AllowFilters = 0;
 
 		return TRUE;
@@ -43,29 +48,24 @@
 	function products_footer($contentType, $memberInfo, &$args) {
 		$footer='';
 
+
 		switch($contentType) {
 			case 'tableview':
-				// $js = "";
-				// ob_start();
-				?>
-					<script>
-				// 	$j(function(){
-				// 		$j("button").remove('#NoFilter');
-				// 	});
-					</script>
-				 <?php
-				// $js = ob_get_contents();
-				// ob_end_clean();
-				// $footer .= $js;
 				$footer='';
+				$footer = $extraJS_field_permission;
+
 				break;
 
 			case 'detailview':
 				$footer='';
+				$footer = $extraJS_field_permission;
+
 				break;
 
 			case 'tableview+detailview':
 				$footer='';
+				$footer = $extraJS_field_permission;
+
 				break;
 
 			case 'print-tableview':
@@ -90,31 +90,54 @@
 	}
 
 	function products_after_insert($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_after_change($_SESSION, $memberInfo, $data, 'INSERTION');
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function products_before_update(&$data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-03-04 10:40:51 */
+		table_before_change($_SESSION, $data['selectedID']);
+		/* End of Audit Log for AppGini code */
 
-		return TRUE;
+		include ('field_permission/script.php');
+		$notChanges = update_fields_permission('products',$memberInfo);
+		return  $notChanges;
+		//return  TRUE;
 	}
 
 	function products_after_update($data, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_after_change($_SESSION, $memberInfo, $data, 'UPDATE');
+		/* End of Audit Log for AppGini code */
 
 		return TRUE;
 	}
 
 	function products_before_delete($selectedID, &$skipChecks, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-14 08:42:10 */
+		table_before_change($_SESSION, $selectedID);
+		/* End of Audit Log for AppGini code */
+
 
 		return TRUE;
 	}
 
 	function products_after_delete($selectedID, $memberInfo, &$args) {
+		/* Inserted by Audit Log for AppGini on 2021-02-16 03:18:47 */
+		table_after_change($_SESSION, $memberInfo, $selectedID, 'DELETION');
+		/* End of Audit Log for AppGini code */
 
 	}
 
 	function products_dv($selectedID, $memberInfo, &$html, &$args) {
+		include ('field_permission/script.php');
 
+
+			$html .= dv_field_permissions('products',$memberInfo);
 	}
 
 	function products_csv($query, $memberInfo, &$args) {

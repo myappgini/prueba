@@ -1,6 +1,6 @@
 <?php
 
-	define('mysql_charset', 'utf8');
+	define('mysql_charset', 'cp1256');
 
 	function detect_config($redirect_to_setup = true) {
 		$config_exists = is_readable(dirname(__FILE__) . '/config.php');
