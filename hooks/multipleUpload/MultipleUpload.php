@@ -3,14 +3,16 @@ class MultipleUpload
 {
     protected $errors;
 
+    public $extensions_img = ['jpg','jpeg','gif','png','tif','PNG','JPG','JPEG','GIF','TIF'];
+    public $extensions_mov = ['mov','avi','swf','asf','wmv','mpg','mpeg','mp4','flv'];
+    public $extensions_docs = ['|txt|doc|docx|pdf|zip'];
+    public $extensions_audio = ['wav','mp3'];
+
+
     public function __construct($config = [])
     {
         error_reporting(E_ERROR | E_WARNING | E_PARSE);
         $this->errors = [];
-        $this->extensions_img = '|jpg|jpeg|gif|png|tif|PNG|JPG|JPEG|GIF|TIF';
-        $this->extensions_mov = '|mov|avi|swf|asf|wmv|mpg|mpeg|mp4|flv';
-        $this->extensions_docs = '|txt|doc|docx|pdf|zip';
-        $this->extensions_audio = '|wav|mp3';
         $this->extensions =
             $this->extensions_docs .
             $this->extensions_img .
