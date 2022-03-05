@@ -29,7 +29,8 @@ echo '<!-- dropzone control multipleupload -->';
     </div>
 </div>
 <script>
-    var ext = '<?php echo $mu->extensions; ?>';
+    // debugger
+    var ext = '<?php echo implode("|",$mu->extensions); ?>';
     ext = ext.replace(/\|/g, ",.");
     $j("div#my-awesome-dropzone").dropzone({
         paramName: "uploadedFile", // The name that will be used to transfer the file

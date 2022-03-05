@@ -797,4 +797,29 @@ $Translation = [
 	'Mail' => 'Mail',
 	'Preconfigured users and groups' => 'Preconfigured users and groups',
 	'Application' => 'Application',
+
+	// Added in 5.97
+	'Query logs' => 'Query logs',
+	'Query log table does not exist' => 'There was an error while attempting to create appgini_query_log table. Please make sure the database user has CREATE TABLE privilege.',
+	'slow queries' => 'Slow queries',
+	'error queries' => 'Error queries',
+	'date/time' => 'Date/time',
+	'duration (sec)' => 'Duration (sec)',
+	'page address' => 'Page address',
+	'query' => 'Query',
+	'page x of y' => 'Page <x> of <y>',
+	'total # queries' => 'Total # queries.',
+
+	// Added in 6.0
+	'Interactive SQL queries tool' => 'Interactive SQL queries tool',
+	'Enter SQL query' => 'Enter SQL query',
+	'Query must start with select' => 'Query must start with %s',
+	'Display results' => 'Display results',
+	'Update results as you type' => 'Update results as you type',
+	'Use cache' => 'Use cache',
+	'results truncated' => 'Results below might have been truncated to a limit of %s records for performance purposes.',
+	'Results will be displayed here' => 'Results will be displayed here.',
+	'Bookmark this query' => 'Bookmark this query',
+	'Query name' => 'Query name',
+	'Manage bookmarked queries' => 'Manage bookmarked queries',
 ];

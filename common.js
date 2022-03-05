@@ -1,5 +1,7 @@
 var AppGini = AppGini || {};
 
+AppGini.version = 5.98;
+
 /* initials and fixes */
 jQuery(function() {
 	AppGini.count_ajaxes_blocking_saving = 0;
@@ -194,15 +196,13 @@ jQuery(function() {
 
 	// in table view, hide unnecessary page elements if no records are displayed
 	if($j('.table_view').length) {
-		setInterval(function() {
-			if($j('tfoot .alert-warning').length) {
-				$j('#Print, #CSV, #tv-tools, thead, tr.success').addClass('hidden');
-				$j('.tv-toggle').parent().addClass('hidden');
-				return;
-			}
+		var tvHasWarning = $j('.table_view tfoot .alert-warning').length > 0;
 
-			$j('#Print, #CSV, #tv-tools, thead, tr.success').removeClass('hidden');
-			$j('.tv-toggle').parent().removeClass('hidden');       
+		setInterval(function() {
+			$j('#Print, #CSV, #tv-tools, .table_view thead, .table_view tr.success')
+				.toggleClass('hidden', tvHasWarning);
+
+			$j('.tv-toggle').parent().toggleClass('hidden', tvHasWarning);
 		}, 100);
 	}
 
@@ -598,7 +598,7 @@ function mass_delete(t, ids) {
 						if(!continue_delete) return;
 						jQuery.ajax(t + '_view.php', {
 							type: 'POST',
-							data: { delete_x: 1, SelectedID: ids[itrn] },
+							data: { delete_x: 1, SelectedID: ids[itrn], csrf_token: $j('#csrf_token').val() },
 							success: function(resp) {
 								if(resp != 'OK') {
 									jQuery('<li class="text-danger">' + resp + '</li>').appendTo('.well.details_list ol');
@@ -1508,6 +1508,7 @@ AppGini.calculatedFields = {
 		$j.ajax({
 			url: 'ajax-update-calculated-fields.php',
 			data: { table: table, id: id },
+			type: 'POST',
 			success: function(resp) {
 				if(resp.data == undefined || resp.error == undefined) return;
 

@@ -23,11 +23,6 @@
 		</div>
 	</fieldset>
 </div>
-<!-- child records -->
-<div class="panel-body">
-	<div id="tmp_tables_fields-children"></div>
-</div>
-
 <script>
 	$j(function() {
 		// render read-only checkboxes in DVP
@@ -38,7 +33,13 @@
 			.addClass('hidden')
 			.after('<i class="glyphicon glyphicon-unchecked"></i>')
 	})
+</script>
+<!-- child records -->
+<div class="panel-body">
+	<div id="tmp_tables_fields-children"></div>
+</div>
 
+<script>
 	$j(function() {
 		/* prevent loading child records in multiple DVP */
 		if($j('[id=tmp_tables_fields-children]').length > 1) return;

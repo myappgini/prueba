@@ -171,7 +171,7 @@ function openGalery(settings) {
 
     $j.ajax({
         method: Ajax_Settings.method,
-        dataType: "html",
+        dataType: "text",
         url: Ajax_Settings.url,
         data,
         success: function (res) {

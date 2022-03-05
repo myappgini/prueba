@@ -3,25 +3,26 @@ class MultipleUpload
 {
     protected $errors;
 
-    public $extensions_img = ['jpg','jpeg','gif','png','tif','PNG','JPG','JPEG','GIF','TIF'];
-    public $extensions_mov = ['mov','avi','swf','asf','wmv','mpg','mpeg','mp4','flv'];
-    public $extensions_docs = ['|txt|doc|docx|pdf|zip'];
-    public $extensions_audio = ['wav','mp3'];
+    public $extensions_img = ['jpg', 'jpeg', 'gif', 'png', 'tif', 'tiff'];
+    public $extensions_mov = ['mov', 'avi', 'swf', 'asf', 'wmv', 'mpg', 'mpeg', 'mp4', 'flv'];
+    public $extensions_docs = ['txt', 'doc', 'docx', 'pdf', 'zip'];
+    public $extensions_audio = ['wav', 'mp3'];
 
 
     public function __construct($config = [])
     {
         error_reporting(E_ERROR | E_WARNING | E_PARSE);
         $this->errors = [];
-        $this->extensions =
-            $this->extensions_docs .
-            $this->extensions_img .
-            $this->extensions_mov .
-            $this->extensions_audio;
+        $this->extensions = array_merge(
+            $this->extensions_docs,
+            $this->extensions_img,
+            $this->extensions_mov,
+            $this->extensions_audio
+        );
         $this->type = 'img';
         $this->minImageSize = 1200;
         $this->size = 'false';
-        $this->tn = '';
+        $this->tn = false;
         $this->fn = 'uploads';
         $this->id;
         $this->folder_base = 'images';
@@ -31,8 +32,6 @@ class MultipleUpload
     {
         $resources_dir = dirname(__FILE__);
         $base_dir = realpath("$resources_dir/../..");
-
-        $mi = getMemberInfo();
 
         $original = $base_dir . '/' . $this->folder . '/';
 
@@ -66,9 +65,9 @@ class MultipleUpload
                     throw new RuntimeException('Unknown errors.');
             }
 
-            if (!strpos($this->extensions, $ext)) {
+            if (!in_array(strtolower($ext) , $this->extensions)) {
                 throw new RuntimeException(
-                    'You must upload a (' . $this->extensions . ') file'
+                    'You must upload a (' . implode(",", $this->extensions) . ') file'
                 );
             }
 
@@ -89,6 +88,7 @@ class MultipleUpload
                     );
                 }
             }
+            
         } catch (RuntimeException $e) {
             $a = dirname(__FILE__);
             header('Content-Type: application/json');
@@ -101,6 +101,7 @@ class MultipleUpload
             echo json_encode([
                 'error' => $e->getMessage() . $a,
             ]);
+            die;
         }
 
         //check existing projects' names
@@ -144,17 +145,19 @@ class MultipleUpload
             $filename = $new_name;
         }
 
-        if (
-            !move_uploaded_file(
-                $_FILES['uploadedFile']['tmp_name'],
-                sprintf(
-                    $original . '/%s',
-                    $renameFlag ? $newName : $_FILES['uploadedFile']['name']
-                )
+        if (!move_uploaded_file(
+            $_FILES['uploadedFile']['tmp_name'],
+            sprintf(
+                $original . '/%s',
+                $renameFlag ? $newName : $_FILES['uploadedFile']['name']
             )
-        ) {
+        )) {
             throw new RuntimeException('Failed to move uploaded file.');
         } else {
+            include 'json_class.php';
+            $json = new ProcessJson;
+            $json->info = ['tn' => $this->tn, 'id' => $this->id, 'fn' => $this->fn];
+
             $exit = false;
             if ($this->type === 'img' || $this->type === 'mov') {
                 include '_resampledIMG.php';
@@ -168,7 +171,7 @@ class MultipleUpload
             //file uploaded successfully
 
             $data = [
-                'defaultImage' => 'false',
+                'defaultImage' => is_null($json->get_array()) ? "true" : "false",
                 'isRenamed' => $renameFlag,
                 'fileName' => $renameFlag ? $newName : $file['basename'],
                 'extension' => $ext,
@@ -177,7 +180,7 @@ class MultipleUpload
                 'folder' => $original,
                 'folder_base' => $this->folder,
                 'size' => $this->size,
-                'userUpload' => $mi['username'],
+                'userUpload' => $this->user_name(),
                 'dateUpload' => date('d.m.y'),
                 'timeUpload' => date('H:i:s'),
                 'oldName' => $oldName ? $oldName : '',
@@ -186,14 +189,7 @@ class MultipleUpload
                 'pdfPage' => 1,
             ];
 
-            // * guardar registro..
-            if (!function_exists('add_json')) {
-                include 'functions-ajax.php';
-            }
-
-            // * defaultImage => se cambia a true si es el primer elemento en la funcion add_json
-            $info = ['tn' => $this->tn, 'id' => $this->id, 'fn' => $this->fn];
-            $res = add_json($info, $data);
+            $res = $json->add_data( $data);
             $data['success'] = $res;
             header('Content-Type: application/json');
             echo json_encode($data);
@@ -202,16 +198,15 @@ class MultipleUpload
     }
     private function check_extension($ext)
     {
-        //Check extention
-        if (strpos($this->extensions_docs, $ext)) {
-            $this->type = 'doc';
-        }
-        if (strpos($this->extensions_mov, $ext)) {
-            $this->type = 'mov';
-        }
-        if (strpos($this->extensions_audio, $ext)) {
-            $this->type = 'audio';
-        }
+        //Check extension
+        in_array($ext, $this->extensions_docs) && $this->type = 'doc';
+        in_array($ext, $this->extensions_mov) && $this->type = 'mov';
+        in_array($ext, $this->extensions_audio) && $this->type = 'audio';
+    }
+    private function user_name()
+    {
+        $mi = getMemberInfo();
+        return $mi['username'];
     }
 }
 
