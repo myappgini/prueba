@@ -14,9 +14,6 @@ class ProcessJson
         'where' => false,
     ];
 
-    //changue this if you want to preserve file on server
-    public $delete_file = true;
-
     public function __construct()
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -40,11 +37,6 @@ class ProcessJson
         return $handlebars->render($view, $j);
     }
 
-    /**
-     * Get all json data in array .
-     *
-     * @return array
-     */
     public function get_array()
     {
         return json_decode($this->get_json(), true);
@@ -79,11 +71,6 @@ class ProcessJson
     }
     /////////////////////////////////////////
 
-    /**
-     * Get all json text from database.
-     *
-     * @return string
-     */
     private function get_json()
     {
         $sql = "SELECT {$this->info['fn']} FROM `{$this->info['tn']}` WHERE 1=1 AND {$this->get_where()}";
