@@ -24,13 +24,9 @@ class ProcessJson
 
     public function add_data($data)
     {
-        $this->info['where'] = $this->get_where();
         $set = $this->get_array();
-        if (is_null($set)) {
-            $data['defaultImage'] = 'true';
-        }
         $set['images'][uniqid()] = $data;
-        $set = array_merge($set, $this->info, array("where" => ""));
+        $set = array_merge($set, $this->info);
         $set['length'] = count($set['images']);
         return $this->set_array($set);
     }
@@ -90,18 +86,14 @@ class ProcessJson
      */
     private function get_json()
     {
-        $this->info['where'] = $this->get_where();
-        if (!$this->info['tn']) die('data not valid');
-        $sql = "SELECT {$this->info['fn']} FROM `{$this->info['tn']}` WHERE 1=1 AND {$this->info['where']}";
+        $sql = "SELECT {$this->info['fn']} FROM `{$this->info['tn']}` WHERE 1=1 AND {$this->get_where()}";
         $res = sqlValue($sql);
         return stripslashes($res); //* add this function stripslashes to make it work on windows
     }
 
     private function set_json($set)
     {
-        $this->info['where'] = $this->get_where();
-        if (!$this->info['tn']) die('data not valid');
-        $sql = "UPDATE `{$this->info['tn']}` SET {$set} WHERE 1=1 AND {$this->info['where']}";
+        $sql = "UPDATE `{$this->info['tn']}` SET {$set} WHERE 1=1 AND {$this->get_where()}";
         $eo = ['silentErrors' => true];
         $res = sql($sql, $eo);
         return $res;
@@ -114,6 +106,7 @@ class ProcessJson
 
     private function get_where()
     {
+        if (!$this->info['tn'] && !$this->info['id'] && $this->info['fn']) die('data not valid');
         $key = getPKFieldName($this->info['tn']);
         return $key ? "`{$key}`='{$this->info['id']}'" : $key;
     }

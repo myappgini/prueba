@@ -1,22 +1,13 @@
 <?php
-function make_thumb($source, $fileName, $ext, &$folder, $page = 0)
+function make_thumb($source, $fileName, $ext, $folder, $type)
 {
-    $exit = false;
-    $currDir = dirname(__FILE__);
-    $base_dir = realpath("{$currDir}/../..");
-    header('Content-type: images');
-
-    $fo = $base_dir . "/" . $folder->folder;
-    $source = $fo . $folder->original . '/' . $source;
-    $target = $fo . $folder->original . '/' . $fileName . '_th.'.$ext;
-
-
-    if ($folder->type === 'mov') {
-        return make_thumb_mov($source, $target);
-    }
-
+    $source = $folder . $source;
+    $target = $folder . $fileName . '_th.' . $ext;
     $specs = array("width" => "200", "height" => "200", "identifier" => "_th");
-    if (createThumbnail($source, $specs)) return true;
+
+    if ($type === 'mov') return make_thumb_mov($source, $target);
+    if ($type === 'img') return createThumbnail($source, $specs);
+
     return false;
 }
 
@@ -24,7 +15,6 @@ function make_thumb_mov($source, $target)
 {
     require 'vendor/autoload.php';
     if (class_exists('FFMpeg\FFMpeg')) {
-        $source = $fo . $folder->original . '/' . $source;
         $ffmpeg = FFMpeg\FFMpeg::create();
         $video = $ffmpeg->open($source);
         $video
