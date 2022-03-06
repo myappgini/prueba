@@ -72,6 +72,9 @@ if ($cmd !== '') {
             include 'MultipleUpload.php';
             return;
             break;
+        case 'get-frame':
+            include 'uploadFrame.php';
+            return;
         default:
             $rslt['error'] = 'OPPS, what you need to do?';
             break;

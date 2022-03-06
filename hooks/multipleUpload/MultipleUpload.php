@@ -126,7 +126,7 @@ class MultipleUpload
 
             $exit = false;
             if ($this->type === 'img' || $this->type === 'mov') {
-                include '_resampledIMG.php';
+                include 'createThumbs.php';
                 $exit = make_thumb(
                     $this->uploaded_file['basename'],
                     $this->uploaded_file['filename'],

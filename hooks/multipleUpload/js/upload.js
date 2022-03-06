@@ -202,10 +202,17 @@ function active_upload_frame(settings) {
     data = $j.extend({}, Def_Settings, settings);
 
     if (data.tn) {
-        var selector = $j('#' + data.tn + '_dv_action_buttons');
-        selector.prepend(' <div id="imagesThumbs"></div>');
-        selector.append('<p></p><div id="uploadFrame" class="col-12"></div>');
-        $j('#uploadFrame').load('hooks/multipleUpload/_multipleUpload.php', data);
+        var selector = $j('#' + data.tn + '_dv_form fieldset');
+
+        var constructor = $j((' <div class="form-group '+ data.tn +'-'+ data.fn+'" ></div>'))
+                            .append($j('<hr class="hidden-md hidden-lg">'))
+                            .append($j('<label class="control-label col-lg-3" for="'+ data.fn+'">Uploads</label>'))
+                            .append($j('<div id="imagesThumbs" class="col-lg-9"></div>'))
+                            .append($j('<div id="uploadFrame" class="col-lg-9"></div>'));
+
+        selector.append(constructor);
+        data.cmd = 'get-frame';
+        $j('#uploadFrame').load(Ajax_Settings.url, data);
         return true
     }
     return false
