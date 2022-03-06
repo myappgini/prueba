@@ -7,7 +7,7 @@ $json = new ProcessJson;
 
 $cmd = Request::val('cmd');
 
-$info = [
+$data = [
     'tn' => Request::val('tn'), //table name
     'fn' => Request::val('fn'), //field name
     'id' => Request::val('id'), //index record
@@ -15,7 +15,7 @@ $info = [
     'lastix' => Request::val('lastix'), //id anterior
 ];
 
-$json->info = $info;
+$json->info = $data;
 header('Content-Type: application/json; charset=utf-8');
 
 if ($cmd !== '') {
@@ -26,7 +26,7 @@ if ($cmd !== '') {
             if ($DELETE_FILE) {
                 //TODO: delete file
                 $j = $json->get_array();
-                $b = $j['images'][$info['ix']];
+                $b = $j['images'][$data['ix']];
                 $rslt['file'] = unlink($b['folder'] . $b['fileName']);
                 if ($b['thumbnail']) {
                     $rslt = unlink(
@@ -35,18 +35,15 @@ if ($cmd !== '') {
                 }
             }
             $rslt['json'] = $json->del_item();
-
             break;
         case 'set-default':
-            if ($info['lastix'] != '') {
-                //!Intercambiar contenido de variables
-                list($info['ix'], $info['lastix']) = array($info['lastix'], $info['ix']);
-                $res = $json->set_value('defaultImage', 'false');
+            if ($data['lastix'] != '') {
+                $json->info['ix'] = $data['lastix'];
+                $json->set_value('defaultImage', 'false');
             }
-            $res = $json->set_value('defaultImage', 'true');
-            $rslt['res'] = $res;
-            $rslt['setIx'] = $info['ix'];
-
+            $json->info['ix'] = $data['ix'];
+            $json->set_value('defaultImage', 'true');
+            $rslt['setIx'] = $data['ix'];
             break;
         case 'set-pdf-page':
             $page = Request::val('page');
@@ -59,15 +56,15 @@ if ($cmd !== '') {
             break;
         case 'set-title':
             $newTitle = Request::val('newtitle');
-            $res = $json->set_value('title', $newTitle);
-            $rslt['res'] = $res . ' - ' . $newTitle;
+            $res = $json->set_value('title', $newTitle) ? "changed to: " : "NOT changed to: ";
+            $rslt['res'] = $res . $newTitle;
             break;
         case 'full':
-            echo $json->get_view('dv');
+            echo get_view('dv', $json->get_array());
             return;
             break;
         case 'gallery':
-            echo $json->get_view('gallery');
+            echo get_view('gallery', $json->get_array());
             return;
             break;
         case 'uploading':
@@ -85,4 +82,12 @@ if ($cmd !== '') {
     $rslt['error'] = 'OPPS, what you need?';
     echo json_encode($rslt);
     return;
+}
+
+function get_view($view, $data)
+{
+    include_once 'hbs_views.php';
+    header('Content-Type: text/html; charset=utf-8');
+    $data['view'] = $view;
+    return $handlebars->render($view, $data);
 }

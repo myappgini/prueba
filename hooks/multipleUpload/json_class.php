@@ -11,7 +11,6 @@ class ProcessJson
         'id' => false,
         'ix' => false,
         'lastix' => false,
-        'where' => false,
     ];
 
     public function __construct()
@@ -26,15 +25,6 @@ class ProcessJson
         $set = array_merge($set, $this->info);
         $set['length'] = count($set['images']);
         return $this->set_array($set);
-    }
-
-    public function get_view($view)
-    {
-        include_once 'hbs_views.php';
-        header('Content-Type: text/html; charset=utf-8');
-        $j = json_decode($this->get_json(), true);
-        $j['view'] = $view;
-        return $handlebars->render($view, $j);
     }
 
     public function get_array()
@@ -67,6 +57,7 @@ class ProcessJson
         $data[$key] = makeSafe($value);
         $data = $this->set_updated_info('updated', $data);
         $set['images'][$this->info['ix']] = $data;
+
         return $this->set_array($set);
     }
     /////////////////////////////////////////

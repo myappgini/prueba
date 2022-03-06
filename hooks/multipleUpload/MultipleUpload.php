@@ -15,12 +15,20 @@ class MultipleUpload
     private $uploaded_file = [];
     private $upload_dir = false;
 
+    public $info = [
+        'tn' => false,
+        'fn' => 'uploads',
+        'id' => false,
+        'ix' => false,
+        'lastix' => false,
+    ];
+
+
     public function __construct($config = [])
     {
         error_reporting(E_ERROR | E_WARNING | E_PARSE);
         $this->current_file_dir = dirname(__FILE__);
         $this->root_dir = dirname(dirname($this->current_file_dir));
-        $this->upload_dir = $this->root_dir . '/' . $this->folder_base . '/';
         $this->errors = [];
         $this->extensions = array_merge(
             $this->extensions_docs,
@@ -30,13 +38,11 @@ class MultipleUpload
         );
         $this->minImageSize = 1200;
         $this->size = 'false';
-        $this->tn = false;
-        $this->fn = 'uploads';
-        $this->id;
     }
 
-    public function process_ajax_upload()
+    public function process_upload()
     {
+        $this->upload_dir = $this->root_dir . '/' . $this->folder_base . '/';
 
         try {
             //if file exceeded the filesize, no file will be sent
@@ -116,7 +122,7 @@ class MultipleUpload
         } else {
             include 'json_class.php';
             $json = new ProcessJson;
-            $json->info = ['tn' => $this->tn, 'id' => $this->id, 'fn' => $this->fn];
+            $json->info = $this->info;
 
             $exit = false;
             if ($this->type === 'img' || $this->type === 'mov') {
@@ -144,6 +150,7 @@ class MultipleUpload
                 'userUpload' => $this->user_name(),
                 'dateUpload' => date('d.m.y'),
                 'timeUpload' => date('H:i:s'),
+                'oldName' => $this->oldName,
                 'title' => $this->uploaded_file['filename'],
                 'thumbnail' => $exit,
                 'pdfPage' => 1,
@@ -168,7 +175,7 @@ class MultipleUpload
         $mi = getMemberInfo();
         return $mi['username'];
     }
-    private function check_exist_file()
+    private function check_exist_file()//and rename
     {
         //check existing names
         $currentFiles = scandir($this->upload_dir);
@@ -185,13 +192,15 @@ class MultipleUpload
                 )
             ) {
                 $matches = [];
+                $this->oldName = $file_name_dir;
+                $renameFlag = true;
                 if (!strcmp($_FILES['uploadedFile']['name'], $file_name_dir)) {
                     // la primera vez
                     $this->uploaded_file['basename'] = $this->uploaded_file['filename'] . '-' . '1' . "." . $this->uploaded_file['extension'];
                     $this->uploaded_file['filename']  = $this->uploaded_file['filename'] . '-' . '1';
-                    $renameFlag = true;
                 } else {
-                    //increment number at the end of the name ( sorted desc, first one is the largest number)
+                    //increment number at the end of the name 
+                    //( sorted desc, first one is the largest number)
                     preg_match(
                         '/(-[0-9]+)\.' . $this->uploaded_file['extension'] . '$/i',
                         $file_name_dir,
@@ -200,7 +209,6 @@ class MultipleUpload
                     $number = preg_replace('/[^0-9]/', '', $matches[0]);
                     $this->uploaded_file['basename'] = $this->uploaded_file['filename'] . '-' . (((int) $number) + 1) . "." . $this->uploaded_file['extension'];
                     $this->uploaded_file['filename'] = $this->uploaded_file['filename'] . '-' . (((int) $number) + 1);
-                    $renameFlag = true;
                     break;
                 }
             }
@@ -210,19 +218,18 @@ class MultipleUpload
     }
 }
 
-$currDir = dirname(__FILE__);
-$base_dir = realpath("{$currDir}/../..");
+$base_dir = realpath(dirname(__FILE__)."/../..");
 if (!function_exists('makeSafe')) {
     include "$base_dir/lib.php";
 }
 if (isset($_GET['tn'])) {
     $mu = new MultipleUpload();
-    $mu->tn = Request::val('tn');
-    $mu->fn = Request::val('fn');
-    $mu->id = Request::val('id');
-    //define folder
-    //$mu->folder = Request::val('f');
-    $mu->folder = "{$mu->folder_base}/{$mu->tn}/{$mu->id}";
+    $mu->info['tn'] = Request::val('tn');
+    $mu->info['fn'] = Request::val('fn');
+    $mu->info['id'] = Request::val('id');
+
+    //change folder base
+    $mu->folder_base = "{$mu->folder_base}/{$mu->info['tn']}/{$mu->info['id']}";
     //
-    $mu->process_ajax_upload();
+    $mu->process_upload();
 }

@@ -45,7 +45,9 @@ $j('body').on('click', '.set-default-media', function (e) {
         $currentDefault = $j('li.list-group-item-success'),
         lastix = $currentDefault.data();
     $currentDefault.removeClass('list-group-item-success');
-    $currentDefault.find('span.glyphicon-check').addClass('glyphicon-unchecked').removeClass('glyphicon-check');
+    $currentDefault.find('span.glyphicon-check')
+                    .addClass('glyphicon-unchecked')
+                    .removeClass('glyphicon-check');
     $currentDefault.find('button.btn-primary').show();
     let data = $this.closest(".modal-body").data();
 
@@ -58,7 +60,7 @@ $j('body').on('click', '.set-default-media', function (e) {
         const content = $j("li[data-ix='" + res.setIx + "']");
         content.addClass('list-group-item-success');
         content.find('span.glyphicon-unchecked').addClass('glyphicon-check').removeClass('glyphicon-unchecked');
-        $this.hide();
+        // $this.hide();
     });
 })
 
