@@ -85,10 +85,10 @@
 	$x->TableIcon = 'table.gif';
 	$x->PrimaryKey = '`products`.`id`';
 
-	$x->ColWidth = [150, 150, 150, ];
-	$x->ColCaption = ['Name', 'Due', 'Uploads', ];
-	$x->ColFieldName = ['name', 'due', 'uploads', ];
-	$x->ColNumber  = [2, 3, 4, ];
+	$x->ColWidth = [150, 150, ];
+	$x->ColCaption = ['Name', 'Due', ];
+	$x->ColFieldName = ['name', 'due', ];
+	$x->ColNumber  = [2, 3, ];
 
 	// template paths below are based on the app main directory
 	$x->Template = 'templates/products_templateTV.html';
