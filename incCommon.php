@@ -108,7 +108,7 @@
 		$sql_fields = [
 			'contacto' => "`contacto`.`id` as 'id', `contacto`.`name` as 'name', `contacto`.`user` as 'user', `contacto`.`rango` as 'rango', if(`contacto`.`date`,date_format(`contacto`.`date`,'%d/%m/%Y'),'') as 'date'",
 			'salary' => "`salary`.`id` as 'id', IF(    CHAR_LENGTH(`contacto1`.`name`) || CHAR_LENGTH(`contacto1`.`user`), CONCAT_WS('',   `contacto1`.`name`, ' - ', `contacto1`.`user`), '') as 'contacto', `salary`.`monto` as 'monto', `salary`.`mes` as 'mes', IF(    CHAR_LENGTH(`contacto1`.`name`), CONCAT_WS('',   `contacto1`.`name`), '') as 'nombre', IF(    CHAR_LENGTH(`contacto1`.`rango`), CONCAT_WS('',   `contacto1`.`rango`), '') as 'rango', IF(    CHAR_LENGTH(if(`contacto1`.`date`,date_format(`contacto1`.`date`,'%d/%m/%Y'),'')), CONCAT_WS('',   if(`contacto1`.`date`,date_format(`contacto1`.`date`,'%d/%m/%Y'),'')), '') as 'date'",
-			'products' => "`products`.`id` as 'id', `products`.`name` as 'name', `products`.`uploads` as 'uploads', if(`products`.`due`,date_format(`products`.`due`,'%d/%m/%Y %h:%i %p'),'') as 'due'",
+			'products' => "`products`.`id` as 'id', `products`.`name` as 'name', if(`products`.`due`,date_format(`products`.`due`,'%d/%m/%Y %h:%i %p'),'') as 'due', `products`.`uploads` as 'uploads'",
 			'db_field_permission' => "`db_field_permission`.`ID_field_permissions` as 'ID_field_permissions', IF(    CHAR_LENGTH(`view_membership_groups1`.`name`), CONCAT_WS('',   `view_membership_groups1`.`name`), '') as 'groupID', IF(    CHAR_LENGTH(`tmp_tables_fields1`.`table_filed`), CONCAT_WS('',   `tmp_tables_fields1`.`table_filed`), '') as 'table_field', `db_field_permission`.`fieldstate` as 'fieldstate'",
 			'tmp_tables_fields' => "`tmp_tables_fields`.`table_filed` as 'table_filed'",
 			'view_membership_groups' => "`view_membership_groups`.`groupID` as 'groupID', `view_membership_groups`.`name` as 'name', `view_membership_groups`.`description` as 'description', `view_membership_groups`.`allowSignup` as 'allowSignup', `view_membership_groups`.`needsApproval` as 'needsApproval'",
@@ -209,8 +209,8 @@
 			'products' => [
 				'id' => '',
 				'name' => '',
-				'uploads' => '',
 				'due' => '',
+				'uploads' => '',
 			],
 			'db_field_permission' => [
 				'ID_field_permissions' => '',

@@ -20,38 +20,38 @@
 	$x->QueryFieldsTV = [
 		"`products`.`id`" => "id",
 		"`products`.`name`" => "name",
-		"`products`.`uploads`" => "uploads",
 		"if(`products`.`due`,date_format(`products`.`due`,'%d/%m/%Y %h:%i %p'),'')" => "due",
+		"`products`.`uploads`" => "uploads",
 	];
 	// mapping incoming sort by requests to actual query fields
 	$x->SortFields = [
 		1 => '`products`.`id`',
 		2 => 2,
-		3 => 3,
-		4 => '`products`.`due`',
+		3 => '`products`.`due`',
+		4 => 4,
 	];
 
 	// Fields that can be displayed in the csv file
 	$x->QueryFieldsCSV = [
 		"`products`.`id`" => "id",
 		"`products`.`name`" => "name",
-		"`products`.`uploads`" => "uploads",
 		"if(`products`.`due`,date_format(`products`.`due`,'%d/%m/%Y %h:%i %p'),'')" => "due",
+		"`products`.`uploads`" => "uploads",
 	];
 	// Fields that can be filtered
 	$x->QueryFieldsFilters = [
 		"`products`.`id`" => "ID",
 		"`products`.`name`" => "Name",
-		"`products`.`uploads`" => "Uploads",
 		"`products`.`due`" => "Due",
+		"`products`.`uploads`" => "Uploads",
 	];
 
 	// Fields that can be quick searched
 	$x->QueryFieldsQS = [
 		"`products`.`id`" => "id",
 		"`products`.`name`" => "name",
-		"`products`.`uploads`" => "uploads",
 		"if(`products`.`due`,date_format(`products`.`due`,'%d/%m/%Y %h:%i %p'),'')" => "due",
+		"`products`.`uploads`" => "uploads",
 	];
 
 	// Lookup fields that can be used as filterers
@@ -85,10 +85,10 @@
 	$x->TableIcon = 'table.gif';
 	$x->PrimaryKey = '`products`.`id`';
 
-	$x->ColWidth = [150, 150, ];
-	$x->ColCaption = ['Name', 'Due', ];
-	$x->ColFieldName = ['name', 'due', ];
-	$x->ColNumber  = [2, 4, ];
+	$x->ColWidth = [150, 150, 150, ];
+	$x->ColCaption = ['Name', 'Due', 'Uploads', ];
+	$x->ColFieldName = ['name', 'due', 'uploads', ];
+	$x->ColNumber  = [2, 3, 4, ];
 
 	// template paths below are based on the app main directory
 	$x->Template = 'templates/products_templateTV.html';

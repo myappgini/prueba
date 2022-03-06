@@ -1057,18 +1057,18 @@
 							'description' => '',
 						],
 					],
-					'uploads' => [
-						'appgini' => "TEXT NULL",
-						'info' => [
-							'caption' => 'Uploads',
-							'description' => 'This field must be hiden in tv and dv views, and must be read-only',
-						],
-					],
 					'due' => [
 						'appgini' => "DATETIME NULL",
 						'info' => [
 							'caption' => 'Due',
 							'description' => '',
+						],
+					],
+					'uploads' => [
+						'appgini' => "TEXT NULL",
+						'info' => [
+							'caption' => 'Uploads',
+							'description' => 'This field must be hiden in tv and dv views, and must be read-only',
 						],
 					],
 				],

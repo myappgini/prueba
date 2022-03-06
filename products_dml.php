@@ -325,8 +325,8 @@ function products_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 	// process images
 	$templateCode = str_replace('<%%UPLOADFILE(id)%%>', '', $templateCode);
 	$templateCode = str_replace('<%%UPLOADFILE(name)%%>', '', $templateCode);
-	$templateCode = str_replace('<%%UPLOADFILE(uploads)%%>', '', $templateCode);
 	$templateCode = str_replace('<%%UPLOADFILE(due)%%>', '', $templateCode);
+	$templateCode = str_replace('<%%UPLOADFILE(uploads)%%>', '', $templateCode);
 
 	// process values
 	if($selected_id) {
@@ -336,19 +336,19 @@ function products_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 		if( $dvprint) $templateCode = str_replace('<%%VALUE(name)%%>', safe_html($urow['name']), $templateCode);
 		if(!$dvprint) $templateCode = str_replace('<%%VALUE(name)%%>', html_attr($row['name']), $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(name)%%>', urlencode($urow['name']), $templateCode);
-		$templateCode = str_replace('<%%VALUE(uploads)%%>', safe_html($urow['uploads']), $templateCode);
-		$templateCode = str_replace('<%%URLVALUE(uploads)%%>', urlencode($urow['uploads']), $templateCode);
 		$templateCode = str_replace('<%%VALUE(due)%%>', app_datetime($row['due'], 'dt'), $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(due)%%>', urlencode(app_datetime($urow['due'], 'dt')), $templateCode);
+		$templateCode = str_replace('<%%VALUE(uploads)%%>', safe_html($urow['uploads']), $templateCode);
+		$templateCode = str_replace('<%%URLVALUE(uploads)%%>', urlencode($urow['uploads']), $templateCode);
 	} else {
 		$templateCode = str_replace('<%%VALUE(id)%%>', '', $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(id)%%>', urlencode(''), $templateCode);
 		$templateCode = str_replace('<%%VALUE(name)%%>', '', $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(name)%%>', urlencode(''), $templateCode);
-		$templateCode = str_replace('<%%VALUE(uploads)%%>', '', $templateCode);
-		$templateCode = str_replace('<%%URLVALUE(uploads)%%>', urlencode(''), $templateCode);
 		$templateCode = str_replace('<%%VALUE(due)%%>', '', $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(due)%%>', urlencode(''), $templateCode);
+		$templateCode = str_replace('<%%VALUE(uploads)%%>', '', $templateCode);
+		$templateCode = str_replace('<%%URLVALUE(uploads)%%>', urlencode(''), $templateCode);
 	}
 
 	// process translations

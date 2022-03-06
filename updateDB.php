@@ -42,8 +42,8 @@
 				`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 				PRIMARY KEY (`id`),
 				`name` VARCHAR(40) NULL,
-				`uploads` TEXT NULL,
-				`due` DATETIME NULL
+				`due` DATETIME NULL,
+				`uploads` TEXT NULL
 			) CHARSET utf8"
 		);
 
