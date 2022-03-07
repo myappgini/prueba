@@ -6,7 +6,7 @@ class FieldsPermissions
         "products" => [
             "name" => [
                 "groups_disabled" => ["users"],
-                "users_disabled" => ["ale"]
+                "users_disabled" => ["admin"]
             ],
             "sss" => [
                 "groups_disabled" => ["users"],
@@ -41,12 +41,12 @@ class FieldsPermissions
     //se utiliza en tablename_dv function
     static function dv_field_permissions($tn = false, $memberInfo)
     {
-        $permissions = FieldsPermissions::$permissions;
-        if (isset($permissions[$tn])) {
+        $p = new FieldsPermissions;
+        if (isset($p->permissions[$tn])) {
             $fields_table = get_table_fields($tn); //AppGini internal function
             foreach ($fields_table as $fn => $val) {
-                if (array_key_exists($fn,  $permissions[$tn])) {
-                    if (FieldsPermissions::check_permissions($permissions[$tn][$fn], $memberInfo)) {
+                if (array_key_exists($fn,  $p->permissions[$tn])) {
+                    if ($p->check_permissions($p->permissions[$tn][$fn], $memberInfo)) {
                         $bloqued[] = "#{$fn}";
                     }
                 }
@@ -68,16 +68,16 @@ class FieldsPermissions
     static function update_fields_permission($tn = false, $memberInfo, $data)
     {
         $notChanges = true;
-        $permissions = FieldsPermissions::$permissions;
-        if (isset($permissions[$tn])) {
+        $p = new FieldsPermissions;
+        if (isset($p->permissions[$tn])) {
 
             $fields_table = get_table_fields($tn); //AppGini internal function
             foreach ($fields_table as $fn => $val) {
                 //verifica si unos de los campos está en la matriz de configuracion
-                if (array_key_exists($fn,  $permissions[$tn])) {
-                    //busca en los grupos bloqueados
-                    if (FieldsPermissions::check_permissions($permissions[$tn][$fn], $memberInfo)) {
-                        $where = FieldsPermissions::where_construct($tn, $data['selectedID']); //genera el where id dependiendo del campo ID
+                if (array_key_exists($fn,  $p->permissions[$tn])) {
+                    //busca en los grupos/usuarios bloqueados
+                    if ($p->check_permissions($p->ermissions[$tn][$fn], $memberInfo)) {
+                        $where = $p->where_construct($tn, $data['selectedID']); //genera el where id dependiendo del campo ID
                         // get the database value
                         $old_val = sqlValue("SELECT {$fn} FROM {$tn} WHERE  {$where} "); //AppGini internal function
                         //compara el campo actual con el campo encontrado si son distintos termina y cancela UPDATE
