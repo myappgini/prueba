@@ -6,7 +6,8 @@
         data-lightbox="{{#if ../gallery}}gallery{{else}}dv{{/if}}-set" 
     {{/when}}
     {{#when extension eq pdf}} 
-        href="#" 
+        href="{{folder_base}}/{{fileName}}" 
+        target="_blank"
     {{/when}}
     {{#when type eq mov}}
         href="#" 

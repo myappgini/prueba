@@ -5,7 +5,7 @@
 }
 
 .dropzone {
-    border: 3px dashed darkblue;
+    border: 1px dashed darkblue;
     min-height: 100px;
     -webkit-border-radius: 30px;
     border-radius: 30px;

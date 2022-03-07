@@ -19,14 +19,14 @@ $url = "hooks/multipleUpload/MultipleUpload.php?&tn={$tn}&fn={$fn}&id={$id}&cmd=
 echo '<!-- dropzone control multipleupload -->';
 ?>
 <div class="dz-container">
-    <div class="btn-group-vertical btn-group-lg" style="width: 100%;">
-        <button class="btn btn-info col-lg-12" type="button" onclick="openGalery({fn:'<?php echo $fn; ?>'});">Open Galary</button>
-    </div>
-    <p></p>
-    <div id="response" class="row"></div>
     <div id="my-awesome-dropzone" class="dropzone">
         <i class="glyphicon glyphicon-upload"></i>
+
+        <div id="imagesThumbs" class="col-lg-12"></div>
+        
+        <button class="btn btn-info col-xs-12" type="button" onclick="openGalery({fn:'<?php echo $fn; ?>'});">Open Gallery</button>
     </div>
+    <div id="response" class="row"></div>
 </div>
 <script>
     // debugger
@@ -57,7 +57,7 @@ echo '<!-- dropzone control multipleupload -->';
                     }).append(successMsg).append(dismiss);
 
                     $j("#response").append(successDiv);
-                    successDiv.fadeOut(60000); //close after 1 minute.
+                    successDiv.fadeOut(40000); //close after 1 minute.
                     setTimeout(deleteFile, 2500, file, this);
                 }
             });
@@ -79,7 +79,7 @@ echo '<!-- dropzone control multipleupload -->';
                 $j("#response").html("<div class='alert alert-danger'>" + response + "</div>");
                 $j(".dropzone").css("border", "3px dotted red");
 
-                setTimeout(deleteFile, 4000, file, this);
+                setTimeout(deleteFile, 3000, file, this);
             });
         }
     })

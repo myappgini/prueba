@@ -1,6 +1,6 @@
 const Def_Settings = {
     id: selected_id(),
-    tn: AppGini.currentTableName(),
+    tn: AppGini.currentTableName() || false,
     fn: 'uploads',
     cmd: false,
 };
@@ -188,7 +188,7 @@ function openGalery(settings) {
 }
 
 /**
- * add a upload frame in dv
+ * add a upload frame and gallery in dv
  * 
  * @param {object} settings - user seting from calling.
  *   need 
@@ -203,16 +203,16 @@ function active_upload_frame(settings) {
 
     if (data.tn) {
         var selector = $j('#' + data.tn + '_dv_form fieldset');
+        data.cmd = 'get-frame';
 
         var constructor = $j((' <div class="form-group '+ data.tn +'-'+ data.fn+'" ></div>'))
                             .append($j('<hr class="hidden-md hidden-lg">'))
                             .append($j('<label class="control-label col-lg-3" for="'+ data.fn+'">Uploads</label>'))
-                            .append($j('<div id="imagesThumbs" class="col-lg-9"></div>'))
-                            .append($j('<div id="uploadFrame" class="col-lg-9"></div>'));
+                            .append($j('<div id="uploadFrame" class="col-lg-9" />')
+                                .load(Ajax_Settings.url, data)
+                            )
 
         selector.append(constructor);
-        data.cmd = 'get-frame';
-        $j('#uploadFrame').load(Ajax_Settings.url, data);
         return true
     }
     return false
@@ -222,7 +222,9 @@ async function add_button_TV() {
     const resp = await fetch("hooks/multipleUpload/templates/bs3_btnGalleryTv.hbs");
     const btn = await resp.text();
     const $controls = $j('tbody tr td.text-center');
+    
     $controls.each(function () {
-        $j(this).append(btn);
+        a = $j('<div style="display: inline-block; width: 100px;" />').append( $j(this).html());
+        $j(this).html(a.append(btn));
     })
 }
