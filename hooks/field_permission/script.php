@@ -6,10 +6,10 @@ class FieldsPermissions
         "products" => [
             "name" => [
                 "groups_disabled" => ["users"],
-                "users_disabled" => ["admin"]
+                "users_disabled" => ["ale"]
             ],
-            "sss" => [
-                "groups_disabled" => ["users"],
+            "due" => [
+                "groups_disabled" => ["Admins"],
             ],
         ],
         "Contatcts" => [
@@ -42,29 +42,30 @@ class FieldsPermissions
     static function dv_field_permissions($tn = false, $memberInfo)
     {
         $p = new FieldsPermissions;
-        if (isset($p->permissions[$tn])) {
+        $permissions = FieldsPermissions::$permissions;
+        if (isset($permissions[$tn])) {
             $fields_table = get_table_fields($tn); //AppGini internal function
             foreach ($fields_table as $fn => $val) {
-                if (array_key_exists($fn,  $p->permissions[$tn])) {
-                    if ($p->check_permissions($p->permissions[$tn][$fn], $memberInfo)) {
+                if (array_key_exists($fn,  $permissions[$tn])) {
+                    if ($p->check_permissions($permissions[$tn][$fn], $memberInfo)) {
                         $bloqued[] = "#{$fn}";
                     }
                 }
             }
             ob_start();
-?>
+            ?>
             <script>
                 $j(function() {
                     $j('<?php echo implode(", ", $bloqued); ?>').attr('readonly', 'true');
                 })
             </script>
-<?php
+            <?php
             $h = ob_get_clean();
         }
         return $h;
     }
     //esta función verifica que no haya cambiado a la fuerza el valor del campo.
-    //se utiliza en tablename_before_update function
+    //se utiliza en tablename_before_update function and tablename_before_insert
     static function update_fields_permission($tn = false, $memberInfo, $data)
     {
         $notChanges = true;
