@@ -1,7 +1,6 @@
 <?php
 	define('PREPEND_PATH', '');
-	$app_dir = dirname(__FILE__);
-	include_once("{$app_dir}/lib.php");
+	include_once(__DIR__ . '/lib.php');
 
 	// accept a record as an assoc array, return transformed row ready to insert to table
 	$transformFunctions = [
@@ -40,6 +39,7 @@
 		'todos' => function($data, $options = []) {
 			if(isset($data['dateInit'])) $data['dateInit'] = guessMySQLDateTime($data['dateInit']);
 			if(isset($data['dateEnd'])) $data['dateEnd'] = guessMySQLDateTime($data['dateEnd']);
+			if(isset($data['product'])) $data['product'] = pkGivenLookupText($data['product'], 'todos', 'product');
 
 			return $data;
 		},
@@ -81,6 +81,6 @@
 		};
 	*/
 
-	@include("{$app_dir}/hooks/import-csv.php");
+	@include(__DIR__ . '/hooks/import-csv.php');
 
 	$ui = new CSVImportUI($transformFunctions, $filterFunctions);

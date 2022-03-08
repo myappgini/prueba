@@ -1,4 +1,4 @@
-const ajax_todo = function (data) {
+const ajax_todo = (data) => {
   return $j.ajax({
     method: "post",
     url: "hooks/todos/functions_ajax.php",

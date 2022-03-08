@@ -1,7 +1,8 @@
-<?php if(!isset($Translation)) die('No direct access allowed.'); ?>
-<?php $current_table = 'todos'; ?>
 <?php
+	if(!isset($Translation)) die('No direct access allowed.');
+	$current_table = 'todos';
 	$cleaner = new CI_Input(datalist_db_encoding);
+	$firstRecord = null;
 ?>
 <script>
 	<?php echo $current_table; ?>GetChildrenRecordsList = function(command) {
@@ -103,6 +104,7 @@
 						<td class="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][1]}"; ?>" id="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][1]}-" . html_attr($record[$config['child-primary-key-index']]); ?>"><?php echo safe_html($record[1]); ?></td>
 						<td class="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][2]}"; ?>" id="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][2]}-" . html_attr($record[$config['child-primary-key-index']]); ?>"><?php echo safe_html($record[2]); ?></td>
 						<td class="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][3]}"; ?>" id="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][3]}-" . html_attr($record[$config['child-primary-key-index']]); ?>"><?php echo safe_html($record[3]); ?></td>
+						<td class="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][4]}"; ?>" id="<?php echo "{$parameters['ChildTable']}-{$config['display-field-names'][4]}-" . html_attr($record[$config['child-primary-key-index']]); ?>"><?php echo safe_html($record[4]); ?></td>
 					</tr>
 					<?php } ?>
 				</tbody>
@@ -113,7 +115,7 @@
 								<?php if($config['show-page-progress']) { ?>
 									<span style="margin: 10px;">
 										<?php $firstRecord = ($parameters['Page'] - 1) * $config['records-per-page'] + 1; ?>
-										<?php echo str_replace(array('<FirstRecord>', '<LastRecord>', '<RecordCount>'), array($firstRecord, $firstRecord + count($records) - 1, $totalMatches), $Translation['records x to y of z']); ?>
+										<?php echo str_replace(['<FirstRecord>', '<LastRecord>', '<RecordCount>'], [$firstRecord, $firstRecord + count($records) - 1, $totalMatches], $Translation['records x to y of z']); ?>
 									</span>
 								<?php } ?>
 							<?php } else { ?>

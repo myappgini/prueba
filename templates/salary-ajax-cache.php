@@ -1,6 +1,6 @@
 <?php
-	$rdata = array_map('to_utf8', array_map('nl2br', array_map('html_attr_tags_ok', $rdata)));
-	$jdata = array_map('to_utf8', array_map('nl2br', array_map('html_attr_tags_ok', $jdata)));
+	$rdata = array_map('to_utf8', array_map('safe_html', array_map('html_attr_tags_ok', $rdata)));
+	$jdata = array_map('to_utf8', array_map('safe_html', array_map('html_attr_tags_ok', $jdata)));
 ?>
 <script>
 	$j(function() {
@@ -8,7 +8,7 @@
 
 		/* data for selected record, or defaults if none is selected */
 		var data = {
-			contacto: <?php echo json_encode(array('id' => $rdata['contacto'], 'value' => $rdata['contacto'], 'text' => $jdata['contacto'])); ?>,
+			contacto: <?php echo json_encode(['id' => $rdata['contacto'], 'value' => $rdata['contacto'], 'text' => $jdata['contacto']]); ?>,
 			nombre: <?php echo json_encode($jdata['nombre']); ?>,
 			rango: <?php echo json_encode($jdata['rango']); ?>,
 			date: <?php echo json_encode($jdata['date']); ?>

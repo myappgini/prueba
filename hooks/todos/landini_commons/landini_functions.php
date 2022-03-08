@@ -27,7 +27,7 @@ function getDataTable(&$settings, $values = false)
 
     $sql = "SELECT {$table_fields} FROM {$table_from}" . $where;
 
-    $debug ? ($error[] = "<br> $sql <br>") : false;
+    $debug && ($error[] = "<br> $sql <br>");
     $eo = ['silentErrors' => true];
     $res = sql($sql, $eo); //AppGini internal function
     $error[] = $eo;

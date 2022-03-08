@@ -37,28 +37,18 @@
                         <div class="col-xs-3">
                         defualt:  
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-xs-9">
                           <span class="glyphicon 
                             {{#when defaultImage !eq true}}
-                              glyphicon-unchecked 
+                              glyphicon-unchecked set-default-media
                             {{/when}} 
                             {{#when defaultImage eq true}}
-                              glyphicon-check 
+                              glyphicon-check set-default-media
                             {{/when}} 
-                          "></span> 
-                        </div>
-                        <div class="col-xs-5" >
-                          <button 
-                            type="button" 
-                            class="btn btn-primary btn-xs set-default-media" 
-                            data-ix="{{@key}}"
+                          "
                             data-cmd="set-default"
-                            {{#when defaultImage eq true}}
-                              style="display: none;"
-                            {{/when}} 
-                            >
-                            Set as defualt
-                          </button>
+                            data-ix="{{@key}}"
+                            ></span> 
                         </div>
                       </div>
                     </div>

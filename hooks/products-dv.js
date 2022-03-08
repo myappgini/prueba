@@ -12,7 +12,8 @@ function load_images(addFrame = false) {
             id: selected_id(),
         }
         if (addFrame) active_upload_frame(data);
-
-        loadImages(data)
+        setTimeout(() => {
+            loadImages(data)
+        }, 300);
     }
 }

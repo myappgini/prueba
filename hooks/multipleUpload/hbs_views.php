@@ -1,8 +1,8 @@
 <?php
 // 
 // Author: Alejandro Landini
-// from previewImages.php 7/4/18
 // update 10/9/20
+// update 3/3/22
 
 if (!function_exists('getMemberInfo')) {
     die('{ "error": "Invalid way to access." }');
@@ -14,7 +14,6 @@ Handlebars\Autoloader::register();
 use Handlebars\Handlebars;
 use Handlebars\Loader\FilesystemLoader;
 
-//$boostrap = "bs3";
 
 $currDir = dirname(__FILE__);
 
