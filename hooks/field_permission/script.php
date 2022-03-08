@@ -21,9 +21,15 @@ class FieldsPermissions
             "user" => [
                 "groups_disabled" => ["users", "Admins"],
                 "hidden" => false
-            ],
-
+            ]
         ],
+        "todos"=>[
+            "tarea" => [
+                "groups_disabled" => ["users"],
+                "users_disabled" => ["admin"],
+                "hidden" => false
+            ]
+        ]
     ];
 
     // format

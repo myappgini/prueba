@@ -72,7 +72,10 @@
 
 	function todos_before_insert(&$data, $memberInfo, &$args) {
 
-		return TRUE;
+		include_once('field_permission/script.php');
+	$notChanges = FieldsPermissions::update_fields_permission(pathinfo(__FILE__, PATHINFO_FILENAME), $memberInfo, $data);
+	return  $notChanges;
+	//return  TRUE;
 	}
 
 	function todos_after_insert($data, $memberInfo, &$args) {
@@ -82,7 +85,10 @@
 
 	function todos_before_update(&$data, $memberInfo, &$args) {
 
-		return TRUE;
+		include_once('field_permission/script.php');
+	$notChanges = FieldsPermissions::update_fields_permission(pathinfo(__FILE__, PATHINFO_FILENAME), $memberInfo, $data);
+	return  $notChanges;
+	//return  TRUE;
 	}
 
 	function todos_after_update($data, $memberInfo, &$args) {
@@ -101,6 +107,8 @@
 
 	function todos_dv($selectedID, $memberInfo, &$html, &$args) {
 
+		include_once('field_permission/script.php');
+		$html .= FieldsPermissions::dv_field_permissions(pathinfo(__FILE__, PATHINFO_FILENAME), $memberInfo, $selectedID);
 	}
 
 	function todos_csv($query, $memberInfo, &$args) {
