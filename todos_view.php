@@ -22,6 +22,7 @@
 		"`todos`.`tarea`" => "tarea",
 		"if(`todos`.`dateInit`,date_format(`todos`.`dateInit`,'%d/%m/%Y'),'')" => "dateInit",
 		"if(`todos`.`dateEnd`,date_format(`todos`.`dateEnd`,'%d/%m/%Y'),'')" => "dateEnd",
+		"IF(    CHAR_LENGTH(`products1`.`id`), CONCAT_WS('',   `products1`.`id`), '') /* Product */" => "product",
 	];
 	// mapping incoming sort by requests to actual query fields
 	$x->SortFields = [
@@ -29,6 +30,7 @@
 		2 => 2,
 		3 => '`todos`.`dateInit`',
 		4 => '`todos`.`dateEnd`',
+		5 => '`products1`.`id`',
 	];
 
 	// Fields that can be displayed in the csv file
@@ -37,6 +39,7 @@
 		"`todos`.`tarea`" => "tarea",
 		"if(`todos`.`dateInit`,date_format(`todos`.`dateInit`,'%d/%m/%Y'),'')" => "dateInit",
 		"if(`todos`.`dateEnd`,date_format(`todos`.`dateEnd`,'%d/%m/%Y'),'')" => "dateEnd",
+		"IF(    CHAR_LENGTH(`products1`.`id`), CONCAT_WS('',   `products1`.`id`), '') /* Product */" => "product",
 	];
 	// Fields that can be filtered
 	$x->QueryFieldsFilters = [
@@ -44,6 +47,7 @@
 		"`todos`.`tarea`" => "Tareas",
 		"`todos`.`dateInit`" => "Date Init",
 		"`todos`.`dateEnd`" => "Date End",
+		"IF(    CHAR_LENGTH(`products1`.`id`), CONCAT_WS('',   `products1`.`id`), '') /* Product */" => "Product",
 	];
 
 	// Fields that can be quick searched
@@ -52,12 +56,13 @@
 		"`todos`.`tarea`" => "tarea",
 		"if(`todos`.`dateInit`,date_format(`todos`.`dateInit`,'%d/%m/%Y'),'')" => "dateInit",
 		"if(`todos`.`dateEnd`,date_format(`todos`.`dateEnd`,'%d/%m/%Y'),'')" => "dateEnd",
+		"IF(    CHAR_LENGTH(`products1`.`id`), CONCAT_WS('',   `products1`.`id`), '') /* Product */" => "product",
 	];
 
 	// Lookup fields that can be used as filterers
-	$x->filterers = [];
+	$x->filterers = ['product' => 'Product', ];
 
-	$x->QueryFrom = "`todos` ";
+	$x->QueryFrom = "`todos` LEFT JOIN `products` as products1 ON `products1`.`id`=`todos`.`product` ";
 	$x->QueryWhere = '';
 	$x->QueryOrder = '';
 
@@ -85,10 +90,10 @@
 	$x->TableIcon = 'table.gif';
 	$x->PrimaryKey = '`todos`.`id`';
 
-	$x->ColWidth = [150, 150, 150, ];
-	$x->ColCaption = ['Tareas', 'Date Init', 'Date End', ];
-	$x->ColFieldName = ['tarea', 'dateInit', 'dateEnd', ];
-	$x->ColNumber  = [2, 3, 4, ];
+	$x->ColWidth = [150, 150, 150, 150, ];
+	$x->ColCaption = ['Tareas', 'Date Init', 'Date End', 'Product', ];
+	$x->ColFieldName = ['tarea', 'dateInit', 'dateEnd', 'product', ];
+	$x->ColNumber  = [2, 3, 4, 5, ];
 
 	// template paths below are based on the app main directory
 	$x->Template = 'templates/todos_templateTV.html';

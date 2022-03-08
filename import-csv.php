@@ -39,6 +39,7 @@
 		'todos' => function($data, $options = []) {
 			if(isset($data['dateInit'])) $data['dateInit'] = guessMySQLDateTime($data['dateInit']);
 			if(isset($data['dateEnd'])) $data['dateEnd'] = guessMySQLDateTime($data['dateEnd']);
+			if(isset($data['product'])) $data['product'] = pkGivenLookupText($data['product'], 'todos', 'product');
 
 			return $data;
 		},

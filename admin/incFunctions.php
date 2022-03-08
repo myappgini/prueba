@@ -1177,6 +1177,13 @@
 							'description' => '',
 						],
 					],
+					'product' => [
+						'appgini' => "INT UNSIGNED NULL",
+						'info' => [
+							'caption' => 'Product',
+							'description' => '',
+						],
+					],
 				],
 			];
 		}
@@ -2203,6 +2210,9 @@
 				'view_membership_groups' => ['groupID'],
 				'tmp_tables_fields' => ['table_field'],
 			],
+			'todos' => [
+				'products' => ['product'],
+			],
 		];
 
 		return isset($parents[$table]) ? $parents[$table] : [];
@@ -2402,6 +2412,7 @@
 			'view_membership_groups' => [
 			],
 			'todos' => [
+				'product' => 'SELECT `products`.`id`, `products`.`id` FROM `products` ORDER BY 2',
 			],
 		];
 

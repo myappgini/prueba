@@ -111,6 +111,17 @@
 		'view_membership_groups' => [
 		],
 		'todos' => [
+			'product' => [
+				'parent_table' => 'products',
+				'parent_pk_field' => 'id',
+				'parent_caption' => '`products`.`id`',
+				'parent_from' => '`products` ',
+				'filterers' => [],
+				'custom_query' => '',
+				'inherit_permissions' => false,
+				'list_type' => 0,
+				'not_null' => false,
+			],
 		],
 	];
 

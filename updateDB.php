@@ -86,9 +86,14 @@
 				PRIMARY KEY (`id`),
 				`tarea` TEXT NULL,
 				`dateInit` DATE NULL,
-				`dateEnd` DATE NULL
-			) CHARSET utf8"
+				`dateEnd` DATE NULL,
+				`product` INT UNSIGNED NULL
+			) CHARSET utf8", [
+				"ALTER TABLE todos ADD `field5` VARCHAR(40)",
+				"ALTER TABLE `todos` CHANGE `field5` `product` VARCHAR(40) NULL ",
+			]
 		);
+		setupIndexes('todos', ['product',]);
 
 
 

@@ -16,6 +16,7 @@ function todos_insert(&$error_message = '') {
 		'tarea' => br2nl(Request::val('tarea', '')),
 		'dateInit' => Request::dateComponents('dateInit', '1'),
 		'dateEnd' => Request::dateComponents('dateEnd', '1'),
+		'product' => Request::lookup('product', ''),
 	];
 
 
@@ -112,6 +113,7 @@ function todos_update(&$selected_id, &$error_message = '') {
 		'tarea' => br2nl(Request::val('tarea', '')),
 		'dateInit' => Request::dateComponents('dateInit', ''),
 		'dateEnd' => Request::dateComponents('dateEnd', ''),
+		'product' => Request::lookup('product', ''),
 	];
 
 	// get existing values
@@ -191,6 +193,7 @@ function todos_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $Allo
 		$dvprint = true;
 	}
 
+	$filterer_product = Request::val('filterer_product');
 
 	// populate filterers, starting from children to grand-parents
 
@@ -212,6 +215,8 @@ function todos_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $Allo
 	$combo_dateEnd->DefaultDate = parseMySQLDate('1', '1');
 	$combo_dateEnd->MonthNames = $Translation['month names'];
 	$combo_dateEnd->NamePrefix = 'dateEnd';
+	// combobox: product
+	$combo_product = new DataCombo;
 
 	if($selected_id) {
 		// mm: check member permissions
@@ -236,24 +241,107 @@ function todos_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $Allo
 		}
 		$combo_dateInit->DefaultDate = $row['dateInit'];
 		$combo_dateEnd->DefaultDate = $row['dateEnd'];
+		$combo_product->SelectedData = $row['product'];
 		$urow = $row; /* unsanitized data */
 		$row = array_map('safe_html', $row);
 	} else {
 		$filterField = Request::val('FilterField');
 		$filterOperator = Request::val('FilterOperator');
 		$filterValue = Request::val('FilterValue');
+		$combo_product->SelectedData = $filterer_product;
 	}
+	$combo_product->HTML = '<span id="product-container' . $rnd1 . '"></span><input type="hidden" name="product" id="product' . $rnd1 . '" value="' . html_attr($combo_product->SelectedData) . '">';
+	$combo_product->MatchText = '<span id="product-container-readonly' . $rnd1 . '"></span><input type="hidden" name="product" id="product' . $rnd1 . '" value="' . html_attr($combo_product->SelectedData) . '">';
 
 	ob_start();
 	?>
 
 	<script>
 		// initial lookup values
+		AppGini.current_product__RAND__ = { text: "", value: "<?php echo addslashes($selected_id ? $urow['product'] : htmlspecialchars($filterer_product, ENT_QUOTES)); ?>"};
 
 		jQuery(function() {
 			setTimeout(function() {
+				if(typeof(product_reload__RAND__) == 'function') product_reload__RAND__();
 			}, 50); /* we need to slightly delay client-side execution of the above code to allow AppGini.ajaxCache to work */
 		});
+		function product_reload__RAND__() {
+		<?php if(($AllowUpdate || $AllowInsert) && !$dvprint) { ?>
+
+			$j("#product-container__RAND__").select2({
+				/* initial default value */
+				initSelection: function(e, c) {
+					$j.ajax({
+						url: 'ajax_combo.php',
+						dataType: 'json',
+						data: { id: AppGini.current_product__RAND__.value, t: 'todos', f: 'product' },
+						success: function(resp) {
+							c({
+								id: resp.results[0].id,
+								text: resp.results[0].text
+							});
+							$j('[name="product"]').val(resp.results[0].id);
+							$j('[id=product-container-readonly__RAND__]').html('<span id="product-match-text">' + resp.results[0].text + '</span>');
+							if(resp.results[0].id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=products_view_parent]').hide(); } else { $j('.btn[id=products_view_parent]').show(); }
+
+
+							if(typeof(product_update_autofills__RAND__) == 'function') product_update_autofills__RAND__();
+						}
+					});
+				},
+				width: '100%',
+				formatNoMatches: function(term) { return '<?php echo addslashes($Translation['No matches found!']); ?>'; },
+				minimumResultsForSearch: 5,
+				loadMorePadding: 200,
+				ajax: {
+					url: 'ajax_combo.php',
+					dataType: 'json',
+					cache: true,
+					data: function(term, page) { return { s: term, p: page, t: 'todos', f: 'product' }; },
+					results: function(resp, page) { return resp; }
+				},
+				escapeMarkup: function(str) { return str; }
+			}).on('change', function(e) {
+				AppGini.current_product__RAND__.value = e.added.id;
+				AppGini.current_product__RAND__.text = e.added.text;
+				$j('[name="product"]').val(e.added.id);
+				if(e.added.id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=products_view_parent]').hide(); } else { $j('.btn[id=products_view_parent]').show(); }
+
+
+				if(typeof(product_update_autofills__RAND__) == 'function') product_update_autofills__RAND__();
+			});
+
+			if(!$j("#product-container__RAND__").length) {
+				$j.ajax({
+					url: 'ajax_combo.php',
+					dataType: 'json',
+					data: { id: AppGini.current_product__RAND__.value, t: 'todos', f: 'product' },
+					success: function(resp) {
+						$j('[name="product"]').val(resp.results[0].id);
+						$j('[id=product-container-readonly__RAND__]').html('<span id="product-match-text">' + resp.results[0].text + '</span>');
+						if(resp.results[0].id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=products_view_parent]').hide(); } else { $j('.btn[id=products_view_parent]').show(); }
+
+						if(typeof(product_update_autofills__RAND__) == 'function') product_update_autofills__RAND__();
+					}
+				});
+			}
+
+		<?php } else { ?>
+
+			$j.ajax({
+				url: 'ajax_combo.php',
+				dataType: 'json',
+				data: { id: AppGini.current_product__RAND__.value, t: 'todos', f: 'product' },
+				success: function(resp) {
+					$j('[id=product-container__RAND__], [id=product-container-readonly__RAND__]').html('<span id="product-match-text">' + resp.results[0].text + '</span>');
+					if(resp.results[0].id == '<?php echo empty_lookup_value; ?>') { $j('.btn[id=products_view_parent]').hide(); } else { $j('.btn[id=products_view_parent]').show(); }
+
+					if(typeof(product_update_autofills__RAND__) == 'function') product_update_autofills__RAND__();
+				}
+			});
+		<?php } ?>
+
+		}
 	</script>
 	<?php
 
@@ -317,6 +405,8 @@ function todos_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $Allo
 		$jsReadOnly .= "\tjQuery('#dateInitDay, #dateInitMonth, #dateInitYear').prop('disabled', true).css({ color: '#555', backgroundColor: '#fff' });\n";
 		$jsReadOnly .= "\tjQuery('#dateEnd').prop('readonly', true);\n";
 		$jsReadOnly .= "\tjQuery('#dateEndDay, #dateEndMonth, #dateEndYear').prop('disabled', true).css({ color: '#555', backgroundColor: '#fff' });\n";
+		$jsReadOnly .= "\tjQuery('#product').prop('disabled', true).css({ color: '#555', backgroundColor: '#fff' });\n";
+		$jsReadOnly .= "\tjQuery('#product_caption').prop('disabled', true).css({ color: '#555', backgroundColor: 'white' });\n";
 		$jsReadOnly .= "\tjQuery('.select2-container').hide();\n";
 
 		$noUploads = true;
@@ -330,9 +420,12 @@ function todos_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $Allo
 	$templateCode = str_replace('<%%COMBOTEXT(dateInit)%%>', $combo_dateInit->GetHTML(true), $templateCode);
 	$templateCode = str_replace('<%%COMBO(dateEnd)%%>', ($selected_id && !$arrPerm[3] ? '<div class="form-control-static">' . $combo_dateEnd->GetHTML(true) . '</div>' : $combo_dateEnd->GetHTML()), $templateCode);
 	$templateCode = str_replace('<%%COMBOTEXT(dateEnd)%%>', $combo_dateEnd->GetHTML(true), $templateCode);
+	$templateCode = str_replace('<%%COMBO(product)%%>', $combo_product->HTML, $templateCode);
+	$templateCode = str_replace('<%%COMBOTEXT(product)%%>', $combo_product->MatchText, $templateCode);
+	$templateCode = str_replace('<%%URLCOMBOTEXT(product)%%>', urlencode($combo_product->MatchText), $templateCode);
 
 	/* lookup fields array: 'lookup field name' => ['parent table name', 'lookup field caption'] */
-	$lookup_fields = [];
+	$lookup_fields = ['product' => ['products', 'Product'], ];
 	foreach($lookup_fields as $luf => $ptfc) {
 		$pt_perm = getTablePermissions($ptfc[0]);
 
@@ -352,6 +445,7 @@ function todos_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $Allo
 	$templateCode = str_replace('<%%UPLOADFILE(tarea)%%>', '', $templateCode);
 	$templateCode = str_replace('<%%UPLOADFILE(dateInit)%%>', '', $templateCode);
 	$templateCode = str_replace('<%%UPLOADFILE(dateEnd)%%>', '', $templateCode);
+	$templateCode = str_replace('<%%UPLOADFILE(product)%%>', '', $templateCode);
 
 	// process values
 	if($selected_id) {
@@ -368,6 +462,9 @@ function todos_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $Allo
 		$templateCode = str_replace('<%%URLVALUE(dateInit)%%>', urlencode(@date('d/m/Y', @strtotime(html_attr($urow['dateInit'])))), $templateCode);
 		$templateCode = str_replace('<%%VALUE(dateEnd)%%>', @date('d/m/Y', @strtotime(html_attr($row['dateEnd']))), $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(dateEnd)%%>', urlencode(@date('d/m/Y', @strtotime(html_attr($urow['dateEnd'])))), $templateCode);
+		if( $dvprint) $templateCode = str_replace('<%%VALUE(product)%%>', safe_html($urow['product']), $templateCode);
+		if(!$dvprint) $templateCode = str_replace('<%%VALUE(product)%%>', html_attr($row['product']), $templateCode);
+		$templateCode = str_replace('<%%URLVALUE(product)%%>', urlencode($urow['product']), $templateCode);
 	} else {
 		$templateCode = str_replace('<%%VALUE(id)%%>', '', $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(id)%%>', urlencode(''), $templateCode);
@@ -377,6 +474,8 @@ function todos_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $Allo
 		$templateCode = str_replace('<%%URLVALUE(dateInit)%%>', urlencode('1'), $templateCode);
 		$templateCode = str_replace('<%%VALUE(dateEnd)%%>', '1', $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(dateEnd)%%>', urlencode('1'), $templateCode);
+		$templateCode = str_replace('<%%VALUE(product)%%>', '', $templateCode);
+		$templateCode = str_replace('<%%URLVALUE(product)%%>', urlencode(''), $templateCode);
 	}
 
 	// process translations

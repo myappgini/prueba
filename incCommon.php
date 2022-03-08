@@ -112,7 +112,7 @@
 			'db_field_permission' => "`db_field_permission`.`ID_field_permissions` as 'ID_field_permissions', IF(    CHAR_LENGTH(`view_membership_groups1`.`name`), CONCAT_WS('',   `view_membership_groups1`.`name`), '') as 'groupID', IF(    CHAR_LENGTH(`tmp_tables_fields1`.`table_filed`), CONCAT_WS('',   `tmp_tables_fields1`.`table_filed`), '') as 'table_field', `db_field_permission`.`fieldstate` as 'fieldstate'",
 			'tmp_tables_fields' => "`tmp_tables_fields`.`table_filed` as 'table_filed'",
 			'view_membership_groups' => "`view_membership_groups`.`groupID` as 'groupID', `view_membership_groups`.`name` as 'name', `view_membership_groups`.`description` as 'description', `view_membership_groups`.`allowSignup` as 'allowSignup', `view_membership_groups`.`needsApproval` as 'needsApproval'",
-			'todos' => "`todos`.`id` as 'id', `todos`.`tarea` as 'tarea', if(`todos`.`dateInit`,date_format(`todos`.`dateInit`,'%d/%m/%Y'),'') as 'dateInit', if(`todos`.`dateEnd`,date_format(`todos`.`dateEnd`,'%d/%m/%Y'),'') as 'dateEnd'",
+			'todos' => "`todos`.`id` as 'id', `todos`.`tarea` as 'tarea', if(`todos`.`dateInit`,date_format(`todos`.`dateInit`,'%d/%m/%Y'),'') as 'dateInit', if(`todos`.`dateEnd`,date_format(`todos`.`dateEnd`,'%d/%m/%Y'),'') as 'dateEnd', IF(    CHAR_LENGTH(`products1`.`id`), CONCAT_WS('',   `products1`.`id`), '') as 'product'",
 		];
 
 		if(isset($sql_fields[$table_name])) return $sql_fields[$table_name];
@@ -130,7 +130,7 @@
 			'db_field_permission' => "`db_field_permission` LEFT JOIN `view_membership_groups` as view_membership_groups1 ON `view_membership_groups1`.`groupID`=`db_field_permission`.`groupID` LEFT JOIN `tmp_tables_fields` as tmp_tables_fields1 ON `tmp_tables_fields1`.`table_filed`=`db_field_permission`.`table_field` ",
 			'tmp_tables_fields' => "`tmp_tables_fields` ",
 			'view_membership_groups' => "`view_membership_groups` ",
-			'todos' => "`todos` ",
+			'todos' => "`todos` LEFT JOIN `products` as products1 ON `products1`.`id`=`todos`.`product` ",
 		];
 
 		$pkey = [
@@ -233,6 +233,7 @@
 				'tarea' => '',
 				'dateInit' => '1',
 				'dateEnd' => '1',
+				'product' => '',
 			],
 		];
 
