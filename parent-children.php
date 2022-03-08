@@ -19,6 +19,29 @@
 			'view_membership_groups' => [
 			],
 			'todos' => [
+				'product' => [
+					'parent-table' => 'products',
+					'parent-primary-key' => 'id',
+					'child-primary-key' => 'id',
+					'child-primary-key-index' => 0,
+					'tab-label' => 'Todos <span class="hidden child-label-todos child-field-caption">(Product)</span>',
+					'auto-close' => false,
+					'display-refresh' => true,
+					'display-add-new' => true,
+					'forced-where' => '',
+					'display-fields' => [1 => 'Tareas', 2 => 'Date Init', 3 => 'Date End', 4 => 'Product'],
+					'display-field-names' => [1 => 'tarea', 2 => 'dateInit', 3 => 'dateEnd', 4 => 'product'],
+					'sortable-fields' => [0 => '`todos`.`id`', 1 => 2, 2 => '`todos`.`dateInit`', 3 => '`todos`.`dateEnd`', 4 => '`products1`.`id`'],
+					'records-per-page' => 10,
+					'default-sort-by' => false,
+					'default-sort-direction' => 'asc',
+					'open-detail-view-on-click' => true,
+					'display-page-selector' => true,
+					'show-page-progress' => true,
+					'template' => 'children-todos',
+					'template-printable' => 'children-todos-printable',
+					'query' => "SELECT `todos`.`id` as 'id', `todos`.`tarea` as 'tarea', if(`todos`.`dateInit`,date_format(`todos`.`dateInit`,'%d/%m/%Y'),'') as 'dateInit', if(`todos`.`dateEnd`,date_format(`todos`.`dateEnd`,'%d/%m/%Y'),'') as 'dateEnd', IF(    CHAR_LENGTH(`products1`.`id`), CONCAT_WS('',   `products1`.`id`), '') as 'product' FROM `todos` LEFT JOIN `products` as products1 ON `products1`.`id`=`todos`.`product` "
+				],
 			],
 		];
 

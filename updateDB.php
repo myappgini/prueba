@@ -88,10 +88,7 @@
 				`dateInit` DATE NULL,
 				`dateEnd` DATE NULL,
 				`product` INT UNSIGNED NULL
-			) CHARSET utf8", [
-				"ALTER TABLE todos ADD `field5` VARCHAR(40)",
-				"ALTER TABLE `todos` CHANGE `field5` `product` VARCHAR(40) NULL ",
-			]
+			) CHARSET utf8"
 		);
 		setupIndexes('todos', ['product',]);
 
