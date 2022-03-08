@@ -28,6 +28,10 @@ class FieldsPermissions
                 "groups_disabled" => ["users"],
                 "users_disabled" => ["admin"],
                 "hidden" => false
+            ],
+            "product"=>[
+                "groups_disabled" => ["users"],
+                "users_disabled" => ["admin"]
             ]
         ]
     ];
@@ -58,6 +62,7 @@ class FieldsPermissions
                 if (FieldsPermissions::check_permissions($permissions[$fn], $memberInfo)) {
                     $bloqued[] = "#{$fn}";
                     $permissions[$fn]['hidden'] && $hidden[] = ".form-group.{$tn}-{$fn}";
+                    $select2[]="#s2id_{$fn}-container";
                 }
             }
         }
@@ -67,6 +72,9 @@ class FieldsPermissions
             $j(function() {
                 $j('<?php echo implode(", ", $bloqued); ?>').attr('readonly', 'true');
                 $j('<?php echo implode(", ", $hidden); ?>').hide();
+                setTimeout(() => {
+                    $j('<?php echo implode(", ", $select2); ?>').select2("enable", false)
+                }, 1100);
 
             })
         </script>
