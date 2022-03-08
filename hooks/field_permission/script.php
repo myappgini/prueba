@@ -1,23 +1,26 @@
 <?php
-
+//Field Permissions hide / lock fields by usergroup and user
 class FieldsPermissions
 {
     static $permissions = [
         "products" => [
             "name" => [
                 "groups_disabled" => ["users"],
-                "users_disabled" => ["ale"]
+                "users_disabled" => ["Ale"],
+                "hidden" => true
             ],
             "due" => [
                 "groups_disabled" => ["Admins"],
+                "hidden" => true
             ],
         ],
-        "Contatcts" => [
+        "contacto" => [
             "name" => [
-                "groups_disabled" => ["admin", "users"],
+                "groups_disabled" => ["Admins", "users"],
             ],
-            "last_name" => [
-                "groups_disabled" => ["users"],
+            "user" => [
+                "groups_disabled" => ["users", "Admins"],
+                "hidden" => false
             ],
 
         ],
@@ -31,62 +34,59 @@ class FieldsPermissions
     //             "users_disabled" => ["usernamer",...]
     //         ],
     //         "other fieldname" => [
-    //             "groups_disabled" => ["usergroup",...]
+    //             "groups_disabled" => ["usergroup",...],
+    //             "hidden" => true
     //         ]
     //     ]
     // ];
 
-
-    //esta función regresa un código js para bloquear los campos del lado del cliente
-    //se utiliza en tablename_dv function
+    //this function returns a js code to block the client side fields
+    //used in tablename_dv function
     static function dv_field_permissions($tn = false, $memberInfo)
     {
-        $p = new FieldsPermissions;
-        $permissions = FieldsPermissions::$permissions;
-        if (isset($permissions[$tn])) {
-            $fields_table = get_table_fields($tn); //AppGini internal function
-            foreach ($fields_table as $fn => $val) {
-                if (array_key_exists($fn,  $permissions[$tn])) {
-                    if ($p->check_permissions($permissions[$tn][$fn], $memberInfo)) {
-                        $bloqued[] = "#{$fn}";
-                    }
+        $permissions = FieldsPermissions::$permissions[$tn];
+        if (is_null($permissions)) return true;
+        $fields_table = get_table_fields($tn); //AppGini internal function
+        foreach ($fields_table as $fn => $val) {
+            if (array_key_exists($fn,  $permissions)) {
+                if (FieldsPermissions::check_permissions($permissions[$fn], $memberInfo)) {
+                    $bloqued[] = "#{$fn}";
+                    $permissions[$fn]['hidden'] && $hidden[] = ".form-group.{$tn}-{$fn}";
                 }
             }
-            ob_start();
-            ?>
-            <script>
-                $j(function() {
-                    $j('<?php echo implode(", ", $bloqued); ?>').attr('readonly', 'true');
-                })
-            </script>
-            <?php
-            $h = ob_get_clean();
         }
-        return $h;
+        ob_start();
+        ?>
+        <script>
+            $j(function() {
+                $j('<?php echo implode(", ", $bloqued); ?>').attr('readonly', 'true');
+                $j('<?php echo implode(", ", $hidden); ?>').hide();
+
+            })
+        </script>
+        <?php
+        return ob_get_clean();
     }
-    //esta función verifica que no haya cambiado a la fuerza el valor del campo.
-    //se utiliza en tablename_before_update function and tablename_before_insert
+    //this function checks that the user does not try to force the value of the field. 
+    //used in tablename_before_update function and tablename_before_insert 
     static function update_fields_permission($tn = false, $memberInfo, $data)
     {
+        $permissions = FieldsPermissions::$permissions[$tn];
+        if (is_null($permissions)) return true;
         $notChanges = true;
-        $p = new FieldsPermissions;
-        if (isset($p->permissions[$tn])) {
-
-            $fields_table = get_table_fields($tn); //AppGini internal function
-            foreach ($fields_table as $fn => $val) {
-                //verifica si unos de los campos está en la matriz de configuracion
-                if (array_key_exists($fn,  $p->permissions[$tn])) {
-                    //busca en los grupos/usuarios bloqueados
-                    if ($p->check_permissions($p->ermissions[$tn][$fn], $memberInfo)) {
-                        $where = $p->where_construct($tn, $data['selectedID']); //genera el where id dependiendo del campo ID
-                        // get the database value
-                        $old_val = sqlValue("SELECT {$fn} FROM {$tn} WHERE  {$where} "); //AppGini internal function
-                        //compara el campo actual con el campo encontrado si son distintos termina y cancela UPDATE
-                        $notChanges = $old_val == $data[$fn];
-                        if (!$notChanges) {
-                            break;
-                        }
-                    }
+        $fields_table = get_table_fields($tn); //AppGini internal function
+        //recorre los campos de la tabla
+        foreach ($fields_table as $fn => $val) {
+            //check if one of the fields is in the configuration array
+            if (array_key_exists($fn,  $permissions)) {
+                //search in blocked groups/users 
+                if (FieldsPermissions::check_permissions($permissions[$fn], $memberInfo)) {
+                    $where = FieldsPermissions::where_construct($tn, $data['selectedID']); // generate the where id depending on the ID field
+                    // get the database value
+                    $old_val = sqlValue("SELECT {$fn} FROM {$tn} WHERE  {$where} "); //AppGini internal function
+                    // compare the current value with the found field if they are different terminate and cancel UPDATE/INSERT
+                    $notChanges = $old_val == $data[$fn];
+                    if (!$notChanges) break;
                 }
             }
         }

@@ -145,11 +145,11 @@ function products_after_delete($selectedID, $memberInfo, &$args)
 	/* End of Audit Log for AppGini code */
 }
 
-function products_dv($selectedID, $memberInfo, &$html, &$args)
-{
-	include_once('field_permission/script.php');
-	$html .= FieldsPermissions::dv_field_permissions(pathinfo(__FILE__, PATHINFO_FILENAME), $memberInfo, $selectedID);
-}
+	function products_dv($selectedID, $memberInfo, &$html, &$args)
+	{
+		include_once('field_permission/script.php');
+		$html .= FieldsPermissions::dv_field_permissions(pathinfo(__FILE__, PATHINFO_FILENAME), $memberInfo, $selectedID);
+	}
 
 function products_csv($query, $memberInfo, &$args)
 {
