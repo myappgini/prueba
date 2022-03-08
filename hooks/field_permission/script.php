@@ -2,7 +2,7 @@
 //Field Permissions hide / lock fields by usergroup and user
 class FieldsPermissions
 {
-    static $permissions = [
+    public static $permissions = [
         "products" => [
             "name" => [
                 "groups_disabled" => ["users"],
@@ -52,14 +52,14 @@ class FieldsPermissions
 
     //this function returns a js code to block the client side fields
     //used in tablename_dv function
-    static function dv_field_permissions($tn = false, $memberInfo)
+    public static function dv_field_permissions($tn = false, $memberInfo)
     {
-        $permissions = FieldsPermissions::$permissions[$tn];
+        $permissions = self::$permissions[$tn];
         if (is_null($permissions)) return true;
         $fields_table = get_table_fields($tn); //AppGini internal function
         foreach ($fields_table as $fn => $val) {
             if (array_key_exists($fn,  $permissions)) {
-                if (FieldsPermissions::check_permissions($permissions[$fn], $memberInfo)) {
+                if (self::check_permissions($permissions[$fn], $memberInfo)) {
                     $bloqued[] = "#{$fn}";
                     $permissions[$fn]['hidden'] && $hidden[] = ".form-group.{$tn}-{$fn}";
                     $select2[]="#s2id_{$fn}-container";
@@ -83,19 +83,19 @@ class FieldsPermissions
     }
     //this function checks that the user does not try to force the value of the field. 
     //used in tablename_before_update function and tablename_before_insert 
-    static function update_fields_permission($tn = false, $memberInfo, $data)
+    public static function update_fields_permission($tn = false, $memberInfo, $data)
     {
-        $permissions = FieldsPermissions::$permissions[$tn];
+        $permissions = self::$permissions[$tn];
         if (is_null($permissions)) return true;
         $notChanges = true;
         $fields_table = get_table_fields($tn); //AppGini internal function
-        //recorre los campos de la tabla
+        //iterate through the fields of the table
         foreach ($fields_table as $fn => $val) {
             //check if one of the fields is in the configuration array
             if (array_key_exists($fn,  $permissions)) {
                 //search in blocked groups/users 
-                if (FieldsPermissions::check_permissions($permissions[$fn], $memberInfo)) {
-                    $where = FieldsPermissions::where_construct($tn, $data['selectedID']); // generate the where id depending on the ID field
+                if (self::check_permissions($permissions[$fn], $memberInfo)) {
+                    $where = self::where_construct($tn, $data['selectedID']); // generate the where id depending on the ID field
                     // get the database value
                     $old_val = sqlValue("SELECT {$fn} FROM {$tn} WHERE  {$where} "); //AppGini internal function
                     // compare the current value with the found field if they are different terminate and cancel UPDATE/INSERT
