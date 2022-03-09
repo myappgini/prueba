@@ -196,8 +196,7 @@ class MultipleUpload
                 $renameFlag = true;
                 if (!strcmp($_FILES['uploadedFile']['name'], $file_name_dir)) {
                     // la primera vez
-                    $this->uploaded_file['basename'] = $this->uploaded_file['filename'] . '-' . '1' . "." . $this->uploaded_file['extension'];
-                    $this->uploaded_file['filename']  = $this->uploaded_file['filename'] . '-' . '1';
+                    $new_name  = $this->uploaded_file['filename'] . '-' . '1';
                 } else {
                     //increment number at the end of the name 
                     //( sorted desc, first one is the largest number)
@@ -207,13 +206,15 @@ class MultipleUpload
                         $matches
                     );
                     $number = preg_replace('/[^0-9]/', '', $matches[0]);
-                    $this->uploaded_file['basename'] = $this->uploaded_file['filename'] . '-' . (((int) $number) + 1) . "." . $this->uploaded_file['extension'];
-                    $this->uploaded_file['filename'] = $this->uploaded_file['filename'] . '-' . (((int) $number) + 1);
+                    $new_name = $this->uploaded_file['filename'] . '-' . (((int) $number) + 1);
                     break;
                 }
             }
         }
-
+        if ($renameFlag ){
+            $this->uploaded_file['filename']=$new_name;
+            $this->uploaded_file['basename']=$new_name . "." . $this->uploaded_file['extension'];
+        }
         return $renameFlag;
     }
 }
