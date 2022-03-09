@@ -54,14 +54,13 @@ class FieldsPermissions
     //used in tablename_dv function
     public static function dv_field_permissions($tn = false, $memberInfo)
     {
-        $permissions = self::$permissions[$tn];
-        if (is_null($permissions)) return true;
+        if (is_null(self::$permissions[$tn])) return true;
         $fields_table = get_table_fields($tn); //AppGini internal function
         foreach ($fields_table as $fn => $val) {
-            if (array_key_exists($fn,  $permissions)) {
-                if (self::check_permissions($permissions[$fn], $memberInfo)) {
+            if (array_key_exists($fn,  self::$permissions[$tn])) {
+                if (self::check_permissions(self::$permissions[$tn][$fn], $memberInfo)) {
                     $bloqued[] = "#{$fn}";
-                    $permissions[$fn]['hidden'] && $hidden[] = ".form-group.{$tn}-{$fn}";
+                    self::$permissions[$tn][$fn]['hidden'] && $hidden[] = ".form-group.{$tn}-{$fn}";
                     $select2[]="#s2id_{$fn}-container";
                 }
             }
@@ -72,9 +71,7 @@ class FieldsPermissions
             $j(function() {
                 $j('<?php echo implode(", ", $bloqued); ?>').attr('readonly', 'true');
                 $j('<?php echo implode(", ", $hidden); ?>').hide();
-                setTimeout(() => {
-                    $j('<?php echo implode(", ", $select2); ?>').select2("enable", false)
-                }, 1100);
+                setTimeout(() => { $j('<?php echo implode(", ", $select2); ?>').select2("enable", false)}, 1100);
 
             })
         </script>
@@ -85,21 +82,20 @@ class FieldsPermissions
     //used in tablename_before_update function and tablename_before_insert 
     public static function update_fields_permission($tn = false, $memberInfo, $data)
     {
-        $permissions = self::$permissions[$tn];
-        if (is_null($permissions)) return true;
+        if (is_null(self::$permissions[$tn])) return true;
         $notChanges = true;
         $fields_table = get_table_fields($tn); //AppGini internal function
         //iterate through the fields of the table
         foreach ($fields_table as $fn => $val) {
             //check if one of the fields is in the configuration array
-            if (array_key_exists($fn,  $permissions)) {
+            if (array_key_exists($fn,  self::$permissions[$tn])) {
                 //search in blocked groups/users 
-                if (self::check_permissions($permissions[$fn], $memberInfo)) {
+                if (self::check_permissions(self::$permissions[$tn][$fn], $memberInfo)) {
                     $where = self::where_construct($tn, $data['selectedID']); // generate the where id depending on the ID field
-                    // get the database value
-                    $old_val = sqlValue("SELECT {$fn} FROM {$tn} WHERE  {$where} "); //AppGini internal function
+                    // get the database current value
+                    $current_val = sqlValue("SELECT {$fn} FROM {$tn} WHERE  {$where} "); //AppGini internal function
                     // compare the current value with the found field if they are different terminate and cancel UPDATE/INSERT
-                    $notChanges = $old_val == $data[$fn];
+                    $notChanges = $current_val == $data[$fn];
                     if (!$notChanges) break;
                 }
             }
