@@ -5,17 +5,17 @@ const Def_Settings = {
     cmd: false,
 };
 
-const Ajax_Settings = {
+var Ajax_Settings = {
     method: "post",
     url: "hooks/multipleUpload/functions-ajax.php",
-    dataType: "json"
+    dataType: "json",
 }
 
 const selectedIx = function (obj) {
     return $j(obj).closest('li.list-group-item-container').attr('data-ix');
 }
 
-const ajax = function (data){
+const ajax = function (data) {
     return $j.ajax({
         method: Ajax_Settings.method,
         url: Ajax_Settings.url,
@@ -46,21 +46,19 @@ $j('body').on('click', '.set-default-media', function (e) {
         lastix = $currentDefault.data();
     $currentDefault.removeClass('list-group-item-success');
     $currentDefault.find('span.glyphicon-check')
-                    .addClass('glyphicon-unchecked')
-                    .removeClass('glyphicon-check');
+        .addClass('glyphicon-unchecked')
+        .removeClass('glyphicon-check');
     $currentDefault.find('button.btn-primary').show();
-    let data = $this.closest(".modal-body").data();
+    var data = $this.closest(".modal-body").data();
 
     data = $j.extend({}, $this.data(), data)
-    if (typeof lastix !== 'undefined') {
-        data.lastix = lastix.ix;
-    }
 
-    ajax(data).done(function(res){
+    if (typeof lastix !== 'undefined')  data.lastix = lastix.ix;
+
+    ajax(data).done(function (res) {
         const content = $j("li[data-ix='" + res.setIx + "']");
         content.addClass('list-group-item-success');
         content.find('span.glyphicon-unchecked').addClass('glyphicon-check').removeClass('glyphicon-unchecked');
-        // $this.hide();
     });
 })
 
@@ -80,7 +78,7 @@ $j('body').on('click', '.set-default-page', function (e) {
     }
     $j(".img-pdf-" + ix).attr("data-pdfPage", page);
     data.page = page;
-    ajax(data).done(function(res){
+    ajax(data).done(function (res) {
         createPDFThumbnails();
     });
 
@@ -93,8 +91,7 @@ $j('body').on('click', ".remove-media", function (e) {
     content.addClass('disable-content');
     data.ix = ix;
     data.cmd = "del-item"
-
-    ajax(data).done(function(res){
+    ajax(data).done(function (res) {
         content.remove();
     });
 })
@@ -105,20 +102,18 @@ $j('body').on('click', ".remove-media", function (e) {
 $j(document).on({
     'hidden.bs.modal': function () {
         //refresh images after close modal
-        if ( typeof load_images === "function" ){
-                load_images();
-            }
+        if (typeof load_images === "function")  load_images();
     }
 }, '.modal');
 
 
 $j('body').on('click', ".edit-title", function (e) {
     var $this = $j(this),
-    data = $this.closest('.modal-body').data(),
-    div = $this.closest('.box-header').children('.title-media'),
-    value = div.attr('data-title'),
-    tb = div.find('input:text'); //get textbox, if exist
-    
+        data = $this.closest('.modal-body').data(),
+        div = $this.closest('.box-header').children('.title-media'),
+        value = div.attr('data-title'),
+        tb = div.find('input:text'); //get textbox, if exist
+
     if (tb.length) { //text box already exist
         const ix = selectedIx(this);
         var newtitle = tb.val();
@@ -128,7 +123,7 @@ $j('body').on('click', ".edit-title", function (e) {
         data.cmd = "set-title"
         data.newtitle = newtitle;
         data.ix = ix;
-        ajax(data).done(function(res){
+        ajax(data).done(function (res) {
             //console.log(res)
         });
     } else {
@@ -186,17 +181,6 @@ function openGalery(settings) {
         }
     });
 }
-
-/**
- * add a upload frame and gallery in dv
- * 
- * @param {object} settings - user seting from calling.
- *   need 
- *   tn (tableName) neceesarry, 
- *   fn (fieldName), defualt uploads if the user make in your table afiled asis
- * @return {bollean} - true is everithink ok, otherwise false
- * 
- **/
 function active_upload_frame(settings) {
 
     data = $j.extend({}, Def_Settings, settings);
@@ -205,12 +189,12 @@ function active_upload_frame(settings) {
         var selector = $j('#' + data.tn + '_dv_form fieldset');
         data.cmd = 'get-frame';
 
-        var constructor = $j((' <div class="form-group '+ data.tn +'-'+ data.fn+'" ></div>'))
-                            .append($j('<hr class="hidden-md hidden-lg">'))
-                            .append($j('<label class="control-label col-lg-3" for="'+ data.fn+'">Uploads</label>'))
-                            .append($j('<div id="uploadFrame" class="col-lg-9" />')
-                                .load(Ajax_Settings.url, data)
-                            )
+        var constructor = $j((' <div class="form-group ' + data.tn + '-' + data.fn + '" ></div>'))
+            .append($j('<hr class="hidden-md hidden-lg">'))
+            .append($j('<label class="control-label col-lg-3" for="' + data.fn + '">Uploads</label>'))
+            .append($j('<div id="uploadFrame" class="col-lg-9" />')
+                .load(Ajax_Settings.url, data)
+            )
 
         selector.append(constructor);
         return true
@@ -222,9 +206,9 @@ async function add_button_TV() {
     const resp = await fetch("hooks/multipleUpload/templates/bs3_btnGalleryTv.hbs");
     const btn = await resp.text();
     const $controls = $j('tbody tr td.text-center');
-    
+
     $controls.each(function () {
-        a = $j('<div style="display: inline-block; width: 100px;" />').append( $j(this).html());
+        a = $j('<div style="display: inline-block; width: 100px;" />').append($j(this).html());
         $j(this).html(a.append(btn));
     })
 }
