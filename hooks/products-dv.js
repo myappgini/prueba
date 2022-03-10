@@ -14,6 +14,6 @@ function load_images(addFrame = false) {
         if (addFrame) active_upload_frame(data);
         setTimeout(() => {
             loadImages(data)
-        }, 300);
+        }, 1000);
     }
 }

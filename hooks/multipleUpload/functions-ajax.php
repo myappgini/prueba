@@ -12,7 +12,7 @@ $data = [
     'fn' => Request::val('fn'), //field name
     'id' => Request::val('id'), //index record
     'ix' => Request::val('ix'), //id item gallery
-    'lastix' => Request::val('lastix'), //id anterior
+    'lastix' => Request::val('lastix'), //id last item gallery
 ];
 
 $json->info = $data;
