@@ -3,7 +3,9 @@ if (!function_exists('getMemberInfo')) {
     include '../../lib.php';
 }
 include 'json_class.php';
+include 'MultipleUpload.php';
 $json = new ProcessJson;
+$mu = new MultipleUpload();
 
 $cmd = Request::val('cmd');
 
@@ -16,6 +18,7 @@ $data = [
 ];
 
 $json->info = $data;
+$mu->info=$data;
 header('Content-Type: application/json; charset=utf-8');
 
 if ($cmd !== '') {
@@ -69,7 +72,10 @@ if ($cmd !== '') {
             break;
         case 'uploading':
             //calling from uploading option
-            include 'MultipleUpload.php';
+            //change folder base
+            $mu->folder_base = "{$mu->folder_base}/{$mu->info['tn']}/{$mu->info['id']}";
+            //
+            $mu->process_upload();
             return;
             break;
         case 'get-frame':

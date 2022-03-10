@@ -113,32 +113,21 @@ class MultipleUpload
         if (!move_uploaded_file(
             $_FILES['uploadedFile']['tmp_name'],
             sprintf(
-                $this->upload_dir . '/%s', $this->uploaded_file['basename']
+                $this->upload_dir . '/%s',
+                $this->uploaded_file['basename']
             )
         )) {
             throw new RuntimeException('Failed to move uploaded file.');
             die;
             ////////////////////////////////////////
         } else {
-            include 'json_class.php';
-            $json = new ProcessJson;
-            $json->info = $this->info;
-
-            $exit = false;
-            if ($this->type === 'img' || $this->type === 'mov') {
-                include 'createThumbs.php';
-                $exit = make_thumb(
-                    $this->uploaded_file['basename'],
-                    $this->uploaded_file['filename'],
-                    $this->uploaded_file['extension'],
-                    $this->upload_dir,
-                    $this->type
-                );
-            }
             //file uploaded successfully
+            include_once 'json_class.php';
+            $js = new ProcessJson;
+            $js->info = $this->info;
 
             $data = [
-                'defaultImage' => is_null($json->get_array()) ? "true" : "false",
+                'defaultImage' => is_null($js->get_array()) ? "true" : "false",
                 'isRenamed' => $renameFlag,
                 'fileName' => $this->uploaded_file['basename'],
                 'extension' => $this->uploaded_file['extension'],
@@ -152,13 +141,11 @@ class MultipleUpload
                 'timeUpload' => date('H:i:s'),
                 'oldName' => $this->oldName,
                 'title' => $this->uploaded_file['filename'],
-                'thumbnail' => $exit,
+                'thumbnail' => $this->make_thumb(),
                 'pdfPage' => 1,
             ];
 
-            $res = $json->add_data($data);
-            $data['success'] = $res;
-            header('Content-Type: application/json');
+            $data['success'] = $js->add_data($data);
             echo json_encode($data);
         }
         return;
@@ -175,7 +162,7 @@ class MultipleUpload
         $mi = getMemberInfo();
         return $mi['username'];
     }
-    private function check_exist_file()//and rename
+    private function check_exist_file() //and rename
     {
         //check existing names
         $currentFiles = scandir($this->upload_dir);
@@ -211,26 +198,40 @@ class MultipleUpload
                 }
             }
         }
-        if ($renameFlag ){
-            $this->uploaded_file['filename']=$new_name;
-            $this->uploaded_file['basename']=$new_name . "." . $this->uploaded_file['extension'];
+        if ($renameFlag) {
+            $this->uploaded_file['filename'] = $new_name;
+            $this->uploaded_file['basename'] = $new_name . "." . $this->uploaded_file['extension'];
         }
         return $renameFlag;
     }
-}
+    private function make_thumb()
+    {
+        $source = $this->upload_dir . $this->uploaded_file['basename'];
+        $target = $this->upload_dir . $this->uploaded_file['filename'] . '_th.' . $this->uploaded_file['extension'];
+        $specs = array("width" => "200", "height" => "200", "identifier" => "_th");
 
-$base_dir = realpath(dirname(__FILE__)."/../..");
-if (!function_exists('makeSafe')) {
-    include "$base_dir/lib.php";
-}
-if (isset($_GET['tn'])) {
-    $mu = new MultipleUpload();
-    $mu->info['tn'] = Request::val('tn');
-    $mu->info['fn'] = Request::val('fn');
-    $mu->info['id'] = Request::val('id');
+        if ($this->type === 'mov') return $this->make_thumb_mov($source, $target);
+        if ($this->type === 'img') return createThumbnail($source, $specs);
 
-    //change folder base
-    $mu->folder_base = "{$mu->folder_base}/{$mu->info['tn']}/{$mu->info['id']}";
-    //
-    $mu->process_upload();
+        return false;
+    }
+
+    private function make_thumb_mov($source, $target)
+    {
+        require 'vendor/autoload.php';
+        if (class_exists('FFMpeg\FFMpeg')) {
+            $ffmpeg = FFMpeg\FFMpeg::create();
+            $video = $ffmpeg->open($source);
+            $video
+                ->filters()
+                ->resize(new FFMpeg\Coordinate\Dimension(320, 240))
+                ->synchronize();
+            $video
+                ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(10))
+                ->save($target);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

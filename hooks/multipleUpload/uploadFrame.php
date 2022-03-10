@@ -1,19 +1,10 @@
 <?php
 $currDir = dirname(__FILE__);
-$base_dir = realpath("{$currDir}/../..");
-if (!isset($_REQUEST['tn'])) {
-    die("You can't call this file directly.");
-}
-include $currDir . '/MultipleUpload.php';
+if (!isset($data['tn']))  die("You can't call this file directly."); //from functions-ajax.php
 
-if (!function_exists('makeSafe')) include "$base_dir/lib.php";
+if (!function_exists('makeSafe')) include realpath("{$currDir}/../..")."/lib.php";
 
-$mu = new MultipleUpload();
-$tn = Request::val('tn');
-$fn = Request::val('fn');
-$id = Request::val('id');
-
-$url = "hooks/multipleUpload/MultipleUpload.php?tn={$tn}&fn={$fn}&id={$id}&cmd=uploading";
+$url = "hooks/multipleUpload/functions-ajax.php?tn={$data['tn']}&fn={$data['fn']}&id={$data['id']}&cmd=uploading";
 
 echo '<!-- dropzone control multipleupload -->';
 ?>
@@ -21,7 +12,7 @@ echo '<!-- dropzone control multipleupload -->';
     <div id="my-awesome-dropzone" class="dropzone">
         <i class="glyphicon glyphicon-upload"></i>
         <div id="imagesThumbs" class="col-lg-12"></div>
-        <button class="btn btn-info col-xs-12" type="button" onclick="openGalery({fn:'<?php echo $fn; ?>'});">Open Gallery</button>
+        <button class="btn btn-info col-xs-12" type="button" onclick="openGalery({fn:'<?php echo $data['fn']; ?>'});">Open Gallery</button>
     </div>
     <div id="response" class="alert alert-dismissible" role="alert">
         <button class="close" type="button" data-dismiss="alert" aria-label="Close">
