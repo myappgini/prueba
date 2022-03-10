@@ -2,8 +2,8 @@
 if (!function_exists('getMemberInfo')) {
     include '../../lib.php';
 }
-include 'json_class.php';
-include 'MultipleUpload.php';
+include_once 'json_class.php';
+include_once 'MultipleUpload.php';
 $json = new ProcessJson;
 $mu = new MultipleUpload();
 

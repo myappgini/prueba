@@ -61,7 +61,7 @@ echo '<!-- dropzone control multipleupload -->';
     
     function alertmesg(res, color,file,elm) {
         $j("#response .alertmsg").append(res);
-        $j("#response.alert").addClass(color).fadeOut(2500)
-        setTimeout(deleteFile, 2500, file, elm);
+        $j("#response.alert").addClass(color).fadeOut(3500)
+        setTimeout(deleteFile, 3500, file, elm);
     }
 </script>
