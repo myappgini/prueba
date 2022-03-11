@@ -1,0 +1,22 @@
+[
+    {
+        "products":[
+            {
+                "name":
+                {
+                    "groups_disabled" : ["users"],
+                    "users_disabled" : ["Ale"],
+                    "hidden" : true
+                }
+            },
+            {
+                "due":
+                {
+                    "groups_disabled" : ["Admin"],
+                    "users_disabled" : ["Ale"],
+                    "hidden" : true
+                }
+            }
+        ]
+    }
+]

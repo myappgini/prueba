@@ -113,4 +113,8 @@ class FieldsPermissions
         $key = getPKFieldName($tn); //AppGini internal function
         return $key ? "`{$key}`='{$id}'" : $key;
     }
+
+    public function open_form(){
+        include "edit_form/index.php";
+    }
 }
