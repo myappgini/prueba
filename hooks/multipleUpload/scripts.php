@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="hooks/multipleUpload/dropzone/dz.custom.css">
 <link rel="stylesheet" href="hooks/multipleUpload/css/myLightbox.css">
 <link rel="stylesheet" href="hooks/multipleUpload/css/attachment_thumbnail.css">
+<link rel="stylesheet" href="hooks/multipleUpload/css/mu.css">
 <script src="hooks/multipleUpload/dropzone/dropzone.min.js" ></script>
 <script src="hooks/multipleUpload/js/build/pdf.js" ></script>
 <!-- <script src="hooks/multipleUpload/js/build/pdf.worker.js" ></script> -->

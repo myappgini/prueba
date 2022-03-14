@@ -202,13 +202,24 @@ function active_upload_frame(settings) {
     return false
 }
 
-async function add_button_TV() {
+async function add_button_TV(settings) {
     const resp = await fetch("hooks/multipleUpload/templates/bs3_btnGalleryTv.hbs");
     const btn = await resp.text();
     const $controls = $j('tbody tr td.text-center');
 
+    data = $j.extend({}, Def_Settings, settings);
+    data.cmd = "items";
+
     $controls.each(function () {
         a = $j('<div style="display: inline-block; width: 100px;" />').append($j(this).html());
         $j(this).html(a.append(btn));
+        data.id = $j(this).closest('tr').data('id');
+        ajax(data).done((res)=>{
+            console.log(res)
+            res.res < 1 ? res.res = "" : false;
+            $j('tr[data-id='+res.id+'] .mu-badge').append(res.res);
+        })
+
+
     })
 }

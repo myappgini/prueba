@@ -58,6 +58,11 @@ if ($cmd !== '') {
             $res = $json->set_value('title', $newTitle) ? "changed to: " : "NOT changed to: ";
             $rslt['res'] = $res . $newTitle;
             break;
+        case 'items':
+            $data = 'images';
+            $rslt['res']= $json->get_counts($data);
+            $rslt['id'] = $json->info['id'];
+            break;
         case 'full':
             echo get_view('dv', $json->get_array());
             return;

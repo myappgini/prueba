@@ -1,0 +1,20 @@
+.mu-badge{
+    display: inline-block;
+    color: #003B67;
+    font-weight: bold;
+    line-height: 1;
+    width: 7px;
+    height: 7px;
+    font-size: 10px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .btn .mu-badge {
+    position: relative;
+    top: -1px;
+  }
+  .mu-badge:empty {
+    display: none;
+  }

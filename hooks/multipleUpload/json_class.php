@@ -27,6 +27,12 @@ class ProcessJson
         return $this->set_array($set);
     }
 
+    public function get_counts($data)
+    {
+        $set = $this->get_array();
+        return count($set[$data]);
+    }
+
     public function get_array()
     {
         return json_decode($this->get_json(), true);
