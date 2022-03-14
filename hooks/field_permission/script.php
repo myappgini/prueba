@@ -41,7 +41,7 @@ class FieldsPermissions
     //     "tablename" => [
     //         "fieldname" => [
     //             "groups_disabled" => ["usergroup",...],
-    //             "users_disabled" => ["usernamer",...]
+    //             "users_disabled" => ["username",...]
     //         ],
     //         "other fieldname" => [
     //             "groups_disabled" => ["usergroup",...],
