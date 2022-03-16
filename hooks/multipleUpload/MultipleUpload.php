@@ -145,7 +145,7 @@ class MultipleUpload
                 'pdfPage' => 1,
             ];
 
-            $data['success'] = $js->add_data($data);
+            $data['success'] = $js->add_data($data,'images');
             echo json_encode($data);
         }
         return;

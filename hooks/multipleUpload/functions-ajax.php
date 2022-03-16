@@ -33,21 +33,21 @@ if ($cmd !== '') {
                     );
                 }
             }
-            $rslt['json'] = $json->del_item();
+            $rslt['json'] = $json->del_item('images');
             break;
         case 'set-default':
             if ($data['lastix'] != '') {
                 $json->info['ix'] = $data['lastix'];
-                $json->set_value('defaultImage', 'false');
+                $json->set_value('defaultImage', 'false','images');
             }
             $json->info['ix'] = $data['ix'];
-            $json->set_value('defaultImage', 'true');
+            $json->set_value('defaultImage', 'true','images');
             $rslt['setIx'] = $data['ix'];
             break;
         case 'set-pdf-page':
             $page = Request::val('page');
             if ($page) {
-                $res = $json->set_value('pdfPage', $page);
+                $res = $json->set_value('pdfPage', $page,'images');
                 $rslt['res'] = $res;
             } else {
                 $rslt['error'] = 'must indicate a page';
@@ -55,12 +55,12 @@ if ($cmd !== '') {
             break;
         case 'set-title':
             $newTitle = Request::val('newtitle');
-            $res = $json->set_value('title', $newTitle) ? "changed to: " : "NOT changed to: ";
+            $res = $json->set_value('title', $newTitle,'images') ? "changed to: " : "NOT changed to: ";
             $rslt['res'] = $res . $newTitle;
             break;
         case 'items':
-            $data = 'images';
-            $rslt['res']= $json->get_counts($data);
+            $folder = 'images';
+            $rslt['res']= $json->get_count($folder);
             $rslt['id'] = $json->info['id'];
             break;
         case 'full':

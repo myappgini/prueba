@@ -9,3 +9,4 @@ config.php
 setup.md5
 hooks/todos/test.php
 demo*
+hooks/multipleUpload/temp.json
