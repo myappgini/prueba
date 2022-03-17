@@ -3,6 +3,10 @@
 
 	// upload paths
 	$p = [
+		'contacto' => [
+			'file' => getUploadDir(''),
+			'primary key' => 'id'
+		],
 	];
 
 	if(!count($p)) getLink();

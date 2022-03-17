@@ -30,7 +30,7 @@
 				<?php
 				break;
 			}
-			$res = sql("SELECT `contacto`.`id` as 'id', `contacto`.`name` as 'name', `contacto`.`user` as 'user', `contacto`.`rango` as 'rango', if(`contacto`.`date`,date_format(`contacto`.`date`,'%d/%m/%Y'),'') as 'date' FROM `contacto`  WHERE `contacto`.`id`='{$id}' limit 1", $eo);
+			$res = sql("SELECT `contacto`.`id` as 'id', `contacto`.`name` as 'name', `contacto`.`user` as 'user', `contacto`.`rango` as 'rango', if(`contacto`.`date`,date_format(`contacto`.`date`,'%d/%m/%Y'),'') as 'date', `contacto`.`file` as 'file' FROM `contacto`  WHERE `contacto`.`id`='{$id}' limit 1", $eo);
 			$row = db_fetch_assoc($res);
 			?>
 			$j('#nombre<?php echo $rnd1; ?>').html('<?php echo addslashes(str_replace(["\r", "\n"], '', safe_html($row['name']))); ?>&nbsp;');

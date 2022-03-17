@@ -17,8 +17,12 @@
 				`name` VARCHAR(40) NULL,
 				`user` VARCHAR(40) NULL,
 				`rango` VARCHAR(40) NULL,
-				`date` DATE NULL
-			) CHARSET utf8"
+				`date` DATE NULL,
+				`file` VARCHAR(40) NULL
+			) CHARSET utf8", [
+				"ALTER TABLE contacto ADD `field6` VARCHAR(40)",
+				"ALTER TABLE `contacto` CHANGE `field6` `file` VARCHAR(40) NULL ",
+			]
 		);
 
 		setupTable(

@@ -80,6 +80,8 @@
 
 	function contacto_before_insert(&$data, $memberInfo, &$args) {
 
+
+
 		include_once('field_permission/script.php');
 	$notChanges = FieldsPermissions::update_fields_permission(pathinfo(__FILE__, PATHINFO_FILENAME), $memberInfo, $data);
 	return  $notChanges;
@@ -100,8 +102,6 @@
 		/* Inserted by Audit Log for AppGini on 2021-02-16 04:33:59 */
 		table_before_change($_SESSION, $data['selectedID']);
 		/* End of Audit Log for AppGini code */
-
-
 
 		include_once('field_permission/script.php');
 		$notChanges = FieldsPermissions::update_fields_permission(pathinfo(__FILE__, PATHINFO_FILENAME), $memberInfo, $data);

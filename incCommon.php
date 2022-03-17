@@ -106,7 +106,7 @@
 
 	function get_sql_fields($table_name) {
 		$sql_fields = [
-			'contacto' => "`contacto`.`id` as 'id', `contacto`.`name` as 'name', `contacto`.`user` as 'user', `contacto`.`rango` as 'rango', if(`contacto`.`date`,date_format(`contacto`.`date`,'%d/%m/%Y'),'') as 'date'",
+			'contacto' => "`contacto`.`id` as 'id', `contacto`.`name` as 'name', `contacto`.`user` as 'user', `contacto`.`rango` as 'rango', if(`contacto`.`date`,date_format(`contacto`.`date`,'%d/%m/%Y'),'') as 'date', `contacto`.`file` as 'file'",
 			'salary' => "`salary`.`id` as 'id', IF(    CHAR_LENGTH(`contacto1`.`name`) || CHAR_LENGTH(`contacto1`.`user`), CONCAT_WS('',   `contacto1`.`name`, ' - ', `contacto1`.`user`), '') as 'contacto', `salary`.`monto` as 'monto', `salary`.`mes` as 'mes', IF(    CHAR_LENGTH(`contacto1`.`name`), CONCAT_WS('',   `contacto1`.`name`), '') as 'nombre', IF(    CHAR_LENGTH(`contacto1`.`rango`), CONCAT_WS('',   `contacto1`.`rango`), '') as 'rango', IF(    CHAR_LENGTH(if(`contacto1`.`date`,date_format(`contacto1`.`date`,'%d/%m/%Y'),'')), CONCAT_WS('',   if(`contacto1`.`date`,date_format(`contacto1`.`date`,'%d/%m/%Y'),'')), '') as 'date'",
 			'products' => "`products`.`id` as 'id', `products`.`name` as 'name', if(`products`.`due`,date_format(`products`.`due`,'%d/%m/%Y %h:%i %p'),'') as 'due', `products`.`uploads` as 'uploads'",
 			'db_field_permission' => "`db_field_permission`.`ID_field_permissions` as 'ID_field_permissions', IF(    CHAR_LENGTH(`view_membership_groups1`.`name`), CONCAT_WS('',   `view_membership_groups1`.`name`), '') as 'groupID', IF(    CHAR_LENGTH(`tmp_tables_fields1`.`table_filed`), CONCAT_WS('',   `tmp_tables_fields1`.`table_filed`), '') as 'table_field', `db_field_permission`.`fieldstate` as 'fieldstate'",
@@ -196,6 +196,7 @@
 				'user' => '',
 				'rango' => '',
 				'date' => '1',
+				'file' => '',
 			],
 			'salary' => [
 				'id' => '',
@@ -942,7 +943,7 @@ EOT;
 		$name = str_replace(' ', '_', $f['name']);
 		if(!$NoRename) $name = substr(md5(microtime() . rand(0, 100000)), -17) . $ft[0];
 
-		if(!file_exists($dir)) @mkdir($dir, 0777);
+		if(!file_exists($dir)) @mkdir($dir, 0777, true);
 
 		if(!@move_uploaded_file($f['tmp_name'], $dir . $name)) {
 			echo error_message("Couldn't save the uploaded file. Try chmoding the upload folder '{$dir}' to 777.");

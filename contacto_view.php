@@ -23,6 +23,7 @@
 		"`contacto`.`user`" => "user",
 		"`contacto`.`rango`" => "rango",
 		"if(`contacto`.`date`,date_format(`contacto`.`date`,'%d/%m/%Y'),'')" => "date",
+		"`contacto`.`file`" => "file",
 	];
 	// mapping incoming sort by requests to actual query fields
 	$x->SortFields = [
@@ -31,6 +32,7 @@
 		3 => 3,
 		4 => 4,
 		5 => '`contacto`.`date`',
+		6 => 6,
 	];
 
 	// Fields that can be displayed in the csv file
@@ -40,6 +42,7 @@
 		"`contacto`.`user`" => "user",
 		"`contacto`.`rango`" => "rango",
 		"if(`contacto`.`date`,date_format(`contacto`.`date`,'%d/%m/%Y'),'')" => "date",
+		"`contacto`.`file`" => "file",
 	];
 	// Fields that can be filtered
 	$x->QueryFieldsFilters = [
@@ -48,6 +51,7 @@
 		"`contacto`.`user`" => "User",
 		"`contacto`.`rango`" => "Rango",
 		"`contacto`.`date`" => "prox fecha de pago",
+		"`contacto`.`file`" => "File",
 	];
 
 	// Fields that can be quick searched
@@ -57,6 +61,7 @@
 		"`contacto`.`user`" => "user",
 		"`contacto`.`rango`" => "rango",
 		"if(`contacto`.`date`,date_format(`contacto`.`date`,'%d/%m/%Y'),'')" => "date",
+		"`contacto`.`file`" => "file",
 	];
 
 	// Lookup fields that can be used as filterers
@@ -90,10 +95,10 @@
 	$x->TableIcon = 'table.gif';
 	$x->PrimaryKey = '`contacto`.`id`';
 
-	$x->ColWidth = [150, 150, 150, 150, ];
-	$x->ColCaption = ['Name', 'User', 'Rango', 'prox fecha de pago', ];
-	$x->ColFieldName = ['name', 'user', 'rango', 'date', ];
-	$x->ColNumber  = [2, 3, 4, 5, ];
+	$x->ColWidth = [150, 150, 150, 150, 150, ];
+	$x->ColCaption = ['Name', 'User', 'Rango', 'prox fecha de pago', 'File', ];
+	$x->ColFieldName = ['name', 'user', 'rango', 'date', 'file', ];
+	$x->ColNumber  = [2, 3, 4, 5, 6, ];
 
 	// template paths below are based on the app main directory
 	$x->Template = 'templates/contacto_templateTV.html';

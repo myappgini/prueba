@@ -17,6 +17,20 @@ function contacto_insert(&$error_message = '') {
 		'user' => Request::val('user', ''),
 		'rango' => Request::val('rango', ''),
 		'date' => Request::dateComponents('date', '1'),
+		'file' => Request::fileUpload('file', [
+			'maxSize' => 102400,
+			'types' => 'txt|doc|docx|docm|odt|pdf|rtf',
+			'noRename' => false,
+			'dir' => '',
+			'success' => function($name, $selected_id) {
+			},
+			'failure' => function($selected_id, $fileRemoved) {
+				if(!strlen(Request::val('SelectedID'))) return '';
+
+				/* for empty upload fields, when saving a copy of an existing record, copy the original upload field */
+				return existing_value('contacto', 'file', Request::val('SelectedID'));
+			},
+		]),
 	];
 
 
@@ -133,6 +147,19 @@ function contacto_update(&$selected_id, &$error_message = '') {
 		'user' => Request::val('user', ''),
 		'rango' => Request::val('rango', ''),
 		'date' => Request::dateComponents('date', ''),
+		'file' => Request::fileUpload('file', [
+			'maxSize' => 102400,
+			'types' => 'txt|doc|docx|docm|odt|pdf|rtf',
+			'noRename' => false,
+			'dir' => 'images/contacto/'.$selected_id, //here the destiny folder
+			'id' => $selected_id,
+			'success' => function($name, $selected_id) {
+			},
+			'failure' => function($selected_id, $fileRemoved) {
+				if($fileRemoved) return '';
+				return existing_value('contacto', 'file', $selected_id);
+			},
+		]),
 	];
 
 	// get existing values
@@ -313,6 +340,8 @@ function contacto_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 		$jsReadOnly .= "\tjQuery('#rango').replaceWith('<div class=\"form-control-static\" id=\"rango\">' + (jQuery('#rango').val() || '') + '</div>');\n";
 		$jsReadOnly .= "\tjQuery('#date').prop('readonly', true);\n";
 		$jsReadOnly .= "\tjQuery('#dateDay, #dateMonth, #dateYear').prop('disabled', true).css({ color: '#555', backgroundColor: '#fff' });\n";
+		$jsReadOnly .= "\tjQuery('#file').replaceWith('<div class=\"form-control-static\" id=\"file\">' + (jQuery('#file').val() || '') + '</div>');\n";
+		$jsReadOnly .= "\tjQuery('#file, #file-edit-link').hide();\n";
 		$jsReadOnly .= "\tjQuery('.select2-container').hide();\n";
 
 		$noUploads = true;
@@ -347,6 +376,12 @@ function contacto_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 	$templateCode = str_replace('<%%UPLOADFILE(user)%%>', '', $templateCode);
 	$templateCode = str_replace('<%%UPLOADFILE(rango)%%>', '', $templateCode);
 	$templateCode = str_replace('<%%UPLOADFILE(date)%%>', '', $templateCode);
+	$templateCode = str_replace('<%%UPLOADFILE(file)%%>', ($noUploads ? '' : "<div>{$Translation['upload image']}</div>" . '<i class="glyphicon glyphicon-remove text-danger clear-upload hidden"></i> <input type="file" name="file" id="file" data-filetypes="txt|doc|docx|docm|odt|pdf|rtf" data-maxsize="102400" accept=".txt,.doc,.docx,.docm,.odt,.pdf,.rtf">'), $templateCode);
+	if($AllowUpdate && $row['file'] != '') {
+		$templateCode = str_replace('<%%REMOVEFILE(file)%%>', '<br><input type="checkbox" name="file_remove" id="file_remove" value="1"> <label for="file_remove" style="color: red; font-weight: bold;">'.$Translation['remove image'].'</label>', $templateCode);
+	} else {
+		$templateCode = str_replace('<%%REMOVEFILE(file)%%>', '', $templateCode);
+	}
 
 	// process values
 	if($selected_id) {
@@ -364,6 +399,9 @@ function contacto_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 		$templateCode = str_replace('<%%URLVALUE(rango)%%>', urlencode($urow['rango']), $templateCode);
 		$templateCode = str_replace('<%%VALUE(date)%%>', @date('d/m/Y', @strtotime(html_attr($row['date']))), $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(date)%%>', urlencode(@date('d/m/Y', @strtotime(html_attr($urow['date'])))), $templateCode);
+		if( $dvprint) $templateCode = str_replace('<%%VALUE(file)%%>', safe_html($urow['file']), $templateCode);
+		if(!$dvprint) $templateCode = str_replace('<%%VALUE(file)%%>', html_attr($row['file']), $templateCode);
+		$templateCode = str_replace('<%%URLVALUE(file)%%>', urlencode($urow['file']), $templateCode);
 	} else {
 		$templateCode = str_replace('<%%VALUE(id)%%>', '', $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(id)%%>', urlencode(''), $templateCode);
@@ -375,6 +413,8 @@ function contacto_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 		$templateCode = str_replace('<%%URLVALUE(rango)%%>', urlencode(''), $templateCode);
 		$templateCode = str_replace('<%%VALUE(date)%%>', '1', $templateCode);
 		$templateCode = str_replace('<%%URLVALUE(date)%%>', urlencode('1'), $templateCode);
+		$templateCode = str_replace('<%%VALUE(file)%%>', '', $templateCode);
+		$templateCode = str_replace('<%%URLVALUE(file)%%>', urlencode(''), $templateCode);
 	}
 
 	// process translations
@@ -397,6 +437,8 @@ function contacto_form($selected_id = '', $AllowUpdate = 1, $AllowInsert = 1, $A
 		$templateCode .= $jsEditable;
 
 		if(!$selected_id) {
+			$templateCode.="\n\tif(document.getElementById('fileEdit')) { document.getElementById('fileEdit').style.display='inline'; }";
+			$templateCode.="\n\tif(document.getElementById('fileEditLink')) { document.getElementById('fileEditLink').style.display='none'; }";
 		}
 
 		$templateCode.="\n});</script>\n";

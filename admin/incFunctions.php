@@ -990,6 +990,13 @@
 							'description' => '',
 						],
 					],
+					'file' => [
+						'appgini' => "VARCHAR(40) NULL",
+						'info' => [
+							'caption' => 'File',
+							'description' => 'Maximum file size allowed: 100 KB.<br>Allowed file types: txt, doc, docx, docm, odt, pdf, rtf',
+						],
+					],
 				],
 				'salary' => [
 					'id' => [

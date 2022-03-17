@@ -9,3 +9,7 @@
 		<td id="contacto-user-<%%VALUE(id)%%>" class="contacto-user"><%%SELECT%%><%%VALUE(user)%%><%%ENDSELECT%%></td>
 		<td id="contacto-rango-<%%VALUE(id)%%>" class="contacto-rango"><%%SELECT%%><%%VALUE(rango)%%><%%ENDSELECT%%></td>
 		<td id="contacto-date-<%%VALUE(id)%%>" class="contacto-date"><%%SELECT%%><%%VALUE(date)%%><%%ENDSELECT%%></td>
+		<td id="contacto-file-<%%VALUE(id)%%>" class="contacto-file"><a href="link.php?t=contacto&f=file&i=<%%VALUE(id)%%>" target="_blank" title="<%%VALUE(file)%%>" class="btn btn-default"><i class="glyphicon glyphicon-lg glyphicon-file text-info"></i></a></td>
+		<script>$j(function() {
+			var e_file = '<%%VALUE(file)%%>'; if(e_file == '' || e_file == '&nbsp;') $j(/*<*/ '#contacto-file-<%%VALUE(id)%%>' /*>*/).html('');
+		});</script>

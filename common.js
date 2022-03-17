@@ -325,6 +325,12 @@ function contacto_validateData() {
 	$j('.has-error').removeClass('has-error');
 	var errors = false;
 
+	// check file uploads (file type and size)
+	if($j('#file').val() && !AppGini.checkFileUpload('file', 'txt|doc|docx|docm|odt|pdf|rtf', 102400)) {
+		AppGini.scrollTo('file');
+		return false;
+	}
+
 	return !errors;
 }
 function salary_validateData() {
