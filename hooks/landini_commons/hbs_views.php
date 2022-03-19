@@ -3,10 +3,10 @@
 // Author: Alejandro Landini
 // update 10/9/20
 // update 3/3/22
+// update 19/3/22
 
-if (!function_exists('getMemberInfo')) {
-    die('{ "error": "Invalid way to access." }');
-}
+if (!function_exists('getMemberInfo'))  die('{ "error": "Invalid way to access." }');
+
 require 'handlebars-php/src/Handlebars/Autoloader.php';
 //load handlebars php library
 Handlebars\Autoloader::register();
@@ -14,10 +14,7 @@ Handlebars\Autoloader::register();
 use Handlebars\Handlebars;
 use Handlebars\Loader\FilesystemLoader;
 
-
-$currDir = dirname(__FILE__);
-
-# Set the partials files
+# Set the partials files from caller
 // $partialsDir = [__DIR__ . "/templates", __DIR__ . "/templates/elements", __DIR__ . "/templates/tags"];
 $partialsLoader = new FilesystemLoader(
     $partialsDir,
@@ -30,7 +27,8 @@ $partialsLoader = new FilesystemLoader(
 # We'll use $handlebars throughout this the examples, assuming the will be all set this way
 $handlebars = new Handlebars([
     "loader" => $partialsLoader,
-    "partials_loader" => $partialsLoader
+    "partials_loader" => $partialsLoader,
+    "enableDataVariables" => false
 ]);
 
 $handlebars = registerHelpers($handlebars);

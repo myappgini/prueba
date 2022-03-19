@@ -1,0 +1,29 @@
+[
+    {
+        "images": {
+            "6233b6b2248c6": {
+                "defaultImage": "false",
+                "isRenamed": true,
+                "fileName": "Screenshot_20210605_181804-3.png",
+                "extension": "png",
+                "name": "Screenshot_20210605_181804-3",
+                "type": "img",
+                "folder": "/home/alejandro/htdocs/prueba/images/products/3/",
+                "folder_base": "images/products/3",
+                "size": "false",
+                "userUpload": "admin",
+                "dateUpload": "17.03.22",
+                "timeUpload": "19:30:50",
+                "oldName": "Screenshot_20210605_181804-2.png",
+                "title": "Screenshot_20210605_181804-3",
+                "thumbnail": true,
+                "pdfPage": 1
+            }
+        },
+        "tn": "products",
+        "fn": "uploads",
+        "id": "3",
+        "ix": "",
+        "lastix": ""
+    }
+]
