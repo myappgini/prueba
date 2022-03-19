@@ -18,7 +18,7 @@ use Handlebars\Loader\FilesystemLoader;
 $currDir = dirname(__FILE__);
 
 # Set the partials files
-$partialsDir = __DIR__ . "/templates";
+// $partialsDir = [__DIR__ . "/templates", __DIR__ . "/templates/elements", __DIR__ . "/templates/tags"];
 $partialsLoader = new FilesystemLoader(
     $partialsDir,
     [
@@ -42,7 +42,7 @@ function registerHelpers($handlebars)
         "filemtime",
         function ($template, $context, $args, $source) {
             $data = ($context->get($args));
-            $file = $data['folder'] . $data['name'] . '_th.'.$data['extension'];
+            $file = $data['folder'] . $data['name'] . '_th.' . $data['extension'];
             if (file_exists($file)) {
                 return filemtime($file);
             }
@@ -81,5 +81,11 @@ function registerHelpers($handlebars)
         }
     );
 
+    $handlebars->addHelper(
+        "app_datetime",
+        function ($template, $context, $args, $source) {
+            return app_datetime($context->get($args), 'dt');
+        }
+    );
     return $handlebars;
 }

@@ -2,7 +2,8 @@
 if (!function_exists('getMemberInfo')) {
     include '../../lib.php';
 }
-include 'landini_commons/landini_functions.php';
+include '../landini_commons/landini_functions.php';
+include_once '../landini_commons/json_class.php';
 
 $cmd = Request::val('cmd', false);
 if (!$cmd) {
@@ -24,15 +25,14 @@ $data = [
     'sr' => Request::val('sort_array', false), // array to new sort
     'pg' => Request::val('progress',false)//progress current task
 ];
-
+$json = new ProcessJson($data);
 header('Content-Type: application/json; charset=utf-8');
 
 if ($cmd) {
-    $tasks = get_data($data);
+    $tasks = $json->get_array();
     switch ($cmd) {
         case 'option-todo':
-            $html = get_view('dropdown_menu', []);
-            echo $html;
+            echo get_view('dropdown_menu', []);
             break;
         case 'removed-deleted':
             unset($tasks['deleted_tasks']);
@@ -41,13 +41,11 @@ if ($cmd) {
         case 'get-todo':
             $tasks['list_delete'] = false;
             $tasks += detail_options();
-            $html = get_view('todos', $tasks);
-            echo $html;
+            echo get_view('todos', $tasks);
             break;
         case 'get-deleted':
             $tasks['list_delete'] = true;
-            $html = get_view('todos', $tasks);
-            echo $html;
+            echo get_view('todos', $tasks);
             break;
         case 'remove-task':
             unset($tasks['deleted_tasks'][$data['ix']]);
@@ -140,8 +138,7 @@ if ($cmd) {
                 break;
             }
             $task = add_data($data);
-            $html = get_view('task', $task);
-            echo $html;
+            echo get_view('task', $task);
             break;
         case 'task-detail':
             $task = $tasks['tasks'][$data['ix']];
@@ -150,14 +147,12 @@ if ($cmd) {
 
             $task += detail_options();
             $task['progress_options']['progress_bar']['width']=$task['progress'];
-            $html = get_view('detail', $task);
-            echo $html;
+            echo get_view('detail', $task);
             break;
         case 'config-todo':
             $task=[];
             $task += detail_options();
-            $html = get_view('settings', $task);
-            echo $html;
+            echo get_view('settings', $task);
             break;
         case 'send-task-user':
             if (!$data['us'] || $data['us'] === $data['id']) {
@@ -313,7 +308,9 @@ function detail_options()//detail modal windows options
 
 function get_view($view, $data)
 {
-    include_once 'hbs_views.php';
+    # Set the partials files
+    $partialsDir = [__DIR__ . "/templates", __DIR__ . "/templates/elements", __DIR__ . "/templates/tags"];
+    include_once '../landini_commons/hbs_views.php';
     header('Content-Type: text/html; charset=utf-8');
     $data['view'] = $view;
     return $handlebars->render($view, $data);

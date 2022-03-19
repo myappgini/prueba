@@ -2,7 +2,7 @@
 if (!function_exists('getMemberInfo')) {
     include '../../lib.php';
 }
-include_once 'json_class.php';
+include_once '../landini_commons/json_class.php';
 include_once 'MultipleUpload.php';
 
 $cmd = Request::val('cmd');
@@ -14,7 +14,6 @@ $data = [
     'lastix' => Request::val('lastix'), //id last item gallery
 ];
 $json = new ProcessJson($data);
-// $json->info = $data;
 header('Content-Type: application/json; charset=utf-8');
 
 if ($cmd !== '') {
@@ -97,8 +96,11 @@ if ($cmd !== '') {
 
 function get_view($view, $data)
 {
-    include_once 'hbs_views.php';
+    # Set the partials files
+    $partialsDir = [__DIR__ . "/templates"];
+    include_once '../landini_commons/hbs_views.php';
     header('Content-Type: text/html; charset=utf-8');
+
     $data['view'] = $view;
     return $handlebars->render($view, $data);
 }

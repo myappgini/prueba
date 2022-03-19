@@ -120,7 +120,7 @@ class ProcessJson
      */
     private function set_json($set)
     {
-        $set = "`{$this->info['fn']}`='" . json_encode($set) . "'";
+        $set = "`{$this->info['fn']}`='" . json_encode($set, JSON_UNESCAPED_UNICODE) . "'";
         $sql = "UPDATE `{$this->info['tn']}` SET {$set} WHERE 1=1 AND {$this->get_where()}";
         $eo = ['silentErrors' => true];
         $res = sql($sql, $eo);
