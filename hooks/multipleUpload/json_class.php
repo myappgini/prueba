@@ -5,21 +5,21 @@ if (!function_exists('getMemberInfo')) {
 
 class ProcessJson
 {
-    public $info = [
+    private $info = [
         'tn' => false,
         'fn' => false,
         'id' => false,
-        'ix' => false,
-        'lastix' => false,
+        'ix' => false
     ];
 
     public $trash_folder = 'delete';
     private $temp_array = [];
 
-    public function __construct()
+    public function __construct($info=[])
     {
-        header('Content-Type: application/json; charset=utf-8');
+        $this->info = $info;
         $this->temp_array = $this->get_array();
+        header('Content-Type: application/json; charset=utf-8');
     }
 
     /**
@@ -33,19 +33,19 @@ class ProcessJson
      */
     public function add_data($data, $folder = false)
     {
-        $set = $this->get_array();
         if ($folder) {
-            $set[$folder][uniqid()] = $data;
+            $this->temp_array[$folder][uniqid()] = $data;
         } else {
-            $set[uniqid()] = $data;
+            $this->temp_array[uniqid()] = $data;
         }
 
-        return $this->set_array($set);
+        return $this->set_array();
     }
 
     public function get_count($folder = false)
     {
-        return count($this->get_array($folder));
+        $set = $folder ? $this->temp_array[$folder] : $this->temp_array ;
+        return count($set);
     }
 
     public function del_item($folder = false)
@@ -53,28 +53,18 @@ class ProcessJson
         // this code require new version db
         // $sql = "UPDATE {$tn} SET {$fn}=json_remove({$fn},'$.images[{$ix}]') WHERE {$where}";
         // return  sql($sql, $eo);
-        $set = $this->get_array();
+        // $set = $this->temp_array;
 
         if ($folder) {
-            $trash = $set[$folder];
-            unset($set[$folder][$this->info['ix']]);
+            $trash = $this->temp_array[$folder][$this->info['ix']];
+            unset($this->temp_array[$folder][$this->info['ix']]);
         } else {
-            $trash = $set;
-            unset($set[$this->info['ix']]);
+            $trash = $this->temp_array[$this->info['ix']];
+            unset($this->temp_array[$this->info['ix']]);
         }
+        $this->temp_array[$this->trash_folder][uniqid()]=$trash;
 
-        $unset = $this->set_array($set);
-        $trash = $this->move_to_folder($trash[$this->info['ix']], $this->trash_folder);
-
-        return $trash && $unset;
-    }
-
-    private function move_to_folder($data, $folder = false)
-    {
-        $set = $this->get_array($folder);
-        $set[uniqid()] = $this->set_updated_info('movedTo', $data);
-        $data = $this->add_data($set, $folder); // agrega el folder y guarda al json original
-        return $data; //debiera regresar un true
+        return $this->set_array();
     }
 
     public function set_value($key, $value, $folder = false)
@@ -83,18 +73,20 @@ class ProcessJson
         //$sql = "UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$ix}].{$key}','{$value}') WHERE {$where}";
         // $res = sqlValue($sql);
         // return $res;
-        $set = $this->get_array();
-        $data = $set['images'][$this->info['ix']];
-        $data[$key] = makeSafe($value);
-        $data = $this->set_updated_info('updated', $data);
-        $set['images'][$this->info['ix']] = $data;
+        if ($folder){
+            $this->temp_array[$folder][$this->info['ix']][makeSafe($key)] = makeSafe($value);
+            $this->temp_array[$folder][$this->info['ix']] = $this->set_info('updated', $this->temp_array['images'][$this->info['ix']]);
+        }else{
+            $this->temp_array[$this->info['ix']][makeSafe($key)] = makeSafe($value);
+            $this->temp_array[$this->info['ix']] = $this->set_info('updated', $this->temp_array['images'][$this->info['ix']]);
+        }
 
-        return $this->set_array($set);
+        return $this->set_array();
     }
 
     public function get_folders()
     {
-        $set = $this->get_array();
+        $set = $this->temp_array;
         return array_keys($set);
     }
 
@@ -108,15 +100,14 @@ class ProcessJson
     /**
      * SELECT en la base de datos SQL.
      *
-     * @param array $set string para enviar a la base de datos con el set de SQL.
-     *
      * @return string con el json o falso si hay error
      */
     private function get_json()
     {
+        //TODO: get json from another source
         $sql = "SELECT {$this->info['fn']} FROM `{$this->info['tn']}` WHERE {$this->get_where()}";
-        $res = sqlValue($sql);
         //TODO: error select control
+        $res = sqlValue($sql);
         return stripslashes($res); //* add this function stripslashes to make it work on windows
     }
 
@@ -129,6 +120,7 @@ class ProcessJson
      */
     private function set_json($set)
     {
+        $set = "`{$this->info['fn']}`='" . json_encode($set) . "'";
         $sql = "UPDATE `{$this->info['tn']}` SET {$set} WHERE 1=1 AND {$this->get_where()}";
         $eo = ['silentErrors' => true];
         $res = sql($sql, $eo);
@@ -137,16 +129,17 @@ class ProcessJson
     }
 
     /**
-     * prepara el array para convertirlo en JSON y lo manda a guardar a la base de datos, le agrega información adicional
+     * prepara el array para convertirlo en JSON y lo manda a guardar, le agrega información adicional
      *
-     * @param array $set array para enviar a la base de datos.
+     * @param array $set array para enviar a guardar.
      *
      * @return true is OK
      */
-    private function set_array($set)
+    private function set_array($set = [])
     {
+        if (empty($set)) $set = $this->temp_array;
         $set = array_merge($set, $this->info);
-        return $this->set_json("`{$this->info['fn']}`='" . json_encode($set) . "'");
+        return $this->set_json($set);
     }
 
     private function get_where()
@@ -156,7 +149,7 @@ class ProcessJson
         return $key ? "`{$key}`='{$this->info['id']}'" : $key;
     }
 
-    private function set_updated_info($prefix, $array)
+    private function set_info($prefix, $array)
     {
         $data[$prefix . 'By'] = getLoggedMemberID();
         $data[$prefix . 'Date'] = date('d.m.y');
@@ -164,3 +157,4 @@ class ProcessJson
         return array_merge($array, $data);
     }
 }
+

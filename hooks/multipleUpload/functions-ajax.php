@@ -4,7 +4,6 @@ if (!function_exists('getMemberInfo')) {
 }
 include_once 'json_class.php';
 include_once 'MultipleUpload.php';
-$json = new ProcessJson;
 
 $cmd = Request::val('cmd');
 $data = [
@@ -14,7 +13,8 @@ $data = [
     'ix' => Request::val('ix'), //id item gallery
     'lastix' => Request::val('lastix'), //id last item gallery
 ];
-$json->info = $data;
+$json = new ProcessJson($data);
+// $json->info = $data;
 header('Content-Type: application/json; charset=utf-8');
 
 if ($cmd !== '') {
@@ -61,7 +61,7 @@ if ($cmd !== '') {
         case 'items':
             $folder = 'images';
             $rslt['res']= $json->get_count($folder);
-            $rslt['id'] = $json->info['id'];
+            $rslt['id'] = $data['id'];
             break;
         case 'full':
             echo get_view('dv', $json->get_array());

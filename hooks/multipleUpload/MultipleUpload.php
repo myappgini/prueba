@@ -123,8 +123,8 @@ class MultipleUpload
         } else {
             //file uploaded successfully
             include_once 'json_class.php';
-            $js = new ProcessJson;
-            $js->info = $this->info;
+            $js = new ProcessJson($this->info);
+            // $js->info = $this->info;
 
             $data = [
                 'defaultImage' => is_null($js->get_array()) ? "true" : "false",
