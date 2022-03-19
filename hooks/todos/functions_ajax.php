@@ -3,7 +3,6 @@ if (!function_exists('getMemberInfo')) {
     include '../../lib.php';
 }
 include 'landini_commons/landini_functions.php';
-include 'handlebars.php';
 
 $cmd = Request::val('cmd', false);
 if (!$cmd) {
@@ -32,7 +31,7 @@ if ($cmd) {
     $tasks = get_data($data);
     switch ($cmd) {
         case 'option-todo':
-            $html = $handlebars->render('dropdown_menu', []);
+            $html = get_view('dropdown_menu', []);
             echo $html;
             break;
         case 'removed-deleted':
@@ -42,12 +41,12 @@ if ($cmd) {
         case 'get-todo':
             $tasks['list_delete'] = false;
             $tasks += detail_options();
-            $html = $handlebars->render('todos', $tasks);
+            $html = get_view('todos', $tasks);
             echo $html;
             break;
         case 'get-deleted':
             $tasks['list_delete'] = true;
-            $html = $handlebars->render('todos', $tasks);
+            $html = get_view('todos', $tasks);
             echo $html;
             break;
         case 'remove-task':
@@ -141,7 +140,7 @@ if ($cmd) {
                 break;
             }
             $task = add_data($data);
-            $html = $handlebars->render('task', $task);
+            $html = get_view('task', $task);
             echo $html;
             break;
         case 'task-detail':
@@ -151,13 +150,13 @@ if ($cmd) {
 
             $task += detail_options();
             $task['progress_options']['progress_bar']['width']=$task['progress'];
-            $html = $handlebars->render('detail', $task);
+            $html = get_view('detail', $task);
             echo $html;
             break;
         case 'config-todo':
             $task=[];
             $task += detail_options();
-            $html = $handlebars->render('settings', $task);
+            $html = get_view('settings', $task);
             echo $html;
             break;
         case 'send-task-user':
@@ -310,4 +309,12 @@ function detail_options()//detail modal windows options
 {
     include ("templates/options/options.php");
     return $settings;
+}
+
+function get_view($view, $data)
+{
+    include_once 'hbs_views.php';
+    header('Content-Type: text/html; charset=utf-8');
+    $data['view'] = $view;
+    return $handlebars->render($view, $data);
 }
