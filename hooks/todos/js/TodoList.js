@@ -20,7 +20,8 @@ const this_obj = function (obj) {
   const $this = $j(obj);
   const $li = $this.closest('.task-content');
   const cmd = $this.data('cmd');
-  const ix = $li.data('ix')
+  const ix = $li.data('ix');
+  // debugger;
   return [$this, $li, {
     cmd,
     ix

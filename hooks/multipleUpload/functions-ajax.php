@@ -94,7 +94,7 @@ if ($cmd !== '') {
     return;
 }
 
-function get_view($view, $data)
+function get_view($view, $data=[])
 {
     # Set the partials files
     $partialsDir = [__DIR__ . "/templates"];

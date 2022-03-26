@@ -1,8 +1,6 @@
 <?php
-if (!function_exists('getMemberInfo')) {
-    include '../../lib.php';
-}
-
+if (!function_exists('getMemberInfo'))  include '../../lib.php';
+include_once 'landini_class.php';
 class ProcessJson
 {
     private $info = [
@@ -33,10 +31,11 @@ class ProcessJson
      */
     public function add_data($data, $folder = false)
     {
+        $data['uid'] = uniqid();
         if ($folder) {
-            $this->temp_array[$folder][uniqid()] = $data;
+            $this->temp_array[$folder][$data['uid']] = $data;
         } else {
-            $this->temp_array[uniqid()] = $data;
+            $this->temp_array[$data['uid']] = $data;
         }
 
         return $this->set_array();
@@ -50,11 +49,7 @@ class ProcessJson
 
     public function del_item($folder = false)
     {
-        // this code require new version db
-        // $sql = "UPDATE {$tn} SET {$fn}=json_remove({$fn},'$.images[{$ix}]') WHERE {$where}";
-        // return  sql($sql, $eo);
-        // $set = $this->temp_array;
-
+        
         if ($folder) {
             $trash = $this->temp_array[$folder][$this->info['ix']];
             unset($this->temp_array[$folder][$this->info['ix']]);
@@ -67,18 +62,28 @@ class ProcessJson
         return $this->set_array();
     }
 
-    public function set_value($key, $value, $folder = false)
-    {
+    public function del_item_sql(){
+        // this code require new version db
+        // $sql = "UPDATE {$tn} SET {$fn}=json_remove({$fn},'$.images[{$ix}]') WHERE {$where}";
+        // return  sql($sql, $eo);
+        // $set = $this->temp_array;
+    }
+
+    public function set_value_sql(){
         // this code require new version db
         //$sql = "UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$ix}].{$key}','{$value}') WHERE {$where}";
         // $res = sqlValue($sql);
         // return $res;
+    }
+
+    public function set_value($key, $value, $folder = false)
+    {
         if ($folder){
             $this->temp_array[$folder][$this->info['ix']][makeSafe($key)] = makeSafe($value);
-            $this->temp_array[$folder][$this->info['ix']] = $this->set_info('updated', $this->temp_array['images'][$this->info['ix']]);
+            $this->temp_array[$folder][$this->info['ix']] = $this->set_info('updated', $this->temp_array[$folder][$this->info['ix']]);
         }else{
             $this->temp_array[$this->info['ix']][makeSafe($key)] = makeSafe($value);
-            $this->temp_array[$this->info['ix']] = $this->set_info('updated', $this->temp_array['images'][$this->info['ix']]);
+            $this->temp_array[$this->info['ix']] = $this->set_info('updated', $this->temp_array[$this->info['ix']]);
         }
 
         return $this->set_array();
@@ -90,6 +95,13 @@ class ProcessJson
         return array_keys($set);
     }
 
+    /**
+     * Obtiene el array de la base de datos.
+     *
+     * @param string $Folder se puede especificar una carpeta dentro del array para obtner los datos.
+     *
+     * @return array con el set de datos
+     */
     public function get_array($folder = false)
     {
         $set = json_decode($this->get_json(), true);
@@ -121,7 +133,7 @@ class ProcessJson
     private function set_json($set)
     {
         $set = "`{$this->info['fn']}`='" . json_encode($set, JSON_UNESCAPED_UNICODE) . "'";
-        $sql = "UPDATE `{$this->info['tn']}` SET {$set} WHERE 1=1 AND {$this->get_where()}";
+        $sql = "UPDATE `{$this->info['tn']}` SET {$set} WHERE {$this->get_where()}";
         $eo = ['silentErrors' => true];
         $res = sql($sql, $eo);
         //TODO: error update control
@@ -135,7 +147,7 @@ class ProcessJson
      *
      * @return true is OK
      */
-    private function set_array($set = [])
+    public function set_array($set = [])
     {
         if (empty($set)) $set = $this->temp_array;
         $set = array_merge($set, $this->info);
@@ -144,9 +156,7 @@ class ProcessJson
 
     private function get_where()
     {
-        if (!$this->info['tn'] && !$this->info['id'] && $this->info['fn']) die('data info not valid');
-        $key = getPKFieldName($this->info['tn']);
-        return $key ? "`{$key}`='{$this->info['id']}'" : $key;
+        return Landini::whereConstruct($this->info);
     }
 
     private function set_info($prefix, $array)
