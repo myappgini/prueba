@@ -13,7 +13,7 @@ class ProcessJson
     public $trash_folder = 'delete';
     private $temp_array = [];
 
-    public function __construct($info=[])
+    public function __construct($info = [])
     {
         $this->info = $info;
         $this->temp_array = $this->get_array();
@@ -35,7 +35,8 @@ class ProcessJson
         if ($folder) {
             $this->temp_array[$folder][$data['uid']] = $data;
         } else {
-            $this->temp_array[$data['uid']] = $data;
+            // $this->temp_array[$data['uid']] = $data;
+            $this->temp_array = $data;
         }
 
         return $this->set_array();
@@ -43,13 +44,13 @@ class ProcessJson
 
     public function get_count($folder = false)
     {
-        $set = $folder ? $this->temp_array[$folder] : $this->temp_array ;
+        $set = $folder ? $this->temp_array[$folder] : $this->temp_array;
         return count($set);
     }
 
     public function del_item($folder = false)
     {
-        
+
         if ($folder) {
             $trash = $this->temp_array[$folder][$this->info['ix']];
             unset($this->temp_array[$folder][$this->info['ix']]);
@@ -57,19 +58,21 @@ class ProcessJson
             $trash = $this->temp_array[$this->info['ix']];
             unset($this->temp_array[$this->info['ix']]);
         }
-        $this->temp_array[$this->trash_folder][uniqid()]=$trash;
+        $this->temp_array[$this->trash_folder][uniqid()] = $trash;
 
         return $this->set_array();
     }
 
-    public function del_item_sql(){
+    public function del_item_sql()
+    {
         // this code require new version db
         // $sql = "UPDATE {$tn} SET {$fn}=json_remove({$fn},'$.images[{$ix}]') WHERE {$where}";
         // return  sql($sql, $eo);
         // $set = $this->temp_array;
     }
 
-    public function set_value_sql(){
+    public function set_value_sql()
+    {
         // this code require new version db
         //$sql = "UPDATE {$tn} SET {$fn}=json_set({$fn},'$.images[{$ix}].{$key}','{$value}') WHERE {$where}";
         // $res = sqlValue($sql);
@@ -78,10 +81,14 @@ class ProcessJson
 
     public function set_value($key, $value, $folder = false)
     {
-        if ($folder){
-            $this->temp_array[$folder][$this->info['ix']][makeSafe($key)] = makeSafe($value);
+        if ($folder) {
+            if (!is_array($value)) {
+                $this->temp_array[$folder][$this->info['ix']][makeSafe($key)] = makeSafe($value);
+            } else {
+                $this->temp_array[$folder][$this->info['ix']][makeSafe($key)][] = $value;
+            }
             $this->temp_array[$folder][$this->info['ix']] = $this->set_info('updated', $this->temp_array[$folder][$this->info['ix']]);
-        }else{
+        } else {
             $this->temp_array[$this->info['ix']][makeSafe($key)] = makeSafe($value);
             $this->temp_array[$this->info['ix']] = $this->set_info('updated', $this->temp_array[$this->info['ix']]);
         }
@@ -167,4 +174,3 @@ class ProcessJson
         return array_merge($array, $data);
     }
 }
-

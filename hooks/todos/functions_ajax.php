@@ -34,28 +34,28 @@ if ($cmd) {
         case 'option-todo':
             echo get_view('dropdown_menu', []);
             break;
-        case 'removed-deleted':
+        case 'removed-deleted': //vaciar papelera
             unset($tasks['deleted_tasks']);
-            $res = update_data($data, $tasks);
-            $json->set_array($res);
+            $json->add_data($tasks);
             // no break
-        case 'get-todo':
+        case 'get-todo': //lista de tareas
             $tasks['list_delete'] = false;
             $tasks += detail_options();
             echo get_view('todos', $tasks);
             break;
-        case 'get-deleted':
+        case 'get-deleted': //lista de tareas borradas
             $tasks['list_delete'] = true;
             echo get_view('todos', $tasks);
             break;
         case 'remove-task':
             unset($tasks['deleted_tasks'][$data['ix']]);
-            // $res = update_data($data, $tasks);
             $res = $json->set_array($tasks);
             echo 'removed: ' . $res;
             break;
         case 'delete-task':
-            echo 'deleted: ' . delete_task($data, $tasks);
+            $json->trash_folder = "deleted_tasks";
+            $res = $json->del_item('tasks');
+            echo 'deleted: ' . $res;
             break;
         case 'recover-task':
             $uid = uniqid();
@@ -65,10 +65,11 @@ if ($cmd) {
             $tasks['tasks'][$uid] = $tasks['deleted_tasks'][$data['ix']];
             $tasks['tasks'][$uid]['uid'] = $uid;
             unset($tasks['deleted_tasks'][$data['ix']]);
+
             $res = update_data($data, $tasks);
             echo 'recovered: ' . $res;
             break;
-        case 'edit-task':
+        case 'edit-task': //editar titulo de tarea
             if (!$data['nt']) {
                 echo "{error:'something wrong in edit task'}";
                 break;
@@ -77,12 +78,11 @@ if ($cmd) {
                 echo "{error:'no task changed'}";
                 break;
             }
-            $tasks['tasks'][$data['ix']]['task'] = $data['nt'];
-            $tasks['tasks'][$data['ix']]['details'][] = add_msg("Task change to:{$data['nt']}");
-            $res = update_data($data, $tasks);
+            $res = $json->set_value('task', $data['nt'], 'tasks');
+            $json->set_value('details', add_msg("Task change to: {$data['nt']}"), 'tasks');
             echo 'edited: ' . $res;
             break;
-        case 'edit-description':
+        case 'edit-description': //Agregar editar descripcion de la tarea, en detalles
             if (!$data['nt']) {
                 echo "{error:'something wrong in edit description'}";
                 break;
@@ -92,7 +92,7 @@ if ($cmd) {
                 break;
             }
             $res = $json->set_value('description', $data['nt'], 'tasks');
-            $json->set_value('details', add_msg("Description change to:{$data['nt']}"), 'tasks');
+            $json->set_value('details', add_msg("Description change to: {$data['nt']}"), 'tasks');
 
             echo 'edited: ' . $res;
             break;
@@ -100,27 +100,25 @@ if ($cmd) {
             $ok = $data['ok'] === "true";
             if ($ok) {
                 if ($tasks['tasks'][$data['ix']]['progress'] < 100) {
-                    $tasks['tasks'][$data['ix']]['old_progress'] = $tasks['tasks'][$data['ix']]['progress'];
+                    $json->set_value('old_progress', $tasks['tasks'][$data['ix']]['progress'], 'tasks');
                 }
-                $tasks['tasks'][$data['ix']]['progress'] = 100;
+                $json->set_value('progress', 100, 'tasks');
             } else {
-                $tasks['tasks'][$data['ix']]['progress'] = $tasks['tasks'][$data['ix']]['old_progress'];
+                $json->set_value('progress', $tasks['tasks'][$data['ix']]['old_progress'], 'tasks');
             }
-            $tasks['tasks'][$data['ix']]['complete'] = $ok;
-            $tasks['tasks'][$data['ix']]['details'][] = add_msg($ok ? "Task marked as completed" : "Task marked as uncompleted");
-            $res = update_data($data, $tasks);
+
+            $json->set_value('complete', $ok, 'tasks');
+            $json->set_value('details', add_msg($ok ? "Task marked as completed" : "Task marked as uncompleted"), 'tasks');
             echo 'edited: ' . $res;
             break;
         case 'set-due':
-            $tasks['tasks'][$data['ix']]['due'] = mysql_datetime($data['du']);
-            $tasks['tasks'][$data['ix']]['details'][] = add_msg("Set due to task: " . $data['du']);
-            $res = update_data($data, $tasks);
+            $json->set_value('due', mysql_datetime($data['du']), 'tasks');
+            $json->set_value('details', add_msg("Set due to task: " . $data['du']), 'tasks');
             echo 'edited: ' . $res;
             break;
         case 'set-progress':
-            $tasks['tasks'][$data['ix']]['progress'] = $data['pg'];
-            $tasks['tasks'][$data['ix']]['details'][] = add_msg("Set task progress to: " . $data['pg']);
-            $res = update_data($data, $tasks);
+            $json->set_value('progress', $data['pg'], 'tasks');
+            $json->set_value('details', add_msg("Set task progress to: " . $data['pg']), 'tasks');
             echo 'edited: ' . $res;
             break;
         case 'get-values':
@@ -134,7 +132,7 @@ if ($cmd) {
         case 'get-progress':
             echo $tasks['tasks'][$data['ix']]['progress'];
             break;
-        case 'add-task':
+        case 'add-task': //agregar una nueva tarea
             if (!$data['tk']) {
                 echo "{error:'something wrong'}";
                 break;
@@ -148,7 +146,7 @@ if ($cmd) {
                 'details' => [add_msg("New task: {$data['tk']}")],
                 'deleted' => false,
             ];
-        
+
             $user = check_userExist($data);
             $json->add_data($task, 'tasks');
 
